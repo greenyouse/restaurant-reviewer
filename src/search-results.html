@@ -20,7 +20,7 @@
      }
 
      *[hidden] {
-         display: none;
+         display: none !important;
      }
 
      .loader {
@@ -123,7 +123,7 @@
     </section>
 
     <section class="loader" hidden$="[[!loading]]">
-      <paper-spinner active></paper-spinner>
+      <paper-spinner active="[[!loading]]"></paper-spinner>
     </section>
 
   </template>
