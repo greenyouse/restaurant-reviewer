@@ -1,0 +1,119 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="star-rating.html">
+
+<!-- Used for a quick view of restaurants on the homepage. -->
+
+<dom-module id="restaurant-card">
+
+  <template>
+    <style>
+     :host {
+         --paper-card-header-image: {
+             width: 10em;
+             height: 5em;
+         }
+
+         --paper-card: {
+             width: 10em;
+             height: 20em;
+         }
+     }
+
+     .card-header: {
+         @apply(--paper-font-headline);
+     }
+
+     .card-content {
+         @apply(--layout-vertical);
+         @apply(--layout-start-justified);
+     }
+
+     .card-highlight {
+         color: var(--google-blue-500);
+     }
+
+     .card-detail {
+         color: var(--paper-grey-600);
+     }
+
+     p {
+         margin: 0px;
+     }
+
+    </style>
+
+    <paper-card image="[[imageUrl]]" alt="store-image">
+      <div class="card-content">
+        <p class="card-header"><b>[[title]]</b></p>
+        <div>
+          <star-rating rating="[[rating]]"></star-rating>
+          <template is="dom-if" if="[[openNow]]">
+            <p class="card-highlight">Open Now</p>
+          </template>
+        </div>
+        <p class="card-detail">[[address]]</p>
+      </div>
+    </paper-card>
+
+  </template>
+
+  <script>
+
+   Polymer({
+
+     is: "restaurant-card",
+
+     properties: {
+       imageUrl: {
+         type: Object
+       },
+
+       imageData: {
+         type: Array
+       },
+
+       rating: {
+         type: Number
+       },
+
+       address: {
+         type: String
+       },
+
+       title: {
+         type: String
+       },
+
+       placeId: {
+         type: String
+       },
+
+       openNow: {
+         type: Boolean
+       }
+     },
+
+     observers: [
+       'fetchImageUrl(imageData)'
+     ],
+
+     /**
+      * Find the image url or load a default picture when there are no pictures
+      *
+      * @param {Array<String>} imageData
+      */
+     fetchImageUrl: function(imageData) {
+       if (typeof(imageData) === undefined) {
+         this.imageUrl = "https://maps.gstatic.com/tactile/pane/result-no-thumbnail-1x.png";
+       } else {
+         imageUrl = imageData[0].getUrl({maxWidth: 1000, maxHeight: 500});
+         this.imageUrl = imageUrl;
+       }
+     }
+   });
+
+  </script>
+
+</dom-module>

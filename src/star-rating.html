@@ -1,0 +1,97 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html"
+<link rel="import" href="my-icons.html">
+
+<dom-module id="star-rating">
+  <template>
+    <style>
+     iron-icon {
+         --iron-icon-width: 16px;
+         --iron-icon-height: 16px;
+     }
+
+     iron-icon.full {
+         color: #ffc107
+     }
+
+     iron-icon.empty {
+         color: var(--paper-grey-500);
+     }
+    </style>
+
+    <div class="rating">
+      <template is="dom-repeat" items="[[_starsColl]]" as="star">
+        <iron-icon class$="[[star.class]]" src="[[star.src]]" icon="[[star.icon]]"></iron-icon>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+   Polymer({
+     is: "star-rating",
+
+     properties: {
+       stars: {
+         type: Number,
+         value: 5
+       },
+
+       _starsColl: {
+         type: Array,
+         value: function() {
+           return [];
+         }
+       },
+
+       rating: {
+         type: Number
+       }
+     },
+
+     observers: [
+       'calculateStars(rating)'
+     ],
+
+     calculateStars: function(rating) {
+       var halfStars = Math.round(rating / .5),
+           starColl = [];
+
+       // calculate the number of each star type
+       var wholeStars = Math.floor(halfStars / 2),
+           halfStars = Math.floor(halfStars % 2);
+
+       var emptyStars = this.stars - (wholeStars + halfStars);
+
+       // build up the star collection using full, half, and empty stars
+       for (var i = 0; i < wholeStars; i++) {
+         var star = {
+           icon: "star",
+           class: "full"
+         };
+         starColl.push(star)
+       }
+
+       // using a custom svg for half stars
+       if (halfStars > 0) {
+         var halfStar = {
+           class: "half",
+           src: '../images/half-star.svg'
+         }
+         starColl.push(halfStar);
+       }
+
+       for (var i = 0; i < emptyStars; i++) {
+         var emptyStar = {
+           icon: "star",
+           class: "empty"
+         }
+         starColl.push(emptyStar);
+       }
+
+       this._starsColl = starColl;
+     }
+   });
+  </script>
+
+</dom-module>

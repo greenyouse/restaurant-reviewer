@@ -1,0 +1,87 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/google-apis/google-maps-api.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<dom-module id="places-input">
+  <template>
+    <google-maps-api id="maps" libraries="places" on-api-load="loaded"></google-maps-api>
+
+    <paper-input id="address"
+                 name$="[[name]]"
+                 label$="[[label]]"
+                 aria-label$="[[ariaLabel]]"
+                 placeholder$="[[placeholder]]"
+                 value="{{value}}"
+                 required">
+      <content></content>
+    </paper-input>
+  </template>
+
+  <script>
+   Polymer({
+     is: 'places-input',
+
+     properties: {
+       value: {
+         type: String,
+         notify: true
+       },
+
+       options: {
+         type: Object,
+         value: function() {
+           return {
+             types: ['geocode']
+           }
+         }
+       },
+
+       autocomplete: {
+         type: Object,
+         notify: true
+       },
+
+       lat: {
+         type: Number,
+         notify: true
+       },
+
+       lng: {
+         type: Number,
+         notify: true
+       },
+
+       name: {
+         type: String
+       },
+
+       label: {
+         type: String
+       },
+
+       ariaLabel: {
+         type: String
+       },
+
+       placeholder: {
+         type: String
+       }
+     },
+
+     loaded: function() {
+       var inputEl = this.$.address.inputElement;
+       this.autocomplete = new google.maps.places.Autocomplete(inputEl, this.options);
+       google.maps.event.addListener(this.autocomplete, 'place_changed', e => {
+         var place = this.autocomplete.getPlace();
+
+         if (!place.geometry) return;
+
+         var location = place.geometry.location;
+         this.lat= location.lat();
+         this.lng= location.lng();
+       });
+     }
+
+   });
+  </script>
+</dom-module>
