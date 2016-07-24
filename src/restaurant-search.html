@@ -1,0 +1,20 @@
+<dom-module is="restaurant-search">
+  <script>
+   Polymer({
+     is: "restaurant-search",
+
+     properties: {
+       route: {
+         type: Object
+       },
+
+       searchResults: {
+         type: Array,
+         value: function() {
+           return [];
+         }
+       }
+     }
+   })
+  </script>
+</dom-module>

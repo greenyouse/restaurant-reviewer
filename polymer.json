@@ -1,0 +1,10 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/restaurant-reviewer.html",
+  "fragments": [
+    "src/home-page.html",
+    "src/advanced-search.html",
+    "src/search-results.html",
+    "src/business-listing.html"
+  ]
+}
