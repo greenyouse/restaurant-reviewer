@@ -429,6 +429,10 @@
 
      // mostly for styling the CSS back and menu buttons
      _routePageChanged: function(page) {
+       // redirect to home-page on startup (helps with business-listing navigation)
+       if (this.route === undefined)
+         document.location = "/#/home";
+
        this.page = page || "home";
         // Scroll to the top of the page on every *route* change. Use `Polymer.AppLayout.scroll`
         // with `behavior: 'silent'` to disable header scroll effects during the scroll.
