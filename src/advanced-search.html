@@ -29,10 +29,10 @@
         <paper-toggle-button value="{{openNow}}">Open Now</paper-toggle-button>
 
         <label for="minPriceFilter">Minimum Price</label>
-        <paper-slider id="minPriceFilter" aria-label="Minimum Price" value="{{minPrice}}" min="0" max="4" required="" editable=""></paper-slider>
+        <paper-slider id="minPriceFilter" aria-label="Minimum Price" value="{{lowPrice}}" min="1" max="5" required="" editable=""></paper-slider>
 
         <label for="maxPriceFilter">Maximum Price</label>
-        <paper-slider id="maxPriceFilter" aria-label="Maximum Price" value="{{maxPrice}}" min="0" max="4" required="" editable=""></paper-slider>
+        <paper-slider id="maxPriceFilter" aria-label="Maximum Price" value="{{highPrice}}" min="1" max="5" required="" editable=""></paper-slider>
 
         <label for="radiusFilter">Search Radius (in kilometers)</label>
         <paper-slider id="radiusFilter" aria-label="Search Radius (in kilometers)" value="{{kmRadius}}" min="1" max="10" editable=""></paper-slider>
@@ -40,7 +40,7 @@
     </paper-card>
   </template>
 
-  <script>Polymer({is:"advanced-search",behaviors:[Polymer.IronValidatableBehavior],properties:{route:{type:Object,notify:!0},queryParams:{type:Object,notify:!0},location:{type:String,notify:!0},latitude:{type:Number,notify:!0},longitude:{type:Number,notify:!0},openNow:{type:Boolean,notify:!0},minPrice:{type:Number,notify:!0},maxPrice:{type:Number,notify:!0},kmRadius:{type:Number,value:10},radius:{type:Number,notify:!0}},listeners:{"advSearchForm.iron-form-submit":"_textSearch"},observers:["setMin(maxPrice)","setMax(minPrice)","setRadius(kmRadius)"],setMax:function(e){this.maxPrice<e&&(this.maxPrice=e)},setMin:function(e){e<this.minPrice&&(this.minPrice=e)},setRadius:function(e){this.radius=1e3*e},_textSearch:function(){this.set("route.path","/search")}});</script>
+  <script>Polymer({is:"advanced-search",behaviors:[Polymer.IronValidatableBehavior],properties:{route:{type:Object,notify:!0},queryParams:{type:Object,notify:!0},location:{type:String,notify:!0},latitude:{type:Number,notify:!0},longitude:{type:Number,notify:!0},openNow:{type:Boolean,notify:!0},lowPrice:{type:Number,value:1},highPrice:{type:Number,value:5},minPrice:{type:Number,notify:!0},maxPrice:{type:Number,notify:!0},kmRadius:{type:Number,value:10},radius:{type:Number,notify:!0}},listeners:{"advSearchForm.iron-form-submit":"_textSearch"},observers:["setMin(highPrice)","setMax(lowPrice)","setRadius(kmRadius)"],setMax:function(e){this.highPrice<e&&(this.highPrice=e,console.log(this.highPrice)),this.maxPrice=this.highPrice-1},setMin:function(e){e<this.lowPrice&&(this.lowPrice=e,console.log(this.lowPrice)),this.minPrice=this.lowPrice-1},setRadius:function(e){this.radius=1e3*e},_textSearch:function(){this.set("route.path","/search")}});</script>
 
 </dom-module>
 </body></html>
