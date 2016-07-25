@@ -161,9 +161,7 @@
 
     </style>
 
-    <google-maps-api version="3.exp"
-                     api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE"
-                     library-loaded="_detectLocation"></google-maps-api>
+    <google-maps-api version="3.exp" api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE" ></google-maps-api>
 
     <app-location route="{{route}}" query-params="{{queryParams}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
@@ -472,6 +470,10 @@
        this.set('route.path', '/advanced');
      },
 
+     attached: function() {
+       this._detectLocation();
+     },
+
      _detectLocation: function() {
        var _this = this;
 
@@ -490,9 +492,13 @@
          _this.longitude = lng;
 
          // set the location to the current address
-         fetch("https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE&latlng=" + lat + "," + lng).then(function (resp) {
+         fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng).then(function (resp) {
            resp.json().then(function (places) {
-             _this.location = places.results[0].formatted_address;
+             if (places.status == google.maps.places.PlacesServiceStatus.OK) {
+               _this.location = places.results[0].formatted_address;
+             } else {
+               console.log("geolocation failed: ", places.status, places.error_message);
+             }
            });
          });
        }, function (e) {
