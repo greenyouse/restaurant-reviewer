@@ -9,9 +9,9 @@
     <meta name="theme-color" content="#fff">
     <link rel="manifest" href="/manifest.json">
 
-    <script>window.Polymer={lazyRegister:!0,dom:"shadow"},function(){if("registerElement"in document&&"import"in document.createElement("link")&&"content"in document.createElement("template"));else{var e=document.createElement("script");e.src="bower_components/webcomponentsjs/webcomponents-lite.min.js",document.head.appendChild(e)}}(),"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("service-worker.js")});</script>
+    <script>window.Polymer={lazyRegister:!0,dom:"shadow"},function(){if("registerElement"in document&&"import"in document.createElement("link")&&"content"in document.createElement("template"));else{var e=document.createElement("script");e.src="/bower_components/webcomponentsjs/webcomponents-lite.min.js",document.head.appendChild(e)}}(),"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("/service-worker.js")});</script>
 
-    <link rel="import" href="src/restaurant-reviewer.html">
+    <link rel="import" href="/src/restaurant-reviewer.html">
 
     <style>body{margin:0;font-family:'Roboto', 'Noto', sans-serif;line-height:1.5;min-height:100vh;background-color:white;display:flex;flex-flow:column;}restaurant-reviewer{flex:1;}.attribution{padding-right:20px;float:right;}</style>
 
@@ -21,7 +21,7 @@
     <restaurant-reviewer></restaurant-reviewer>
 
     <br>
-
+    
     <footer>
       <img class="attribution" src="images/powered_by_google_on_white.png" alt="Powered By Google">
     </footer>

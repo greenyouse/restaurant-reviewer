@@ -1,14 +1,4 @@
-<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/iron-location/iron-location.html">
-<link rel="import" href="../bower_components/iron-location/iron-query-params.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
-<link rel="import" href="dollar-rating.html">
-<link rel="import" href="star-rating.html">
-
-</head><body><dom-module id="search-results">
+<html><head><meta charset="UTF-8"><link rel="import" href="restaurant-reviewer.html"></head><body><dom-module id="search-results">
 
   <template>
 
@@ -21,7 +11,7 @@
       <h3 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h3>
       <div hidden$="[[emptyResults]]">
         <template is="dom-repeat" items="[[searchResults]]" as="shop">
-          <a class="shopCard" href="/#/business/{{shop.placeId}}">
+          <a class="shopCard" href="/restaurant-reviewer/#/business/{{shop.placeId}}">
             <paper-card on-tap="setBusiness">
               <div class="card-content">
                 <div class="row">

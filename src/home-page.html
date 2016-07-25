@@ -1,8 +1,4 @@
-<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="restaurant-card.html">
-
-</head><body><dom-module id="home-page">
+<html><head><meta charset="UTF-8"><link rel="import" href="restaurant-reviewer.html"></head><body><dom-module id="home-page">
   <template>
 
     <style>.nearbyTable{@apply (--layout-horizontal);@apply (--layout-center-justified);@apply (--layout-wrap);}.nearbyTable > *{padding:.5em;width:10em;height:20em;}.center{text-align:center;}.categories{@apply (--layout-horizontal);@apply (--layout-center-justified);@apply (--layout-wrap);}.categories > * > *{list-style:none;color:var(--google-blue-500);}.categories > * > *:hover{cursor:pointer;}a{color:black;text-decoration:none;}</style>
@@ -12,7 +8,7 @@
       <h3 class="center">Nearby Restaurants</h3>
       <div class="nearbyTable">
         <template is="dom-repeat" items="[[nearbyPlaces]]" as="shop">
-          <a href="/#/business/{{shop.place_id}}">
+          <a href="/restaurant-reviewer/#/business/{{shop.place_id}}">
             <restaurant-card title="[[shop.name]]" image-data="[[shop.photos]]" rating="[[shop.rating]]" open-now="[[shop.opening_hours.open_now]]" place-id="[[shop.place_id]]" address="[[shop.vicinity]]" on-tap="setBusiness">
             </restaurant-card>
           </a>
