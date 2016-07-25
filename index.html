@@ -35,7 +35,7 @@
        } else {
          // polyfill web components
          var e = document.createElement('script');
-         e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+         e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
          document.head.appendChild(e);
        }
      })();
@@ -43,13 +43,13 @@
      // load pre-caching service worker
      if ('serviceWorker' in navigator) {
        window.addEventListener('load', function() {
-         navigator.serviceWorker.register('/service-worker.js');
+         navigator.serviceWorker.register('service-worker.js');
        });
      }
 
     </script>
 
-    <link rel="import" href="/src/restaurant-reviewer.html">
+    <link rel="import" href="src/restaurant-reviewer.html">
 
     <style>
 
