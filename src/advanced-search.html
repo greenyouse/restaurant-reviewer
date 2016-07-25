@@ -75,18 +75,18 @@
         <label for="minPriceFilter">Minimum Price</label>
         <paper-slider id="minPriceFilter"
                       aria-label="Minimum Price"
-                      value="{{minPrice}}"
-                      min="0"
-                      max="4"
+                      value="{{lowPrice}}"
+                      min="1"
+                      max="5"
                       required
                       editable></paper-slider>
 
         <label for="maxPriceFilter">Maximum Price</label>
         <paper-slider id="maxPriceFilter"
                       aria-label="Maximum Price"
-                      value="{{maxPrice}}"
-                      min="0"
-                      max="4"
+                      value="{{highPrice}}"
+                      min="1"
+                      max="5"
                       required
                       editable></paper-slider>
 
@@ -142,6 +142,20 @@
          notify: true
        },
 
+       /* The prices for google places are from 0 to 4 but visually,
+          the dollar signs are 1 to 5. Using low and highPrices for a
+          1 to 5 range.
+        */
+       lowPrice: {
+         type: Number,
+         value: 1
+       },
+
+       highPrice: {
+         type: Number,
+         value: 5
+       },
+
        minPrice: {
          type: Number,
          notify: true
@@ -169,21 +183,27 @@
      },
 
      observers: [
-       'setMin(maxPrice)',
-       'setMax(minPrice)',
+       'setMin(highPrice)',
+       'setMax(lowPrice)',
        'setRadius(kmRadius)'
      ],
 
-     setMax: function(min) {
-       if (this.maxPrice < min) {
-         this.maxPrice = min;
-       }
+     setMax: function(low) {
+       if (this.highPrice < low) {
+         this.highPrice = low;
+         console.log(this.highPrice);
+       };
+
+       this.maxPrice = this.highPrice - 1;
      },
 
-     setMin: function(max) {
-       if (max < this.minPrice) {
-         this.minPrice = max;
-       }
+     setMin: function(high) {
+       if (high < this.lowPrice) {
+         this.lowPrice = high;
+         console.log(this.lowPrice);
+       };
+
+       this.minPrice = this.lowPrice - 1;
      },
 
      setRadius: function(kmRadius) {
