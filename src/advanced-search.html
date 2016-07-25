@@ -191,7 +191,6 @@
      setMax: function(low) {
        if (this.highPrice < low) {
          this.highPrice = low;
-         console.log(this.highPrice);
        };
 
        this.maxPrice = this.highPrice - 1;
@@ -200,7 +199,6 @@
      setMin: function(high) {
        if (high < this.lowPrice) {
          this.lowPrice = high;
-         console.log(this.lowPrice);
        };
 
        this.minPrice = this.lowPrice - 1;
