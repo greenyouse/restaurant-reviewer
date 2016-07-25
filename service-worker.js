@@ -29,7 +29,7 @@
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["/bower_components/webcomponentsjs/webcomponents-lite.min.js","f04ed23700daeb36f637bfe095960659"],["/index.html","5d69d9a40666d0835570982aee30784f"],["/manifest.json","8d4770f4b7ca97c79b23e03b56914cee"],["/src/advanced-search.html","fc2a831b640ba820a9b0b3fa975c24fe"],["/src/business-listing.html","6e6683ddfa865e3386a14e4ca9a98f41"],["/src/home-page.html","c1f54456eff765f8c48000846e175aab"],["/src/restaurant-reviewer.html","83c20969fadeb292f4ded28d088fea45"],["/src/search-results.html","6fa16f44e93fc1caab22f7d438fd7b15"]];
+var PrecacheConfig = [["bower_components/webcomponentsjs/webcomponents-lite.min.js","f04ed23700daeb36f637bfe095960659"],["index.html","5d69d9a40666d0835570982aee30784f"],["manifest.json","8d4770f4b7ca97c79b23e03b56914cee"],["src/advanced-search.html","fc2a831b640ba820a9b0b3fa975c24fe"],["src/business-listing.html","6e6683ddfa865e3386a14e4ca9a98f41"],["src/home-page.html","c1f54456eff765f8c48000846e175aab"],["src/restaurant-reviewer.html","83c20969fadeb292f4ded28d088fea45"],["src/search-results.html","6fa16f44e93fc1caab22f7d438fd7b15"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1--' + (self.registration ? self.registration.scope : '') + '-';
 
@@ -252,7 +252,3 @@ self.addEventListener('fetch', function(event) {
     }
   }
 });
-
-
-
-
