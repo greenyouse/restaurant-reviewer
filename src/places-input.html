@@ -4,7 +4,9 @@
 
 <dom-module id="places-input">
   <template>
-    <google-maps-api id="maps" libraries="places" on-api-load="loaded"></google-maps-api>
+    <google-maps-api libraries="places"
+                     api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE"
+                     on-api-load="loaded"></google-maps-api>
 
     <paper-input id="address"
                  name$="[[name]]"
@@ -12,7 +14,7 @@
                  aria-label$="[[ariaLabel]]"
                  placeholder$="[[placeholder]]"
                  value="{{value}}"
-                 required">
+                 required\>"
       <content></content>
     </paper-input>
   </template>
@@ -69,16 +71,18 @@
      },
 
      loaded: function() {
+       var _this = this;
+
        var inputEl = this.$.address.inputElement;
        this.autocomplete = new google.maps.places.Autocomplete(inputEl, this.options);
-       google.maps.event.addListener(this.autocomplete, 'place_changed', e => {
-         var place = this.autocomplete.getPlace();
+       google.maps.event.addListener(this.autocomplete, 'place_changed', function (e) {
+         var place = _this.autocomplete.getPlace();
 
          if (!place.geometry) return;
 
          var location = place.geometry.location;
-         this.lat= location.lat();
-         this.lng= location.lng();
+         _this.lat= location.lat();
+         _this.lng= location.lng();
        });
      }
 

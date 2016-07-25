@@ -215,6 +215,8 @@
      },
 
      _textSearch: function(active, search, coords, minPrice, maxPrice, radius) {
+       var _this = this;
+
        // only fetch data when the search is run
        if (!active || !search || !coords) return;
 
@@ -239,24 +241,26 @@
        }
 
        var places = new google.maps.places.PlacesService(map);
-       places.textSearch(request, (resp, status) => {
+       places.textSearch(request, function (resp, status) {
 
          if (status == google.maps.places.PlacesServiceStatus.OK) {
-           this.emptyResults = false;
+           _this.emptyResults = false;
            var shops = resp.splice(0, 10);
-           this.parseResults(shops);
+           _this.parseResults(shops);
 
-           this.loading = false;
+           _this.loading = false;
          } else {
            // no results found message
-           this.emptyResults = true;
-           this.loading = false;
+           _this.emptyResults = true;
+           _this.loading = false;
          }
        })
      },
 
      parseResults: function(res) {
-       this.searchResults = res.map(shop => {
+       var _this2 = this;
+
+       this.searchResults = res.map(function (shop) {
          var title = shop.name,
              price = shop.price_level,
              address = shop.formatted_address,
@@ -264,7 +268,7 @@
              placeId = shop.place_id,
              imageData = shop.photos || "https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png";
 
-         var imageUrl = typeof(imageData) == "string" ? imageData : this._fetchImageUrl(imageData[0]);
+         var imageUrl = typeof(imageData) == "string" ? imageData : _this._fetchImageUrl(imageData[0]);
 
          return {
            title: title,

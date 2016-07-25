@@ -146,6 +146,7 @@
       * @param {Array} coords The lat/lng coordinates to use
       */
      fetchPlaces: function(coords) {
+       var _this = this;
 
        var map = new google.maps.Map(this.$.map, {
          center: coords
@@ -159,16 +160,16 @@
 
        var places = new google.maps.places.PlacesService(map);
 
-       places.nearbySearch(request, (resp, status) => {
+       places.nearbySearch(request, function (resp, status) {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
 
            // try to only include restaurants with pictures
-           var shops = resp.filter(s => {
+           var shops = resp.filter(function (s) {
              return s.photos;
            });
 
            shops = shops.splice(0,4);
-           this.nearbyPlaces = shops;
+           _this.nearbyPlaces = shops;
          }
        });
      }

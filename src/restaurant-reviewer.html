@@ -161,7 +161,9 @@
 
     </style>
 
-    <google-maps-api id="maps" libraries="places" ></google-maps-api>
+    <google-maps-api version="3.exp"
+                     api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE"
+                     library-loaded="_detectLocation"></google-maps-api>
 
     <app-location route="{{route}}" query-params="{{queryParams}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
@@ -390,10 +392,7 @@
 
        location: {
          type: String,
-         notify: true,
-         value: function() {
-           this._detectLocation();
-         }
+         notify: true
        },
 
        openNow: {
@@ -474,6 +473,8 @@
      },
 
      _detectLocation: function() {
+       var _this = this;
+
        if (!"geolocation" in navigator) return;
 
        var opts = {
@@ -481,23 +482,22 @@
          maximumAge: 5000
        };
 
-       navigator.geolocation.getCurrentPosition(position => {
+       navigator.geolocation.getCurrentPosition(function (position) {
          var lat = position.coords.latitude,
              lng = position.coords.longitude;
 
-         this.latitude = lat;
-         this.longitude = lng;
+         _this.latitude = lat;
+         _this.longitude = lng;
 
          // set the location to the current address
-         fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng).then(resp => {
-           resp.json().then(places => {
-             this.location = places.results[0].formatted_address;
+         fetch("https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE&latlng=" + lat + "," + lng).then(function (resp) {
+           resp.json().then(function (places) {
+             _this.location = places.results[0].formatted_address;
            });
          });
-       }, function(e) {
+       }, function (e) {
          console.log("geolocation error: ", e);
-      },
-       opts)
+      }, opts);
      },
 
      _getCoords: function(lat, lng) {
@@ -532,25 +532,27 @@
      },
 
      loadReviews: function(business) {
+       var _this2 = this;
+
        // load the custom reviews for this business
        var placeId = business.place_id;
 
-       localforage.getItem(placeId, (err, cachedReviews) => {
+       localforage.getItem(placeId, function (err, cachedReviews) {
          var reviews = business.reviews;
 
          if (cachedReviews == null) {
-           this.reviews = reviews;
+           _this2.reviews = reviews;
          } else {
 
          if (reviews == null) reviews = [];
 
-         cachedReviews.map(review => {
-           reviews.unshift(review);
-         });
+           cachedReviews.map(function (review) {
+             reviews.unshift(review);
+           });
 
-         this.reviews = reviews;
+           _this2.reviews = reviews;
          }
-       })
+       });
      },
 
       parseBusiness: function(business) {
@@ -589,6 +591,8 @@
       },
 
      _showBusiness: function(business) {
+       var _this3 = this;
+
        // center and zoom the business listing map
        // TODO: fix map here and add marker
        var map = new google.maps.Map(this.$.map, {
@@ -599,18 +603,20 @@
        };
 
        var places = new google.maps.places.PlacesService(map);
-       places.getDetails(request, (place, status) => {
+       places.getDetails(request, function (place, status) {
          if (status == google.maps.places.PlacesServiceStatus.OK) {
            // load the detailed business info for the listing page
-           this.formattedBusiness = this.parseBusiness(place);
+           _this3.formattedBusiness = _this3.parseBusiness(place);
 
            // change to the business listing page when the selected business changes
-           this.routeData.page = 'business';
+           _this3.routeData.page = 'business';
          }
-       })
+       });
      }
 
    });
   </script>
+
+  <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&v=3.exp&key=AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE"></script> -->
 
 </dom-module>

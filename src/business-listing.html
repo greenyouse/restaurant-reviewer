@@ -241,13 +241,13 @@
       _saveReview: function(newReview, business) {
         var placeId = business.placeId;
 
-        localforage.getItem(placeId).then(reviews => {
+        localforage.getItem(placeId).then(function (reviews) {
           if (reviews == null) reviews = [];
 
           reviews.push(newReview);
 
           localforage.setItem(placeId, reviews);
-        }).catch(err => {
+        }).catch(function (err) {
           console.log("Business db error: ", err);
         });
 
