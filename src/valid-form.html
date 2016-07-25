@@ -1,83 +1,17 @@
-<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<html><head><link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
-<dom-module id="valid-form">
-  <style>
-   paper-button#submit {
-       @apply(--valid-form-button);
-   }
-
-   form {
-       @apply(--valid-form-form);
-       display: flex;
-       justify-content: center;
-       align-items: center;
-       align-content:stretch;
-       background-color: var(--app-light-primary-color);
-   }
-
-   form > * {
-       @apply(--valid-form-elements);
-   }
-  </style>
+</head><body><dom-module id="valid-form">
+  <style>paper-button#submit{@apply (--valid-form-button);}form{@apply (--valid-form-form);display:flex;justify-content:center;align-items:center;align-content:stretch;background-color:var(--app-light-primary-color);}form > *{@apply (--valid-form-elements);}</style>
 
   <template>
     <form is="iron-form" id="form" method="[[method]]" action="[[action]]" autocomplete$="[[autocomplete]]">
       <content></content>
-      <paper-button id="submit" type="submit" disabled="[[invalid]]" raised>[[button]]</paper-button>
+      <paper-button id="submit" type="submit" disabled="[[invalid]]" raised="">[[button]]</paper-button>
     </form>
   </template>
 
-  <script>
-   Polymer({
-     is: 'valid-form',
-
-     properties: {
-       method: {
-         type: String
-       },
-
-       action: {
-         type: String
-       },
-
-       button: {
-         type: String,
-         value: "Submit"
-       },
-
-       autocomplete: {
-         type: Boolean
-       },
-
-       invalid: {
-         type: Boolean,
-         value: false
-       }
-     },
-
-     listeners: {
-       // using tap and keydown work well for handling custom element validity like <input-list>
-       'form.tap': 'validate',
-       'form.keydown': 'validate',
-       'form.change': 'validate',
-       'form.input': 'validate',
-       'submit.tap': 'submit'
-     },
-
-     ready: function() {
-       this.validate();
-     },
-
-     validate: function() {
-       this.invalid = !this.$.form.validate();
-     },
-
-     submit: function() {
-       this.$.form.submit();
-     }
-
-   });
-  </script>
+  <script>Polymer({is:"valid-form",properties:{method:{type:String},action:{type:String},button:{type:String,value:"Submit"},autocomplete:{type:Boolean},invalid:{type:Boolean,value:!1}},listeners:{"form.tap":"validate","form.keydown":"validate","form.change":"validate","form.input":"validate","submit.tap":"submit"},ready:function(){this.validate()},validate:function(){this.invalid=!this.$.form.validate()},submit:function(){this.$.form.submit()}});</script>
 </dom-module>
+</body></html>

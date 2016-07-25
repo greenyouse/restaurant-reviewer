@@ -1,29 +1,11 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-icon/iron-icon.html"
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="my-icons.html">
 
-<dom-module id="star-picker">
+</head><body><dom-module id="star-picker">
   <template>
-    <style>
-     iron-icon {
-         --iron-icon-width: 16px;
-         --iron-icon-height: 16px;
-     }
-
-     iron-icon:hover {
-         cursor: pointer;
-         color: #ffc107;
-     }
-
-     iron-icon.full {
-         color: #ffc107
-     }
-
-     iron-icon.empty {
-         color: var(--paper-grey-500);
-     }
-    </style>
+    <style>iron-icon{--iron-icon-width:16px;--iron-icon-height:16px;}iron-icon:hover{cursor:pointer;color:#ffc107;}iron-icon.full{color:#ffc107;}iron-icon.empty{color:var(--paper-grey-500);}</style>
 
     <div class="rating">
       <template is="dom-repeat" items="[[_starColl]]" as="star">
@@ -33,85 +15,7 @@
 
   </template>
 
-  <script>
-    Polymer({
-      is: "star-picker",
-
-      properties: {
-        /**
-         * The rating given
-         *
-         * @type {Number}
-         */
-        rating: {
-          type: Number,
-          notify: true
-        },
-
-        /**
-         * The number of stars to use for the rating
-         *
-         * @type {Number}
-         */
-        stars: {
-          type: Number,
-          value: 5
-        },
-
-        /**
-         * A private array holding the star objects. Varies the number of stars
-         * based on the stars property.
-         *
-         * @type {Array<Object>}
-         */
-       _starColl: {
-         type: Array,
-         notify: true,
-         value: function() {
-           var coll = [];
-           for (var i; i < this.stars; i++) {
-             coll.push({class: "empty"});
-           }
-
-           return coll;
-         }
-       },
-      },
-
-      observers: [
-        'calculateStars(rating)'
-      ],
-
-      _fillStar: function(e) {
-        this.rating = e.model.index + 1;
-      },
-
-      calculateStars: function(rating) {
-        var starColl = [];
-
-        // calculate the number of each star type
-        var wholeStars = Math.floor(rating);
-        var emptyStars = 5 - (wholeStars);
-
-        // build up the star collection using full and empty stars
-        for (var i = 0; i < wholeStars; i++) {
-          var star = {
-            class: "full",
-          };
-          starColl.push(star)
-        }
-
-        for (var i = 0; i < emptyStars; i++) {
-          var emptyStar = {
-            class: "empty"
-          }
-          starColl.push(emptyStar);
-        }
-
-        this._starColl = starColl;
-      }
-
-    });
-  </script>
+  <script>Polymer({is:"star-picker",properties:{rating:{type:Number,notify:!0},stars:{type:Number,value:5},_starColl:{type:Array,notify:!0,value:function(){for(var r,t=[];r<this.stars;r++)t.push({class:"empty"});return t}}},observers:["calculateStars(rating)"],_fillStar:function(r){this.rating=r.model.index+1},calculateStars:function(r){for(var t=[],a=Math.floor(r),s=5-a,e=0;e<a;e++){var l={class:"full"};t.push(l)}for(var e=0;e<s;e++){var i={class:"empty"};t.push(i)}this._starColl=t}});</script>
 
 </dom-module>
+</body></html>

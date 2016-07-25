@@ -1,47 +1,13 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 
-<dom-module id="dollar-rating">
+</head><body><dom-module id="dollar-rating">
   <template>
-    <style>
-     p {
-         @apply(--dollar-rating-style);
-     }
-    </style>
+    <style>p{@apply (--dollar-rating-style);}</style>
 
     <p>[[dollarRating]]</p>
   </template>
 
-  <script>
-   Polymer({
-     is: 'dollar-rating',
-
-     properties: {
-       rating: {
-         type: Number
-       },
-
-       dollarRating: {
-         type: String,
-         notify: true
-       }
-     },
-
-     observers: [
-       'setDollarRating(rating)'
-     ],
-
-     setDollarRating: function(rating) {
-       // if no rating is recorded just leave a blank string
-       if (!rating) return;
-
-       var ratingString = "";
-       for (var i = 0; i <= rating; i++) {
-         ratingString = ratingString + "$";
-       }
-
-       this.dollarRating = ratingString;
-     }
-   });
-  </script>
+  <script>Polymer({is:"dollar-rating",properties:{rating:{type:Number},dollarRating:{type:String,notify:!0}},observers:["setDollarRating(rating)"],setDollarRating:function(r){if(r){for(var t="",i=0;i<=r;i++)t+="$";this.dollarRating=t}}});</script>
 
 </dom-module>
+</body></html>

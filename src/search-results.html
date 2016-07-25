@@ -1,97 +1,18 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/iron-location/iron-location.html"
-<link rel="import" href="../bower_components/iron-location/iron-query-params.html"
+<link rel="import" href="../bower_components/iron-location/iron-location.html">
+<link rel="import" href="../bower_components/iron-location/iron-query-params.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="dollar-rating.html">
 <link rel="import" href="star-rating.html">
 
-<dom-module id="search-results">
+</head><body><dom-module id="search-results">
 
   <template>
 
-    <style include="iron-flex iron-flex-alignment">
-     :host {
-         --paper-card: {
-             width: 100%;
-         }
-     }
-
-     *[hidden] {
-         display: none;
-     }
-
-     .loader {
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: center;
-         margin-top: 2em;
-     }
-
-     .storeImage {
-         width: 15em;
-         height: 10em;
-     }
-
-     .card-header: {
-         @apply(--paper-font-headline);
-     }
-
-     paper-card {
-         border-bottom: 1px solid var(--paper-grey-400);
-     }
-
-     .shopCard a {
-         color: black;
-         text-decoration: none;
-     }
-
-     .shopCard {
-         color: black;
-     }
-
-     .shopCard:hover {
-         cursor: pointer;
-     }
-
-     .card-detail {
-         color: var(--paper-grey-600);
-     }
-
-     .row {
-         @apply(--layout-horizontal);
-         @apply(--layout-center);
-         @apply(--layout-justified);
-     }
-
-     .row > * {
-         padding: 10px;
-     }
-
-     .row *:nth-child(1){
-         flex: 1 1 25%;
-         align-self: auto;
-     }
-
-     .row *:nth-child(2) {
-         flex: 4 1 50%;
-         align-self: auto;
-     }
-
-     .row *:nth-child(3) {
-         flex: 0 1 25%;
-         align-self: auto;
-     }
-
-     @media screen and (max-width: 767px) {
-         .row {
-             @apply(--layout-wrap);
-         }
-     }
-    </style>
+    <style include="iron-flex iron-flex-alignment">:host{--paper-card:{width:100%;};}*[hidden]{display:none !important;}.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:2em;}.storeImage{width:15em;height:10em;}.card-header:{@apply (--paper-font-headline);};paper-card{border-bottom:1px solid var(--paper-grey-400);}.shopCard a{color:black;text-decoration:none;}.shopCard{color:black;}.shopCard:hover{cursor:pointer;}.card-detail{color:var(--paper-grey-600);}.row{@apply (--layout-horizontal);@apply (--layout-center);@apply (--layout-justified);}.row > *{padding:10px;}.row *:nth-child(1){flex:1 1 25%;align-self:auto;}.row *:nth-child(2){flex:4 1 50%;align-self:auto;}.row *:nth-child(3){flex:0 1 25%;align-self:auto;}@media screen and (max-width: 767px){.row{@apply (--layout-wrap);}}</style>
 
     <app-route route="{{route}}" query-params="{{queryParams}}">
     </app-route>
@@ -99,12 +20,12 @@
     <section hidden$="[[loading]]">
       <h3 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h3>
       <div hidden$="[[emptyResults]]">
-        <template is="dom-repeat" items="[[searchResults]]" as="shop" >
+        <template is="dom-repeat" items="[[searchResults]]" as="shop">
           <a class="shopCard" href="/#/business/{{shop.placeId}}">
             <paper-card on-tap="setBusiness">
               <div class="card-content">
                 <div class="row">
-                  <img class="storeImage" src="[[shop.image]]" alt="restaurant picture"></img>
+                  <img class="storeImage" src="[[shop.image]]" alt="restaurant picture">
                   <div>
                     <h3>[[shop.title]]</h3>
                     <star-rating rating="[[shop.rating]]"></star-rating>
@@ -123,163 +44,12 @@
     </section>
 
     <section class="loader" hidden$="[[!loading]]">
-      <paper-spinner active></paper-spinner>
+      <paper-spinner active="[[!loading]]"></paper-spinner>
     </section>
 
   </template>
 
-  <script>
-   Polymer({
-     is: 'search-results',
-
-     properties: {
-       route: {
-         type: Object,
-         notify: true
-       },
-
-       data: {
-         type: Object
-       },
-
-       active: {
-         type: Boolean,
-         notify: true,
-         value: false
-       },
-
-       queryParams: {
-         type: Object,
-         notify: true
-       },
-
-       business: {
-         type: Object,
-         notify: true
-       },
-
-       searchResults: {
-         type: Array,
-         notify: true,
-         value: function() {
-           return [];
-         }
-       },
-
-       map: {
-         type: Object
-       },
-
-       coords: {},
-
-       emptyResults: {
-         type: Boolean,
-         notify: true,
-         value: true
-       },
-
-       openNow: {
-         type: Boolean
-       },
-
-       maxPrice: {
-         type: Number
-       },
-
-       minPrice: {
-         type: Number
-       },
-
-       radius: {
-         type: Number
-       },
-
-       loading: {
-         type: Boolean,
-         value: false
-       }
-
-     },
-
-     observers: [
-       '_textSearch(active, queryParams.search, coords, minPrice, maxPrice, radius)'
-     ],
-
-     setBusiness: function(e) {
-       this.business = e.model.shop;
-     },
-
-     _fetchImageUrl: function(imageData) {
-       imageUrl = imageData.getUrl({maxWidth: 1000, maxHeight: 500});
-       return imageUrl;
-     },
-
-     _textSearch: function(active, search, coords, minPrice, maxPrice, radius) {
-       // only fetch data when the search is run
-       if (!active || !search || !coords) return;
-
-       // use the paper-spinner when running a search
-       this.loading = true;
-
-       var map = new google.maps.Map(this.map, {
-         center: coords
-       });
-
-       var request = {
-         location: coords,
-         minPriceLevel: minPrice,
-         maxPriceLevel: maxPrice,
-         query: search,
-         radius: radius,
-         type: 'restaurant'
-       }
-
-       if (this.openNow !== undefined) {
-         request.openNow = this.openNow;
-       }
-
-       var places = new google.maps.places.PlacesService(map);
-       places.textSearch(request, (resp, status) => {
-
-         if (status == google.maps.places.PlacesServiceStatus.OK) {
-           this.emptyResults = false;
-           var shops = resp.splice(0, 10);
-           this.parseResults(shops);
-
-           this.loading = false;
-         } else {
-           // no results found message
-           this.emptyResults = true;
-           this.loading = false;
-         }
-       })
-     },
-
-     parseResults: function(res) {
-       this.searchResults = res.map(shop => {
-         var title = shop.name,
-             price = shop.price_level,
-             address = shop.formatted_address,
-             rating = shop.rating,
-             placeId = shop.place_id,
-             imageData = shop.photos || "https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png";
-
-         var imageUrl = typeof(imageData) == "string" ? imageData : this._fetchImageUrl(imageData[0]);
-
-         return {
-           title: title,
-           price: price,
-           address: address,
-           rating: rating,
-           image: imageUrl,
-           placeId: placeId
-         };
-
-       })
-
-     }
-
-   });
-  </script>
+  <script>Polymer({is:"search-results",properties:{route:{type:Object,notify:!0},data:{type:Object},active:{type:Boolean,notify:!0,value:!1},queryParams:{type:Object,notify:!0},business:{type:Object,notify:!0},searchResults:{type:Array,notify:!0,value:function(){return[]}},map:{type:Object},coords:{},emptyResults:{type:Boolean,notify:!0,value:!0},openNow:{type:Boolean},maxPrice:{type:Number},minPrice:{type:Number},radius:{type:Number},loading:{type:Boolean,value:!1}},observers:["_textSearch(active, queryParams.search, coords, minPrice, maxPrice, radius)"],setBusiness:function(e){this.business=e.model.shop},_fetchImageUrl:function(e){return imageUrl=e.getUrl({maxWidth:1e3,maxHeight:500}),imageUrl},_textSearch:function(e,t,a,s,r,i){var o=this;if(e&&t&&a){this.loading=!0;var n=new google.maps.Map(this.map,{center:a}),c={location:a,minPriceLevel:s,maxPriceLevel:r,query:t,radius:i,type:"restaurant"};void 0!==this.openNow&&(c.openNow=this.openNow);var l=new google.maps.places.PlacesService(n);l.textSearch(c,function(e,t){if(t==google.maps.places.PlacesServiceStatus.OK){o.emptyResults=!1;var a=e.splice(0,10);o.parseResults(a),o.loading=!1}else o.emptyResults=!0,o.loading=!1})}},parseResults:function(e){var t=this;this.searchResults=e.map(function(e){var a=e.name,s=e.price_level,r=e.formatted_address,i=e.rating,o=e.place_id,n=e.photos||"https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",c="string"==typeof n?n:t._fetchImageUrl(n[0]);return{title:a,price:s,address:r,rating:i,image:c,placeId:o}})}});</script>
 
 </dom-module>
+</body></html>

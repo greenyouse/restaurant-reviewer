@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
@@ -25,194 +25,47 @@
 <link rel="import" href="search-results.html">
 <link rel="import" href="valid-form.html">
 
-<dom-module id="restaurant-reviewer">
+</head><body><dom-module id="restaurant-reviewer">
 
   <template>
 
-    <style>
-      :host {
-        display: block;
-          --app-primary-color: #1976D2;
-          --app-light-primary-color: #BBDEFB;
-          --app-secondary-color: black;
-          --app-accent-color  #FFE05C;
-          --divider-color: #B6B6B6;
-          --valid-form-button: {
-              border-radius: 25%;
-              background-color:  #FFE05C;
-              flex: 0 1 auto;
-              padding-left: 10px;
-          }
-          --valid-form-form: {
-              background-color: var(--app-light-primary-color);
-              display: flex;
-              flex-wrap: wrap;
-              justify-content: center;
-              align-items: center;
-              align-content:stretch;
-              padding: 5px;
-          }
+    <style>:host{display:block;--app-primary-color:#1976D2;--app-light-primary-color:#BBDEFB;--app-secondary-color:black;--app-accent-color:#FFE05C;--divider-color:#B6B6B6;--valid-form-button:{border-radius:25%;background-color:#FFE05C;flex:0 1 auto;padding-left:10px;};--valid-form-form:{background-color:var(--app-light-primary-color);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;align-content:stretch;padding:5px;};}:host([page=business]) .menu-btn{display:none;}:host(:not([page=business])) .back-btn{display:none;}:host([page=advanced]) #searchBar{display:none;}app-header{background-color:var(--app-primary-color);color:#fff;}app-header paper-icon-button{--paper-icon-button-ink-color:white;}.drawer-list{margin:0 20px;}.drawer-list a{display:block;padding:0 16px;line-height:40px;text-decoration:none;color:var(--app-secondary-color);}.drawer-list a.iron-selected{color:black;font-weight:bold;}.logo{text-align:center;}.logo a{font-size:16px;font-weight:600;letter-spacing:0.3em;color:black;text-decoration:none;display:inline-block;pointer-events:auto;}.left-bar-item{width:40px;}app-drawer{z-index:3;}.row{flex-direction:row;}.column{flex-direction:column;}.header__input--rounded{color:var(--app-secondary-color);flex:1 1 auto;padding-left:10px;padding-right:10px;}iron-pages{max-width:960px;margin:0 auto;}#tabContainer{background-color:var(--app-light-primary-color);display:flex;flex-direction:column;}.advancedSearch{align-self:flex-end;}.advancedSearch a{text-decoration:none;}@media screen and (min-width: 768px){.menu-btn{display:none;}}</style>
 
-      }
+    <google-maps-api version="3.exp" api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE"></google-maps-api>
 
-     :host([page=business]) .menu-btn {
-         display: none;
-     }
-
-     :host(:not([page=business])) .back-btn {
-         display: none;
-     }
-
-     :host([page=advanced]) #searchBar {
-         display: none;
-     }
-
-      app-header {
-        background-color: var(--app-primary-color);
-        color: #fff;
-      }
-
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-
-      .drawer-list {
-        margin: 0 20px;
-      }
-
-      .drawer-list a {
-        display: block;
-        padding: 0 16px;
-        line-height: 40px;
-        text-decoration: none;
-        color: var(--app-secondary-color);
-      }
-
-      .drawer-list a.iron-selected {
-        color: black;
-        font-weight: bold;
-      }
-
-     .logo {
-         text-align: center;
-     }
-
-     .logo a {
-         font-size: 16px;
-         font-weight: 600;
-         letter-spacing: 0.3em;
-         color: black;
-         text-decoration: none;
-         /* required for IE 11, so this <a> can receive pointer events */
-         display: inline-block;
-         pointer-events: auto;
-     }
-
-
-     .left-bar-item {
-         width: 40px;
-     }
-
-     app-drawer {
-         z-index: 3;
-     }
-
-     .row {
-         flex-direction: row;
-     }
-
-     .column {
-         flex-direction: column;
-     }
-
-     .header__input--rounded {
-         /* border-radius: 25%; */
-         color: var(--app-secondary-color);
-         flex: 1 1 auto;
-         padding-left: 10px;
-         padding-right: 10px;
-     }
-
-     iron-pages {
-         max-width: 960px;
-         margin: 0 auto;
-     }
-
-     #tabContainer {
-         background-color: var(--app-light-primary-color);
-         display: flex;
-         flex-direction: column;
-     }
-
-     .advancedSearch {
-         align-self: flex-end;
-     }
-
-     .advancedSearch a {
-         text-decoration: none;
-     }
-
-     /* paper-icon-button has no hidden attribute  */
-     @media screen and (min-width: 768px) {
-         .menu-btn {
-             display: none;
-         }
-     }
-
-    </style>
-
-    <google-maps-api id="maps" libraries="places" ></google-maps-api>
-
-    <app-location route="{{route}}" query-params="{{queryParams}}" use-hash-as-path></app-location>
+    <app-location route="{{route}}" query-params="{{queryParams}}" use-hash-as-path=""></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
     <app-route route="{{route}}" pattern="/search" active="{{searchActive}}" tail="{{searchTail}}"></app-route>
     <app-route route="{{route}}" pattern="/business"></app-route>
 
     <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <app-header role="navigation" id="header" effects="waterfall" condenses reveals>
+    <app-header role="navigation" id="header" effects="waterfall" condenses="" reveals="">
       <app-toolbar>
         <div class="left-bar-item">
-          <paper-icon-button
-              class="menu-btn"
-              icon="menu"
-              on-tap="_toggleDrawer"
-              aria-label="App Menu">
+          <paper-icon-button class="menu-btn" icon="menu" on-tap="_toggleDrawer" aria-label="App Menu">
           </paper-icon-button>
           <a id="backBtn" class="back-btn" tabindex="-1">
             <paper-icon-button icon="arrow-back" aria-label="Go back"></paper-icon-button>
           </a>
         </div>
-        <div class="logo" title><a href="/#/home" aria-label="Reviewer Home">Restaurant Reviewer</a></div>
+        <div class="logo" title=""><a href="/#/home" aria-label="Reviewer Home">Restaurant Reviewer</a></div>
       </app-toolbar>
     </app-header>
 
-    <!-- Restaurant Search Bar -->
+    
     <div id="tabContainer">
       <div id="searchBar" class="header__search">
         <valid-form id="searchForm" button="Search">
-          <iron-a11y-keys id="a11y" target="[[termTarget]]" keys="enter"
-                          on-keys-pressed="_submitSearch"></iron-a11y-keys>
-          <paper-input aria-label="Business Name or Category"
-                       id="searchLocation"
-                       placeholder="Joe's diner, tacos, steakhouses"
-                       class="header__input--rounded"
-                       value="{{queryParams.search}}"
-                       required>
-            <iron-icon icon="search" prefix></iron-icon>
-            <div suffix></div>
+          <iron-a11y-keys id="a11y" target="[[termTarget]]" keys="enter" on-keys-pressed="_submitSearch"></iron-a11y-keys>
+          <paper-input aria-label="Business Name or Category" id="searchLocation" placeholder="Joe's diner, tacos, steakhouses" class="header__input--rounded" value="{{queryParams.search}}" required="">
+            <iron-icon icon="search" prefix=""></iron-icon>
+            <div suffix=""></div>
           </paper-input>
-          <iron-a11y-keys id="a11y" target="[[locationTarget]]" keys="enter"
-                          on-keys-pressed="_submitSearch"></iron-a11y-keys>
-          <places-input class="header__input--rounded"
-                        value="{{location}}"
-                        lat="{{latitude}}"
-                        lng="{{longitude}}"
-                        aria-label="location"
-                        placeholder="address, neighborhood, city, state"
-                        required>
-            <iron-icon icon="communication:location-on" prefix></iron-icon>
-            <div suffix></div>
+          <iron-a11y-keys id="a11y" target="[[locationTarget]]" keys="enter" on-keys-pressed="_submitSearch"></iron-a11y-keys>
+          <places-input class="header__input--rounded" value="{{location}}" lat="{{latitude}}" lng="{{longitude}}" aria-label="location" placeholder="address, neighborhood, city, state" required="">
+            <iron-icon icon="communication:location-on" prefix=""></iron-icon>
+            <div suffix=""></div>
           </places-input>
         </valid-form>
       </div>
@@ -221,9 +74,9 @@
         </div>
     </div>
 
-    <!-- Drawer content for small screens -->
+    
     <template is="dom-if" if="[[smallScreen]]">
-      <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
+      <app-drawer opened="{{drawerOpened}}" swipe-open="" tabindex="0">
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="home" href="/#/home">Home</a>
           <a name="search" href="#" on-tap="_toSearch">Search Results</a>
@@ -231,386 +84,22 @@
       </app-drawer>
     </template>
 
-    <!-- page is used here instead of routeData.page for CSS styling -->
+    
     <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
-      <home-page name="home"
-                 search-term="{{queryParams.search}}"
-                 submit="{{submitSearch}}"
-                 business="{{business}}"
-                 query-params="{{queryParams}}"
-                 coords="[[coords]]"></home-page>
-      <advanced-search name="advanced"
-                       route="{{route}}"
-                       query-params="{{queryParams}}"
-                       location="{{location}}"
-                       latitude="{{latitude}}"
-                       longitude="{{longitude}}"
-                       open-now="{{openNow}}"
-                       min-price="{{minPrice}}"
-                       max-price="{{maxPrice}}"
-                       radius="{{radius}}"></advanced-search>
-      <search-results name="search"
-                      route="{{searchTail}}"
-                      active="{{searchActive}}"
-                      map="[[listingMap]]"
-                      search-results="[[searchResults]]"
-                      coords="[[coords]]"
-                      query-params="{{queryParams}}"
-                      min-price="[[minPrice]]"
-                      max-price="[[maxPrice]]"
-                      radius="[[radius]]"
-                      business="{{business}}"></search-results>
-      <business-listing name="business"
-                        listing-map="[[listingMap]]"
-                        coords="[[coords]]"
-                        reviews="{{reviews}}"
-                        business="[[formattedBusiness]]"></business-listing>
+      <home-page name="home" search-term="{{queryParams.search}}" submit="{{submitSearch}}" business="{{business}}" query-params="{{queryParams}}" coords="[[coords]]"></home-page>
+      <advanced-search name="advanced" route="{{route}}" query-params="{{queryParams}}" location="{{location}}" latitude="{{latitude}}" longitude="{{longitude}}" open-now="{{openNow}}" min-price="{{minPrice}}" max-price="{{maxPrice}}" radius="{{radius}}"></advanced-search>
+      <search-results name="search" route="{{searchTail}}" active="{{searchActive}}" map="[[listingMap]]" search-results="[[searchResults]]" coords="[[coords]]" query-params="{{queryParams}}" min-price="[[minPrice]]" max-price="[[maxPrice]]" radius="[[radius]]" business="{{business}}"></search-results>
+      <business-listing name="business" listing-map="[[listingMap]]" coords="[[coords]]" reviews="{{reviews}}" business="[[formattedBusiness]]"></business-listing>
     </iron-pages>
 
-    <!-- fake google map element for the Google Places library -->
+    
     <div id="map"></div>
 
   </template>
 
-  <script>
+  <script>Polymer({is:"restaurant-reviewer",properties:{page:{type:String,reflectToAttribute:!0},routeData:{type:Object,notify:!0,value:function(){return{page:"home"}}},route:{type:Object},searchTail:{type:Object,notify:!0},searchActive:{type:Boolean,notify:!0},queryParams:{type:Object,notify:!0},smallScreen:{type:Boolean,observer:"_searchStyle"},latitude:{type:Number,notify:!0},longitude:{type:Number,notify:!0},coords:{computed:"_getCoords(latitude, longitude)"},searchResults:{type:Array,value:function(){return[]}},submitSearch:{type:Boolean,value:!1,observer:"_submitSearch"},business:{type:Object,notify:!0,observer:"_showBusiness"},formattedBusiness:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},listingMap:{type:Object,notify:!0,value:function(){return this.$.map}},termTarget:{type:Object,notify:!0,value:function(){return this.$.searchTerm}},locationTarget:{type:Object,notify:!0,value:function(){return this.$.searchLocation}},location:{type:String,notify:!0},openNow:{type:Boolean,notify:!0},minPrice:{type:Number,notify:!0,value:0},maxPrice:{type:Number,notify:!0,value:4},radius:{type:Number,notify:!0,value:1e4}},listeners:{"searchForm.iron-form-submit":"_textSearch","backBtn.tap":"_goBack"},observers:["_routePageChanged(routeData.page)"],_routePageChanged:function(e){void 0===this.route&&(document.location="/#/home"),this.page=e||"home",Polymer.AppLayout.scroll({top:0,behavior:"silent"}),this.drawerOpened=!1},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened},_searchStyle:function(e){this.$.searchBar.classList.remove("column"),this.$.searchBar.classList.remove("row"),e?this.$.searchBar.classList.add("column"):this.$.searchBar.classList.add("row")},_goBack:function(){history.back()},_toSearch:function(){this.set("route.path","/search")},_toAdvSearch:function(){this.set("route.path","/advanced")},attached:function(){this._detectLocation()},_detectLocation:function(){var e=this;if(!(!1 in navigator)){var t={enableHighAccuracy:!0,maximumAge:5e3};navigator.geolocation.getCurrentPosition(function(t){var a=t.coords.latitude,o=t.coords.longitude;e.latitude=a,e.longitude=o,fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng="+a+","+o).then(function(t){t.json().then(function(t){t.status==google.maps.places.PlacesServiceStatus.OK?e.location=t.results[0].formatted_address:console.log("geolocation failed: ",t.status,t.error_message)})})},function(e){console.log("geolocation error: ",e)},t)}},_getCoords:function(e,t){return this.set("queryParams.lat",e),this.set("queryParams.lng",t),new google.maps.LatLng(e,t)},_textSearch:function(){this.openNow=!1,this.minPrice=0,this.maxPrice=4,this.radius=1e4,this.set("route.path","/search")},_submitSearch:function(e){e&&(this.$.searchForm.submit(),this.submitSearch=!1)},_fetchImageUrl:function(e){return imageUrl=e.getUrl({maxWidth:1e3,maxHeight:500}),imageUrl},loadReviews:function(e){var t=this,a=e.place_id;localforage.getItem(a,function(a,o){var r=e.reviews;null==o?t.reviews=r:(null==r&&(r=[]),o.map(function(e){r.unshift(e)}),t.reviews=r)})},parseBusiness:function(e){var t=(new Date).getDay();t-=0==t?-6:1;var a=e.formatted_address,o=e.photos||"https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",r=e.opening_hours.weekday_text[t],i=e.formatted_phone_number,s=e.place_id,n=e.price_level,c=e.rating,u=e.name,l=e.website,h="string"==typeof o?o:this._fetchImageUrl(o[0]);return this.loadReviews(e),{address:a,hours:r,image:h,phone:i,placeId:s,price:n,rating:c,title:u,website:l}},_showBusiness:function(e){var t=this,a=new google.maps.Map(this.$.map,{}),o={placeId:e.placeId||e.place_id},r=new google.maps.places.PlacesService(a);r.getDetails(o,function(e,a){a==google.maps.places.PlacesServiceStatus.OK&&(t.formattedBusiness=t.parseBusiness(e),t.routeData.page="business")})}});</script>
 
-   Polymer({
-
-     is: 'restaurant-reviewer',
-
-     properties: {
-       page: {
-         type: String,
-         reflectToAttribute: true
-       },
-
-       routeData: {
-         type: Object,
-         notify: true,
-         value: function() {
-           return {
-             page: "home"
-           }
-         }
-       },
-
-       route: {
-         type: Object
-       },
-
-       searchTail: {
-         type: Object,
-         notify: true
-       },
-
-       searchActive: {
-         type: Boolean,
-         notify: true
-       },
-
-       queryParams: {
-         type: Object,
-         notify: true
-       },
-
-       smallScreen: {
-         type: Boolean,
-         observer: "_searchStyle"
-       },
-
-       latitude: {
-         type: Number,
-         notify: true
-       },
-
-       longitude: {
-         type: Number,
-         notify: true
-       },
-
-       coords: {
-         computed: '_getCoords(latitude, longitude)'
-       },
-
-       searchResults: {
-         type: Array,
-         value: function() {
-           return [];
-         }
-       },
-
-       submitSearch: {
-         type: Boolean,
-         value: false,
-         observer: "_submitSearch"
-       },
-
-       business: {
-         type: Object,
-         notify: true,
-         observer: "_showBusiness"
-       },
-
-       formattedBusiness: {
-         type: Object,
-         notify: true
-       },
-
-       reviews: {
-         type: Array,
-         notify: true,
-         value: function() {
-           return [];
-         }
-       },
-
-       listingMap: {
-         type: Object,
-         notify: true,
-         value: function() {
-           return this.$.map;
-         }
-       },
-
-       termTarget: {
-         type: Object,
-         notify: true,
-         value: function() {
-           return this.$.searchTerm;
-         }
-       },
-
-       locationTarget: {
-         type: Object,
-         notify: true,
-         value: function() {
-           return this.$.searchLocation;
-         }
-       },
-
-       location: {
-         type: String,
-         notify: true,
-         value: function() {
-           this._detectLocation();
-         }
-       },
-
-       openNow: {
-         type: Boolean,
-         notify: true
-       },
-
-       minPrice: {
-         type: Number,
-         notify: true,
-         value: 0
-       },
-
-       maxPrice: {
-         type: Number,
-         notify: true,
-         value: 4
-       },
-
-       radius: {
-         type: Number,
-         notify: true,
-         value: 10000
-       }
-
-     },
-
-     listeners: {
-       'searchForm.iron-form-submit': '_textSearch',
-       'backBtn.tap': '_goBack'
-     },
-
-     observers: [
-       '_routePageChanged(routeData.page)'
-     ],
-
-     // mostly for styling the CSS back and menu buttons
-     _routePageChanged: function(page) {
-       this.page = page || "home";
-        // Scroll to the top of the page on every *route* change. Use `Polymer.AppLayout.scroll`
-        // with `behavior: 'silent'` to disable header scroll effects during the scroll.
-        Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
-        // Close the drawer - in case the *route* change came from a link in the drawer.
-        this.drawerOpened = false;
-     },
-
-     _toggleDrawer: function() {
-       this.drawerOpened = !this.drawerOpened;
-     },
-
-     /**
-      * Adapts the search bar to column or row layout based on screen size
-      *
-      * @param {Boolean} smallScreen
-      */
-     _searchStyle: function(smallScreen) {
-       // clear any existing column or row classes
-       this.$.searchBar.classList.remove("column");
-       this.$.searchBar.classList.remove("row");
-
-       // add the necessary column or row class based on screen size
-       smallScreen?
-       this.$.searchBar.classList.add("column") :
-       this.$.searchBar.classList.add("row");
-     },
-
-     _goBack: function() {
-       history.back();
-     },
-
-     // avoid removing the query params from the url
-     _toSearch: function() {
-       this.set('route.path', '/search');
-     },
-
-     _toAdvSearch: function() {
-       this.set('route.path', '/advanced');
-     },
-
-     _detectLocation: function() {
-       if (!"geolocation" in navigator) return;
-
-       var opts = {
-         enableHighAccuracy: true,
-         maximumAge: 5000
-       };
-
-       navigator.geolocation.getCurrentPosition(position => {
-         var lat = position.coords.latitude,
-             lng = position.coords.longitude;
-
-         this.latitude = lat;
-         this.longitude = lng;
-
-         // set the location to the current address
-         fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng).then(resp => {
-           resp.json().then(places => {
-             this.location = places.results[0].formatted_address;
-           });
-         });
-       }, function(e) {
-         console.log("geolocation error: ", e);
-      },
-       opts)
-     },
-
-     _getCoords: function(lat, lng) {
-       this.set('queryParams.lat', lat);
-       this.set('queryParams.lng', lng);
-       return new google.maps.LatLng(lat, lng);
-     },
-
-     /**
-      * Resets advanced search params to their default values when the
-      * app-header search is used and jumps to the page of search results.
-      */
-     _textSearch: function() {
-       this.openNow = false,
-       this.minPrice = 0,
-       this.maxPrice = 4,
-       this.radius = 10000;
-
-       this.set('route.path', '/search');
-     },
-
-     _submitSearch: function(doSearch) {
-       if (doSearch) {
-         this.$.searchForm.submit();
-         this.submitSearch = false;
-       }
-     },
-
-     _fetchImageUrl: function(imageData) {
-       imageUrl = imageData.getUrl({maxWidth: 1000, maxHeight: 500});
-       return imageUrl;
-     },
-
-     loadReviews: function(business) {
-       // load the custom reviews for this business
-       var placeId = business.place_id;
-
-       localforage.getItem(placeId, (err, cachedReviews) => {
-         var reviews = business.reviews;
-
-         if (cachedReviews == null) {
-           this.reviews = reviews;
-         } else {
-
-         if (reviews == null) reviews = [];
-
-         cachedReviews.map(review => {
-           reviews.unshift(review);
-         });
-
-         this.reviews = reviews;
-         }
-       })
-     },
-
-      parseBusiness: function(business) {
-        // find day of the week and use to get the current day's opening hours
-        // weeks start on monday so monday = 0 and sunday = 6.
-        // inspired by http://stackoverflow.com/questions/4156434/javascript-get-the-first-day-of-the-week-from-current-date
-        var day = new Date().getDay();
-        day = day - (day == 0 ? -6:1);
-
-        var address = business.formatted_address,
-            imageData = business.photos || "https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",
-            hours = business.opening_hours.weekday_text[day],
-            phone = business.formatted_phone_number,
-            placeId = business.place_id,
-            price = business.price_level,
-            rating = business.rating,
-            title = business.name,
-            website = business.website;
-
-        var imageUrl = typeof(imageData) == "string" ? imageData : this._fetchImageUrl(imageData[0]);
-
-        // separated because the review rendering must happen asynchronously
-        this.loadReviews(business);
-
-            return {
-              address: address,
-              hours: hours,
-              image: imageUrl,
-              phone: phone,
-              placeId: placeId,
-              price: price,
-              rating: rating,
-              title: title,
-              website: website
-            };
-      },
-
-     _showBusiness: function(business) {
-       // center and zoom the business listing map
-       // TODO: fix map here and add marker
-       var map = new google.maps.Map(this.$.map, {
-       });
-
-       var request = {
-         placeId: business.placeId || business.place_id
-       };
-
-       var places = new google.maps.places.PlacesService(map);
-       places.getDetails(request, (place, status) => {
-         if (status == google.maps.places.PlacesServiceStatus.OK) {
-           // load the detailed business info for the listing page
-           this.formattedBusiness = this.parseBusiness(place);
-
-           // change to the business listing page when the selected business changes
-           this.routeData.page = 'business';
-         }
-       })
-     }
-
-   });
-  </script>
+  
 
 </dom-module>
+</body></html>

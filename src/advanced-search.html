@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
@@ -9,47 +9,11 @@
 <link rel="import" href="valid-form.html">
 
 
-<dom-module id="advanced-search">
+</head><body><dom-module id="advanced-search">
 
   <template>
 
-    <style>
-     :host {
-         --valid-form-button: {
-             border-radius: 25%;
-             background-color:  #FFE05C;
-             flex: 0 1 auto;
-             width: 10%;
-             /* padding-left: ; */
-         }
-
-         --valid-form-form: {
-             background-color: white !important;
-             flex-wrap: wrap;
-             flex-direction: column;
-             width: 80%;
-         }
-     }
-
-     .card {
-         box-shadow: 0 2px 2px 0  rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-         padding: 16px;
-         margin: 24px;
-         border-radius: 5px;
-         background-color: #fff;
-         width: 80%;
-     }
-
-     paper-slider {
-         margin-top: 0 !important;
-     }
-
-     paper-input, places-input, paper-toggle-button, paper-slider {
-         width: 75%;
-         margin: 1em;
-     }
-
-    </style>
+    <style>:host{--valid-form-button:{border-radius:25%;background-color:#FFE05C;flex:0 1 auto;width:10%;};--valid-form-form:{background-color:white !important;flex-wrap:wrap;flex-direction:column;width:80%;};}.card{box-shadow:0 2px 2px 0  rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);padding:16px;margin:24px;border-radius:5px;background-color:#fff;width:80%;}paper-slider{margin-top:0 !important;}paper-input, places-input, paper-toggle-button, paper-slider{width:75%;margin:1em;}</style>
 
     <app-route route="{{route}}" query-params="{{queryParams}}">
     </app-route>
@@ -58,145 +22,25 @@
       <valid-form id="advSearchForm" button="Search">
         <h3>Advanced Search</h3>
 
-        <paper-input label="Business Name or Food Type"
-                     ariaLabel="Business Name or Food Type"
-                     value="{{queryParams.search}}"
-                     required></paper-input>
+        <paper-input label="Business Name or Food Type" arialabel="Business Name or Food Type" value="{{queryParams.search}}" required=""></paper-input>
 
-        <places-input value="{{location}}"
-                      lat="{{latitude}}"
-                      lng="{{longitude}}"
-                      label="Location"
-                      aria-label="Location"
-                      required></places-input>
+        <places-input value="{{location}}" lat="{{latitude}}" lng="{{longitude}}" label="Location" aria-label="Location" required=""></places-input>
 
         <paper-toggle-button value="{{openNow}}">Open Now</paper-toggle-button>
 
         <label for="minPriceFilter">Minimum Price</label>
-        <paper-slider id="minPriceFilter"
-                      aria-label="Minimum Price"
-                      value="{{minPrice}}"
-                      min="0"
-                      max="4"
-                      required
-                      editable></paper-slider>
+        <paper-slider id="minPriceFilter" aria-label="Minimum Price" value="{{minPrice}}" min="0" max="4" required="" editable=""></paper-slider>
 
         <label for="maxPriceFilter">Maximum Price</label>
-        <paper-slider id="maxPriceFilter"
-                      aria-label="Maximum Price"
-                      value="{{maxPrice}}"
-                      min="0"
-                      max="4"
-                      required
-                      editable></paper-slider>
+        <paper-slider id="maxPriceFilter" aria-label="Maximum Price" value="{{maxPrice}}" min="0" max="4" required="" editable=""></paper-slider>
 
         <label for="radiusFilter">Search Radius (in kilometers)</label>
-        <paper-slider id="radiusFilter"
-                      aria-label="Search Radius (in kilometers)"
-                      value="{{kmRadius}}"
-                      min="1"
-                      max="10"
-                      editable></paper-slider>
+        <paper-slider id="radiusFilter" aria-label="Search Radius (in kilometers)" value="{{kmRadius}}" min="1" max="10" editable=""></paper-slider>
       </valid-form>
     </paper-card>
   </template>
 
-  <script>
-
-   Polymer({
-
-     is: 'advanced-search',
-
-     behaviors: [
-       Polymer.IronValidatableBehavior
-     ],
-
-     properties: {
-       route: {
-         type: Object,
-         notify: true
-       },
-
-       queryParams: {
-         type: Object,
-         notify: true
-       },
-
-       location: {
-         type: String,
-         notify: true
-       },
-
-       latitude: {
-         type: Number,
-         notify: true
-       },
-
-       longitude: {
-         type: Number,
-         notify: true
-       },
-
-       openNow: {
-         type: Boolean,
-         notify: true
-       },
-
-       minPrice: {
-         type: Number,
-         notify: true
-       },
-
-       maxPrice: {
-         type: Number,
-         notify: true
-       },
-
-       kmRadius: {
-         type: Number,
-         value: 10
-       },
-
-       radius: {
-         type: Number,
-         notify: true
-       }
-
-     },
-
-     listeners: {
-       'advSearchForm.iron-form-submit': '_textSearch'
-     },
-
-     observers: [
-       'setMin(maxPrice)',
-       'setMax(minPrice)',
-       'setRadius(kmRadius)'
-     ],
-
-     setMax: function(min) {
-       if (this.maxPrice < min) {
-         this.maxPrice = min;
-       }
-     },
-
-     setMin: function(max) {
-       if (max < this.minPrice) {
-         this.minPrice = max;
-       }
-     },
-
-     setRadius: function(kmRadius) {
-       this.radius = kmRadius * 1000;
-     },
-
-     // jump to the search-results page
-     _textSearch: function() {
-       console.log('fire!');
-       this.set('route.path', '/search');
-     }
-
-   });
-  </script>
+  <script>Polymer({is:"advanced-search",behaviors:[Polymer.IronValidatableBehavior],properties:{route:{type:Object,notify:!0},queryParams:{type:Object,notify:!0},location:{type:String,notify:!0},latitude:{type:Number,notify:!0},longitude:{type:Number,notify:!0},openNow:{type:Boolean,notify:!0},minPrice:{type:Number,notify:!0},maxPrice:{type:Number,notify:!0},kmRadius:{type:Number,value:10},radius:{type:Number,notify:!0}},listeners:{"advSearchForm.iron-form-submit":"_textSearch"},observers:["setMin(maxPrice)","setMax(minPrice)","setRadius(kmRadius)"],setMax:function(e){this.maxPrice<e&&(this.maxPrice=e)},setMin:function(e){e<this.minPrice&&(this.minPrice=e)},setRadius:function(e){this.radius=1e3*e},_textSearch:function(){this.set("route.path","/search")}});</script>
 
 </dom-module>
+</body></html>

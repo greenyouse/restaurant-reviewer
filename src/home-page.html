@@ -1,48 +1,11 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="restaurant-card.html">
 
-<dom-module id="home-page">
+</head><body><dom-module id="home-page">
   <template>
 
-    <style>
-     .nearbyTable {
-         @apply(--layout-horizontal);
-         @apply(--layout-center-justified);
-         @apply(--layout-wrap);
-     }
-
-     .nearbyTable > * {
-         padding: .5em;
-         width: 10em;
-         height: 20em;
-     }
-
-     .center {
-         text-align: center;
-     }
-
-     .categories {
-         @apply(--layout-horizontal);
-         @apply(--layout-center-justified);
-         @apply(--layout-wrap);
-     }
-
-     .categories > * > * {
-         list-style: none;
-         color: var(--google-blue-500);
-     }
-
-     .categories > * > *:hover {
-         cursor: pointer;
-     }
-
-     a {
-         color: black;
-         text-decoration: none;
-     }
-
-    </style>
+    <style>.nearbyTable{@apply (--layout-horizontal);@apply (--layout-center-justified);@apply (--layout-wrap);}.nearbyTable > *{padding:.5em;width:10em;height:20em;}.center{text-align:center;}.categories{@apply (--layout-horizontal);@apply (--layout-center-justified);@apply (--layout-wrap);}.categories > * > *{list-style:none;color:var(--google-blue-500);}.categories > * > *:hover{cursor:pointer;}a{color:black;text-decoration:none;}</style>
 
     <section>
 
@@ -50,13 +13,7 @@
       <div class="nearbyTable">
         <template is="dom-repeat" items="[[nearbyPlaces]]" as="shop">
           <a href="/#/business/{{shop.place_id}}">
-            <restaurant-card title=[[shop.name]]
-                             image-data=[[shop.photos]]
-                             rating=[[shop.rating]]
-                             open-now=[[shop.opening_hours.open_now]]
-                             place-id="[[shop.place_id]]"
-                             address=[[shop.vicinity]]
-                             on-tap="setBusiness">
+            <restaurant-card title="[[shop.name]]" image-data="[[shop.photos]]" rating="[[shop.rating]]" open-now="[[shop.opening_hours.open_now]]" place-id="[[shop.place_id]]" address="[[shop.vicinity]]" on-tap="setBusiness">
             </restaurant-card>
           </a>
         </template>
@@ -91,89 +48,13 @@
         </ul>
       </section>
 
-      <!-- fake google map element for the Google Places library -->
+      
       <div id="map"></div>
     </section>
 
   </template>
 
-  <script>
-   Polymer({
-
-     is: 'home-page',
-
-     properties: {
-       coords: {},
-
-       business: {
-         type: Object,
-         notify: true
-       },
-
-       nearbyPlaces: {
-         type: Array
-       },
-
-       searchTerm: {
-         type: String,
-         notify: true
-       },
-
-       submit: {
-         type: Boolean,
-         notify: true
-       }
-
-     },
-
-     observers: [
-       'fetchPlaces(coords)'
-     ],
-
-     setBusiness: function(e) {
-       this.business = e.model.shop;
-     },
-
-     setSearch: function(e) {
-       var businessName = e.detail.sourceEvent.target.innerText;
-
-       this.searchTerm = businessName;
-       this.submit = true;
-     },
-
-     /**
-      * Loads an array of nearby restaurants
-      * @param {Array} coords The lat/lng coordinates to use
-      */
-     fetchPlaces: function(coords) {
-
-       var map = new google.maps.Map(this.$.map, {
-         center: coords
-       });
-
-       var request = {
-         location: coords,
-         radius: '10000',
-         types: ['restaurant']
-       };
-
-       var places = new google.maps.places.PlacesService(map);
-
-       places.nearbySearch(request, (resp, status) => {
-         if (status == google.maps.places.PlacesServiceStatus.OK) {
-
-           // try to only include restaurants with pictures
-           var shops = resp.filter(s => {
-             return s.photos;
-           });
-
-           shops = shops.splice(0,4);
-           this.nearbyPlaces = shops;
-         }
-       });
-     }
-
-   });
-  </script>
+  <script>Polymer({is:"home-page",properties:{coords:{},business:{type:Object,notify:!0},nearbyPlaces:{type:Array},searchTerm:{type:String,notify:!0},submit:{type:Boolean,notify:!0}},observers:["fetchPlaces(coords)"],setBusiness:function(e){this.business=e.model.shop},setSearch:function(e){var s=e.detail.sourceEvent.target.innerText;this.searchTerm=s,this.submit=!0},fetchPlaces:function(e){var s=this,t=new google.maps.Map(this.$.map,{center:e}),r={location:e,radius:"10000",types:["restaurant"]},a=new google.maps.places.PlacesService(t);a.nearbySearch(r,function(e,t){if(t==google.maps.places.PlacesServiceStatus.OK){var r=e.filter(function(e){return e.photos});r=r.splice(0,4),s.nearbyPlaces=r}})}});</script>
 
 </dom-module>
+</body></html>
