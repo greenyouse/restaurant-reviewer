@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head>
+  <meta charset="UTF-8">
+  <title>paper-shadow basic tests</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../polymer-gestures/test/js/fake.js"></script>
+
+  <link href="../paper-shadow.html" rel="import">
+
+  <style>.card{width:100px;height:100px;}</style>
+
+</head>
+<body>
+
+  <paper-shadow id="s1" class="card"></paper-shadow>
+
+  <paper-shadow id="s2" class="card">
+    <div id="foo">hi!</div>
+  </paper-shadow>
+
+  <script>var s1=document.getElementById("s1"),fake=new Fake;test("default",function(){assert.notEqual(getComputedStyle(s1.$["shadow-bottom"])["box-shadow"],"none")}),test("shadows are pointer-events: none",function(e){var t=document.getElementById("foo");PolymerGestures.addEventListener(wrap(document),"tap",function(n){assert.strictEqual(n.target,t),e()}),fake.downOnNode(t,function(){fake.upOnNode(t)})});</script>
+
+
+
+</body></html>
