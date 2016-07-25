@@ -77,7 +77,6 @@
   </template>
 
   <script>Polymer({is:"business-listing",properties:{business:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},reviewRating:{type:Number,notify:!0,value:0},toggleReview:{type:Boolean,notify:!0,value:!1},reviewText:{type:String,notify:!0},reviewSent:{type:Boolean,notify:!0,value:!1},listingMap:{type:Object,notify:!0,value:function(){return this.$.listingMap}}},listeners:{"reviewStars.tap":"_showReview","reviewForm.iron-form-submit":"_submitReview"},observers:["resetBusiness(business)"],ready:function(){this.reviewSent=!1,this.toggleReview=!1},resetBusiness:function(e){this.reviewSent=!1,this.toggleReview=!1,this.reviewText="",this.reviewRating=0},_showReview:function(){this.toggleReview=!0},_saveReview:function(e,t){var i=t.placeId;localforage.getItem(i).then(function(t){null==t&&(t=[]),t.push(e),localforage.setItem(i,t)}).catch(function(e){console.log("Business db error: ",e)})},_getDate:function(){var e=new Date,t=e.getDate(),i=e.getMonth()+1,n=e.getFullYear();return t+"/"+i+"/"+n},_submitReview:function(){var e={text:this.reviewText,date:this._getDate(),author_name:"You",rating:this.reviewRating};this._saveReview(e,this.business),this.toggleReview=!1,this.reviewSent=!0}});</script>
-  <script src="../bower_components/localforage/dist/localforage.js"></script>
 
 </dom-module>
 </body></html>
