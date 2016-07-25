@@ -161,7 +161,7 @@
 
     </style>
 
-    <google-maps-api version="3.exp" api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE" ></google-maps-api>
+    <google-maps-api version="3.exp" api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE" library-loaded="{{googleLoaded}}"></google-maps-api>
 
     <app-location route="{{route}}" query-params="{{queryParams}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
@@ -414,6 +414,11 @@
          type: Number,
          notify: true,
          value: 10000
+       },
+
+       googleLoaded: {
+         type: Boolean,
+         value: false
        }
 
      },
@@ -424,7 +429,8 @@
      },
 
      observers: [
-       '_routePageChanged(routeData.page)'
+       '_routePageChanged(routeData.page)',
+       '_detectLocation(googleLoaded)'
      ],
 
      // mostly for styling the CSS back and menu buttons
@@ -474,11 +480,10 @@
        this.set('route.path', '/advanced');
      },
 
-     attached: function() {
-       this._detectLocation();
-     },
+     _detectLocation: function(loaded) {
+       // wait for the library to load before doing geolocation
+       if (loaded != true) return;
 
-     _detectLocation: function() {
        var _this = this;
 
        if (!"geolocation" in navigator) return;
