@@ -71,13 +71,17 @@
          margin: 2em 0 2em;
      }
 
-     li.review > p {
+     li.review > div:nth-child(1) {
          margin-right: 2em;
      }
 
      li.review:nth-child(1) {
          border-top: 1px solid black;
          padding-top: 2em;
+     }
+
+     .smallText {
+         font-size: .8rem;
      }
 
      img {
@@ -151,7 +155,10 @@
       <ul>
         <template is="dom-repeat" items="[[reviews]]" as="review">
           <li class="review flex layout nowrap horizontal start start-justified">
-            <p>[[review.author_name]]</p>
+            <div>
+              <p class="smallText">[[review.date]]</p>
+              <p>[[review.author_name]]</p>
+            </div>
             <div>
               <star-rating rating="[[review.rating]]"></star-rating>
               <p>[[review.text]]</p>
@@ -253,9 +260,20 @@
 
       },
 
+      _getDate: function() {
+        var d = new Date();
+
+        var day = d.getDate(),
+            month = d.getMonth() + 1,
+            year = d.getFullYear();
+
+        return day + "/" + month + "/" + year;
+      },
+
       _submitReview: function() {
         var review = {
           text: this.reviewText,
+          date: this._getDate(),
           author_name: "You",
           rating: this.reviewRating
         }
