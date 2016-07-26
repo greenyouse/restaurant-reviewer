@@ -52,7 +52,6 @@
               align-content:stretch;
               padding: 5px;
           }
-
       }
 
      :host([page=business]) .menu-btn {
@@ -69,11 +68,7 @@
 
       app-header {
         background-color: var(--app-primary-color);
-        color: #fff;
-      }
-
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+        color: black;
       }
 
       .drawer-list {
@@ -157,6 +152,10 @@
          .menu-btn {
              display: none;
          }
+     }
+
+     .logo a:focus {
+         outline: 1px solid black;
      }
 
     </style>
