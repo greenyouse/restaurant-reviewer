@@ -143,6 +143,10 @@
       </div>
 
       <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
+        <paper-input value="{{reviewName}}"
+                     placeholder="Your Name"
+                     required></paper-input>
+        <br>
         <iron-autogrow-textarea value="{{reviewText}}"
                                 hidden$="[[!toggleReview]]"
                                 placeholder="Enter a review for this business"
@@ -198,6 +202,11 @@
           type: Boolean,
           notify: true,
           value: false
+        },
+
+        reviewName: {
+          type: String,
+          notify: true
         },
 
         reviewText: {
@@ -274,9 +283,9 @@
         var review = {
           text: this.reviewText,
           date: this._getDate(),
-          author_name: "You",
+          author_name: this.reviewName,
           rating: this.reviewRating
-        }
+        };
 
         this._saveReview(review, this.business);
         this.toggleReview = false;
