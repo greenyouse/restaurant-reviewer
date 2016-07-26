@@ -19,7 +19,7 @@
      }
     </style>
 
-    <div class="rating">
+    <div class="rating" aria-label$="Rating: [[rating]]">
       <template is="dom-repeat" items="[[_starsColl]]" as="star">
         <iron-icon class$="[[star.class]]" src$="[[star.src]]" icon="[[star.icon]]"></iron-icon>
       </template>
