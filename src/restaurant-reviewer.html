@@ -32,7 +32,7 @@
     <style>
       :host {
         display: block;
-          --app-primary-color: #1976D2;
+          --app-primary-color: #5ca4ec;
           --app-light-primary-color: #BBDEFB;
           --app-secondary-color: black;
           --app-accent-color:  #FFE05C;
@@ -577,9 +577,14 @@
         var day = new Date().getDay();
         day = day - (day == 0 ? -6:1);
 
+        // check that weekday_text exists, otherwise use the default
+        var hours = "opening times not listed";
+        if ("weekday_text" in business.opening_hours)
+          hours = business.opening_hours.weekday_text[day];
+
         var address = business.formatted_address,
             imageData = business.photos || "https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",
-            hours = business.opening_hours.weekday_text[day],
+            hours = hours,
             phone = business.formatted_phone_number,
             placeId = business.place_id,
             price = business.price_level,
