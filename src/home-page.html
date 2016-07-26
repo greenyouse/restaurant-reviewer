@@ -49,7 +49,7 @@
       <h3 class="center">Nearby Restaurants</h3>
       <div class="nearbyTable">
         <template is="dom-repeat" items="[[nearbyPlaces]]" as="shop">
-          <a href="/restaurant-reviewer/#/business/{{shop.place_id}}">
+          <a href="/#/business/{{shop.place_id}}">
             <restaurant-card title=[[shop.name]]
                              image-data=[[shop.photos]]
                              rating=[[shop.rating]]

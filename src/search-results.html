@@ -100,7 +100,7 @@
       <h3 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h3>
       <div hidden$="[[emptyResults]]">
         <template is="dom-repeat" items="[[searchResults]]" as="shop" >
-          <a class="shopCard" href="/restaurant-reviewer/#/business/{{shop.placeId}}">
+          <a class="shopCard" href="/#/business/{{shop.placeId}}">
             <paper-card on-tap="setBusiness">
               <div class="card-content">
                 <div class="row">
