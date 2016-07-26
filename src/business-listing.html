@@ -84,35 +84,19 @@
          font-size: .8rem;
      }
 
-     img {
-         max-width: 45vw;
-         max-height: 50vw;
-     }
-
      iron-autogrow-textarea {
          background-color: white;
      }
 
-     @media screen and (max-width: 767px) {
-         img {
-             width: 80vw;
-             height: 40vh;
-         }
-     }
-
-     @media screen and (max-width: 768px) and (min-width: 768px) {
-         img {
-             width: 80vw;
-             height: 80vh;
-         }
+     img {
+         max-width: 100% !important;
+         height:auto;
+         display: inline-block;
      }
     </style>
 
     <paper-card class="card flex layout nowrap vertical center center-justified">
-      <div class="flex layout wrap horizontal">
-        <img src="[[business.image]]" alt="Business Image"></img>
-        <div id="listingMap"></div>
-      </div>
+      <img src="[[business.image]]" alt="Business Image" />
 
       <h3>[[business.title]]</h3>
       <star-rating rating="[[business.rating]]"></star-rating>
@@ -218,14 +202,6 @@
           type: Boolean,
           notify: true,
           value: false
-        },
-
-        listingMap: {
-          type: Object,
-          notify: true,
-          value: function() {
-            return this.$.listingMap;
-          }
         }
       },
 
