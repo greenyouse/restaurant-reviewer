@@ -7,7 +7,7 @@
     <p>[[dollarRating]]</p>
   </template>
 
-  <script>Polymer({is:"dollar-rating",properties:{rating:{type:Number},dollarRating:{type:String,notify:!0}},observers:["setDollarRating(rating)"],setDollarRating:function(r){if(r){for(var t="",i=0;i<=r;i++)t+="$";this.dollarRating=t}}});</script>
+  <script>Polymer({is:"dollar-rating",properties:{rating:{type:Number},dollarRating:{type:String,notify:!0}},observers:["setDollarRating(rating)"],setDollarRating:function(r){if(r){for(var t="",i=0;i<r;i++)t+="$";this.dollarRating=t}}});</script>
 
 </dom-module>
 </body></html>

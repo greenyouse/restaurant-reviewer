@@ -15,13 +15,10 @@
 </head><body><dom-module id="business-listing">
 
   <template>
-    <style include="iron-flex iron-flex-alignment">:host{--valid-form-button:{border-radius:10%;background-color:#FFE05C;flex:1 1 auto;padding-left:10px;};--valid-form-form:{flex-direction:column;padding:2em;};--valid-form-elements:{margin:2em;};}*[hidden]{display:none !important;}.card{box-shadow:0 2px 2px 0  rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);padding:16px;margin:24px;border-radius:5px;background-color:#fff;}.flex{-webkit-flex-basis:auto !important;flex-basis:auto !important;}ul.metadata > li{display:flex;justify-content:flex-start;align-items:center;}ul.metadata > li > *{align-self:auto;padding-right:1em;}li{list-style:none;}li.review{border-bottom:1px solid black;margin:2em 0 2em;}li.review > div:nth-child(1){margin-right:2em;}li.review:nth-child(1){border-top:1px solid black;padding-top:2em;}.smallText{font-size:.8rem;}img{max-width:45vw;max-height:50vw;}iron-autogrow-textarea{background-color:white;}@media screen and (max-width: 767px){img{width:80vw;height:40vh;}}@media screen and (max-width: 768px) and (min-width: 768px){img{width:80vw;height:80vh;}}</style>
+    <style include="iron-flex iron-flex-alignment">:host{--valid-form-button:{border-radius:10%;background-color:#FFE05C;flex:1 1 auto;padding-left:10px;};--valid-form-form:{flex-direction:column;padding:2em;};--valid-form-elements:{margin:2em;};}*[hidden]{display:none !important;}.card{box-shadow:0 2px 2px 0  rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);padding:16px;margin:24px;border-radius:5px;background-color:#fff;}.flex{-webkit-flex-basis:auto !important;flex-basis:auto !important;}ul.metadata > li{display:flex;justify-content:flex-start;align-items:center;}ul.metadata > li > *{align-self:auto;margin-right:1em;}li{list-style:none;}li.review{border-bottom:1px solid black;margin:2em 0 2em;}li.review > div:nth-child(1){margin-right:2em;}li.review:nth-child(1){border-top:1px solid black;padding-top:2em;}.smallText{font-size:.8rem;}a, p{overflow-wrap:break-word;}iron-autogrow-textarea{background-color:white;}img{max-width:100% !important;height:auto;display:inline-block;}</style>
 
     <paper-card class="card flex layout nowrap vertical center center-justified">
-      <div class="flex layout wrap horizontal">
-        <img src="[[business.image]]" alt="Business Image">
-        <div id="listingMap"></div>
-      </div>
+      <img src="[[business.image]]" alt="Business Image">
 
       <h3>[[business.title]]</h3>
       <star-rating rating="[[business.rating]]"></star-rating>
@@ -48,10 +45,12 @@
 
       <div hidden$="[[reviewSent]]">
         <p>Add your review: </p>
-        <star-picker id="reviewStars" rating="{{reviewRating}}"></star-picker>
+        <star-picker id="reviewStars" selected="[[toggleReview]]" rating="{{reviewRating}}"></star-picker>
       </div>
 
       <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
+        <paper-input value="{{reviewName}}" label="Name" required=""></paper-input>
+        <br>
         <iron-autogrow-textarea value="{{reviewText}}" hidden$="[[!toggleReview]]" placeholder="Enter a review for this business" required=""></iron-autogrow-textarea>
       </valid-form>
       <h3 hidden$="[[!reviewSent]]">Thanks for your review!</h3>
@@ -76,7 +75,7 @@
     </paper-card>
   </template>
 
-  <script>Polymer({is:"business-listing",properties:{business:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},reviewRating:{type:Number,notify:!0,value:0},toggleReview:{type:Boolean,notify:!0,value:!1},reviewText:{type:String,notify:!0},reviewSent:{type:Boolean,notify:!0,value:!1},listingMap:{type:Object,notify:!0,value:function(){return this.$.listingMap}}},listeners:{"reviewStars.tap":"_showReview","reviewForm.iron-form-submit":"_submitReview"},observers:["resetBusiness(business)"],ready:function(){this.reviewSent=!1,this.toggleReview=!1},resetBusiness:function(e){this.reviewSent=!1,this.toggleReview=!1,this.reviewText="",this.reviewRating=0},_showReview:function(){this.toggleReview=!0},_saveReview:function(e,t){var i=t.placeId;localforage.getItem(i).then(function(t){null==t&&(t=[]),t.push(e),localforage.setItem(i,t)}).catch(function(e){console.log("Business db error: ",e)})},_getDate:function(){var e=new Date,t=e.getDate(),i=e.getMonth()+1,n=e.getFullYear();return t+"/"+i+"/"+n},_submitReview:function(){var e={text:this.reviewText,date:this._getDate(),author_name:"You",rating:this.reviewRating};this._saveReview(e,this.business),this.toggleReview=!1,this.reviewSent=!0}});</script>
+  <script>Polymer({is:"business-listing",properties:{business:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},reviewRating:{type:Number,notify:!0,value:0},toggleReview:{type:Boolean,notify:!0,value:!1},reviewName:{type:String,notify:!0},reviewText:{type:String,notify:!0},reviewSent:{type:Boolean,notify:!0,value:!1}},listeners:{"reviewStars.tap":"_showReview","reviewForm.iron-form-submit":"_submitReview"},observers:["resetBusiness(business)"],ready:function(){this.reviewSent=!1,this.toggleReview=!1},resetBusiness:function(e){this.reviewSent=!1,this.toggleReview=!1,this.reviewText="",this.reviewRating=0},_showReview:function(){this.toggleReview=!0},_saveReview:function(e,t){var i=t.placeId;localforage.getItem(i).then(function(t){null==t&&(t=[]),t.push(e),localforage.setItem(i,t)}).catch(function(e){console.log("Business db error: ",e)})},_getDate:function(){var e=new Date,t=e.getDate(),i=e.getMonth()+1,s=e.getFullYear();return t+"/"+i+"/"+s},_submitReview:function(){var e={text:this.reviewText,date:this._getDate(),author_name:this.reviewName,rating:this.reviewRating};this._saveReview(e,this.business),this.toggleReview=!1,this.reviewSent=!0}});</script>
 
 </dom-module>
 </body></html>

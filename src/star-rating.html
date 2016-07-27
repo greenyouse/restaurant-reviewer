@@ -2,11 +2,13 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="my-icons.html">
 
+
+
 </head><body><dom-module id="star-rating">
   <template>
     <style>iron-icon{--iron-icon-width:16px;--iron-icon-height:16px;}iron-icon.full{color:#ffc107;}iron-icon.empty{color:var(--paper-grey-500);}</style>
 
-    <div class="rating">
+    <div class="rating" aria-label$="Rating: [[rating]]">
       <template is="dom-repeat" items="[[_starsColl]]" as="star">
         <iron-icon class$="[[star.class]]" src$="[[star.src]]" icon="[[star.icon]]"></iron-icon>
       </template>
@@ -14,7 +16,7 @@
 
   </template>
 
-  <script>Polymer({is:"star-rating",properties:{stars:{type:Number,value:5},_starsColl:{type:Array,value:function(){return[]}},rating:{type:Number}},observers:["calculateStars(rating)"],calculateStars:function(r){for(var a=Math.round(r/.5),s=[],t=Math.floor(a/2),a=Math.floor(a%2),e=this.stars-(t+a),l=0;l<t;l++){var o={icon:"star",class:"full"};s.push(o)}if(a>0){var u={class:"half",src:"/restaurant-reviewer/images/half-star.svg"};s.push(u)}for(var l=0;l<e;l++){var i={icon:"star",class:"empty"};s.push(i)}this._starsColl=s}});</script>
+  <script>Polymer({is:"star-rating",properties:{stars:{type:Number,value:5},_starsColl:{type:Array,value:function(){return[]}},rating:{type:Number}},observers:["calculateStars(rating)"],calculateStars:function(r){for(var a=Math.round(r/.5),s=[],t=Math.floor(a/2),a=Math.floor(a%2),l=this.stars-(t+a),e=0;e<t;e++){var o={icon:"star",class:"full"};s.push(o)}if(a>0){var u={class:"half",src:"/images/half-star.svg"};s.push(u)}for(var e=0;e<l;e++){var i={icon:"star",class:"empty"};s.push(i)}this._starsColl=s}});</script>
 
 </dom-module>
 </body></html>

@@ -1,13 +1,18 @@
 <html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="my-icons.html">
 
+
+
 </head><body><dom-module id="star-picker">
   <template>
-    <style>iron-icon{--iron-icon-width:16px;--iron-icon-height:16px;}iron-icon:hover{cursor:pointer;color:#ffc107;}iron-icon.full{color:#ffc107;}iron-icon.empty{color:var(--paper-grey-500);}</style>
+    <style>iron-icon{--iron-icon-width:16px;--iron-icon-height:16px;}.set > iron-icon.full{color:#ffc107;}.set > iron-icon.empty{color:var(--paper-grey-500);}.rating{direction:rtl;text-align:center;}.rating:not(.set) > iron-icon{color:var(--paper-grey-500);}.rating > iron-icon:hover,
+     .rating > iron-icon:hover ~ iron-icon{color:#ffc107 !important;cursor:pointer;}div:focus{outline:1px solid black;}</style>
 
-    <div class="rating">
+    <iron-a11y-keys id="a11y" keys="right up left down esc" on-keys-pressed="handleKeys"></iron-a11y-keys>
+    <div tabindex="0" id="starContainer" class="rating" aria-valuemin="0" aria-valuemax$="{{stars}}" aria-valuenow$="{{rating}}">
       <template is="dom-repeat" items="[[_starColl]]" as="star">
         <iron-icon class$="[[star.class]]" icon="star" on-tap="_fillStar"></iron-icon>
       </template>
@@ -15,7 +20,7 @@
 
   </template>
 
-  <script>Polymer({is:"star-picker",properties:{rating:{type:Number,notify:!0},stars:{type:Number,value:5},_starColl:{type:Array,notify:!0,value:function(){for(var r,t=[];r<this.stars;r++)t.push({class:"empty"});return t}}},observers:["calculateStars(rating)"],_fillStar:function(r){this.rating=r.model.index+1},calculateStars:function(r){for(var t=[],a=Math.floor(r),s=5-a,e=0;e<a;e++){var l={class:"full"};t.push(l)}for(var e=0;e<s;e++){var i={class:"empty"};t.push(i)}this._starColl=t}});</script>
+  <script>Polymer({is:"star-picker",properties:{rating:{type:Number,notify:!0},stars:{type:Number,value:5},selected:{type:Boolean,notify:!0,value:!1},_starColl:{type:Array,notify:!0,value:function(){for(var t,s=[];t<this.stars;t++)s.push({class:"empty"});return s}}},observers:["calculateStars(rating)","setSelection(selected)"],setSelection:function(t){void 0!==this.rating&&(ratingDiv=this.$.starContainer,t?ratingDiv.classList.add("set"):ratingDiv.classList.remove("set"))},_fillStar:function(t){this.rating=5-t.model.index},calculateStars:function(t){for(var s=[],e=Math.floor(t),r=5-e,a=0;a<r;a++){var i={class:"empty"};s.push(i)}for(var a=0;a<e;a++){var n={class:"full"};s.push(n)}this._starColl=s},handleKeys:function(t,s){var e=t.detail.key;switch(e){case"esc":return void this.$.starContainer.blur();case"right":case"up":return void(this.rating<this.stars&&(this.rating+=1));case"left":case"down":return void(this.rating>1&&(this.rating-=1))}}});</script>
 
 </dom-module>
 </body></html>

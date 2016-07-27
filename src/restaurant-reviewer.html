@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/google-apis/google-maps-api.html">
 <link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
@@ -16,7 +17,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="advanced-search.html">
 <link rel="import" href="business-listing.html">
 <link rel="import" href="home-page.html">
@@ -29,7 +30,7 @@
 
   <template>
 
-    <style>:host{display:block;--app-primary-color:#1976D2;--app-light-primary-color:#BBDEFB;--app-secondary-color:black;--app-accent-color:#FFE05C;--divider-color:#B6B6B6;--valid-form-button:{border-radius:25%;background-color:#FFE05C;flex:0 1 auto;padding-left:10px;};--valid-form-form:{background-color:var(--app-light-primary-color);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;align-content:stretch;padding:5px;};}:host([page=business]) .menu-btn{display:none;}:host(:not([page=business])) .back-btn{display:none;}:host([page=advanced]) #searchBar{display:none;}app-header{background-color:var(--app-primary-color);color:#fff;}app-header paper-icon-button{--paper-icon-button-ink-color:white;}.drawer-list{margin:0 20px;}.drawer-list a{display:block;padding:0 16px;line-height:40px;text-decoration:none;color:var(--app-secondary-color);}.drawer-list a.iron-selected{color:black;font-weight:bold;}.logo{text-align:center;}.logo a{font-size:16px;font-weight:600;letter-spacing:0.3em;color:black;text-decoration:none;display:inline-block;pointer-events:auto;}.left-bar-item{width:40px;}app-drawer{z-index:3;}.row{flex-direction:row;}.column{flex-direction:column;}.header__input--rounded{color:var(--app-secondary-color);flex:1 1 auto;padding-left:10px;padding-right:10px;}iron-pages{max-width:960px;margin:0 auto;}#tabContainer{background-color:var(--app-light-primary-color);display:flex;flex-direction:column;}.advancedSearch{align-self:flex-end;}.advancedSearch a{text-decoration:none;}@media screen and (min-width: 768px){.menu-btn{display:none;}}</style>
+    <style>:host{display:block;--app-primary-color:#5ca4ec;--app-light-primary-color:#BBDEFB;--app-secondary-color:black;--app-accent-color:#FFE05C;--divider-color:#B6B6B6;--valid-form-button:{border-radius:25%;background-color:#FFE05C;flex:0 1 auto;padding-left:10px;};--valid-form-form:{background-color:var(--app-light-primary-color);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;align-content:stretch;padding:5px;};}:host([page=business]) .menu-btn{display:none;}:host(:not([page=business])) .back-btn{display:none;}:host([page=advanced]) #searchBar{display:none;}:host(:not([page=search])) .filterControls{display:none;}app-header{background-color:var(--app-primary-color);color:black;}.drawer-list{margin:0 20px;}.drawer-list a{display:block;padding:0 16px;line-height:40px;text-decoration:none;color:var(--app-secondary-color);}.drawer-list a.iron-selected{color:black;font-weight:bold;}.logo{text-align:center;}.logo a{font-size:16px;font-weight:600;letter-spacing:0.3em;color:black;text-decoration:none;display:inline-block;pointer-events:auto;}.left-bar-item{width:40px;}app-drawer{z-index:3;}paper-slider{width:30em;margin-left:10em;}label{margin-left:15em;}.flex{display:flex;justify-content:center;align-items:center;}.row{flex-direction:row;}.column{flex-direction:column;}.header__input--rounded{color:var(--app-secondary-color);flex:1 1 auto;padding-left:10px;padding-right:10px;}iron-pages{max-width:960px;margin:0 auto;}#tabContainer{background-color:var(--app-light-primary-color);display:flex;flex-direction:column;}.advancedSearch{align-self:flex-end;}.advancedSearch a{text-decoration:none;}@media screen and (min-width: 768px){.menu-btn{display:none;}}.logo a:focus{outline:1px solid black;}</style>
 
     <google-maps-api version="3.exp" api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE" library-loaded="{{googleLoaded}}"></google-maps-api>
 
@@ -49,7 +50,7 @@
             <paper-icon-button icon="arrow-back" aria-label="Go back"></paper-icon-button>
           </a>
         </div>
-        <div class="logo" title=""><a href="/restaurant-reviewer/#/home" aria-label="Reviewer Home">Restaurant Reviewer</a></div>
+        <div class="logo" title=""><a href="/#/home" aria-label="Reviewer Home">Restaurant Reviewer</a></div>
       </app-toolbar>
     </app-header>
 
@@ -68,17 +69,31 @@
             <div suffix=""></div>
           </places-input>
         </valid-form>
-      </div>
-        <div class="advancedSearch">
-          <a href="#" on-tap="_toAdvSearch">advanced search</a>
+        <div class="filterControls flex column">
+          <h4>Search Filters: </h4>
+          <div class="flex row">
+            <paper-toggle-button id="openFilter" on-tap="toggleOpen">Open Now</paper-toggle-button>
+            <div>
+              <label for="minPriceFilter">Minimum Price</label>
+              <paper-slider id="minPriceFilter" aria-label="Minimum Price" value="{{lowPrice}}" min="1" max="5" required="" editable=""></paper-slider>
+            </div>
+            <div>
+              <label for="maxPriceFilter">Maximum Price</label>
+              <paper-slider id="maxPriceFilter" aria-label="Maximum Price" value="{{highPrice}}" min="1" max="5" required="" editable=""></paper-slider>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="advancedSearch">
+        <a href="#" on-tap="_toAdvSearch">advanced search</a>
+      </div>
     </div>
 
     
     <template is="dom-if" if="[[smallScreen]]">
       <app-drawer opened="{{drawerOpened}}" swipe-open="" tabindex="0">
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="home" href="/restaurant-reviewer/#/home">Home</a>
+          <a name="home" href="/#/home">Home</a>
           <a name="search" href="#" on-tap="_toSearch">Search Results</a>
         </iron-selector>
       </app-drawer>
@@ -88,7 +103,7 @@
     <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
       <home-page name="home" search-term="{{queryParams.search}}" submit="{{submitSearch}}" business="{{business}}" query-params="{{queryParams}}" coords="[[coords]]"></home-page>
       <advanced-search name="advanced" route="{{route}}" query-params="{{queryParams}}" location="{{location}}" latitude="{{latitude}}" longitude="{{longitude}}" open-now="{{openNow}}" min-price="{{minPrice}}" max-price="{{maxPrice}}" radius="{{radius}}"></advanced-search>
-      <search-results name="search" route="{{searchTail}}" active="{{searchActive}}" map="[[listingMap]]" search-results="[[searchResults]]" coords="[[coords]]" query-params="{{queryParams}}" min-price="[[minPrice]]" max-price="[[maxPrice]]" radius="[[radius]]" business="{{business}}"></search-results>
+      <search-results name="search" route="{{searchTail}}" active="{{searchActive}}" map="[[listingMap]]" search-results="[[searchResults]]" coords="[[coords]]" query-params="{{queryParams}}" min-price="[[minPrice]]" max-price="[[maxPrice]]" open-filter="[[openFilter]]" min-filter="[[lowPrice]]" max-filter="[[highPrice]]" radius="[[radius]]" business="{{business}}"></search-results>
       <business-listing name="business" listing-map="[[listingMap]]" coords="[[coords]]" reviews="{{reviews}}" business="[[formattedBusiness]]"></business-listing>
     </iron-pages>
 
@@ -97,7 +112,7 @@
 
   </template>
 
-  <script>Polymer({is:"restaurant-reviewer",properties:{page:{type:String,reflectToAttribute:!0},routeData:{type:Object,notify:!0,value:function(){return{page:"home"}}},route:{type:Object},searchTail:{type:Object,notify:!0},searchActive:{type:Boolean,notify:!0},queryParams:{type:Object,notify:!0},smallScreen:{type:Boolean,observer:"_searchStyle"},latitude:{type:Number,notify:!0},longitude:{type:Number,notify:!0},coords:{computed:"_getCoords(latitude, longitude)"},searchResults:{type:Array,value:function(){return[]}},submitSearch:{type:Boolean,value:!1,observer:"_submitSearch"},business:{type:Object,notify:!0,observer:"_showBusiness"},formattedBusiness:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},listingMap:{type:Object,notify:!0,value:function(){return this.$.map}},termTarget:{type:Object,notify:!0,value:function(){return this.$.searchTerm}},locationTarget:{type:Object,notify:!0,value:function(){return this.$.searchLocation}},location:{type:String,notify:!0},openNow:{type:Boolean,notify:!0},minPrice:{type:Number,notify:!0,value:0},maxPrice:{type:Number,notify:!0,value:4},radius:{type:Number,notify:!0,value:1e4},googleLoaded:{type:Boolean,value:!1}},listeners:{"searchForm.iron-form-submit":"_textSearch","backBtn.tap":"_goBack"},observers:["_routePageChanged(routeData.page)","_detectLocation(googleLoaded)"],_routePageChanged:function(e){void 0===this.route&&(document.location="/restaurant-reviewer/#/home"),this.page=e||"home",Polymer.AppLayout.scroll({top:0,behavior:"silent"}),this.drawerOpened=!1},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened},_searchStyle:function(e){this.$.searchBar.classList.remove("column"),this.$.searchBar.classList.remove("row"),e?this.$.searchBar.classList.add("column"):this.$.searchBar.classList.add("row")},_goBack:function(){history.back()},_toSearch:function(){this.set("route.path","/search")},_toAdvSearch:function(){this.set("route.path","/advanced")},_detectLocation:function(e){if(1==e){var t=this;if(!(!1 in navigator)){var a={enableHighAccuracy:!0,maximumAge:5e3};navigator.geolocation.getCurrentPosition(function(e){var a=e.coords.latitude,o=e.coords.longitude;t.latitude=a,t.longitude=o,fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng="+a+","+o).then(function(e){e.json().then(function(e){e.status==google.maps.places.PlacesServiceStatus.OK?t.location=e.results[0].formatted_address:console.log("geolocation failed: ",e.status,e.error_message)})})},function(e){console.log("geolocation error: ",e)},a)}}},_getCoords:function(e,t){return this.set("queryParams.lat",e),this.set("queryParams.lng",t),new google.maps.LatLng(e,t)},_textSearch:function(){this.openNow=!1,this.minPrice=0,this.maxPrice=4,this.radius=1e4,this.set("route.path","/search")},_submitSearch:function(e){e&&(this.$.searchForm.submit(),this.submitSearch=!1)},_fetchImageUrl:function(e){return imageUrl=e.getUrl({maxWidth:1e3,maxHeight:500}),imageUrl},loadReviews:function(e){var t=this,a=e.place_id;localforage.getItem(a,function(a,o){var r=e.reviews;null==o?t.reviews=r:(null==r&&(r=[]),o.map(function(e){r.unshift(e)}),t.reviews=r)})},parseBusiness:function(e){var t=(new Date).getDay();t-=0==t?-6:1;var a=e.formatted_address,o=e.photos||"https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",r=e.opening_hours.weekday_text[t],i=e.formatted_phone_number,s=e.place_id,n=e.price_level,c=e.rating,u=e.name,l=e.website,h="string"==typeof o?o:this._fetchImageUrl(o[0]);return this.loadReviews(e),{address:a,hours:r,image:h,phone:i,placeId:s,price:n,rating:c,title:u,website:l}},_showBusiness:function(e){var t=this,a=new google.maps.Map(this.$.map,{}),o={placeId:e.placeId||e.place_id},r=new google.maps.places.PlacesService(a);r.getDetails(o,function(e,a){a==google.maps.places.PlacesServiceStatus.OK&&(t.formattedBusiness=t.parseBusiness(e),t.routeData.page="business")})}});</script>
+  <script>Polymer({is:"restaurant-reviewer",properties:{page:{type:String,reflectToAttribute:!0},routeData:{type:Object,notify:!0,value:function(){return{page:"home"}}},route:{type:Object},searchTail:{type:Object,notify:!0},searchActive:{type:Boolean,notify:!0},queryParams:{type:Object,notify:!0},smallScreen:{type:Boolean,observer:"_searchStyle"},latitude:{type:Number,notify:!0},longitude:{type:Number,notify:!0},coords:{computed:"_getCoords(latitude, longitude)"},searchResults:{type:Array,value:function(){return[]}},submitSearch:{type:Boolean,value:!1,observer:"_submitSearch"},business:{type:Object,notify:!0,observer:"_showBusiness"},formattedBusiness:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},listingMap:{type:Object,notify:!0,value:function(){return this.$.map}},termTarget:{type:Object,notify:!0,value:function(){return this.$.searchTerm}},locationTarget:{type:Object,notify:!0,value:function(){return this.$.searchLocation}},location:{type:String,notify:!0},openNow:{type:Boolean,notify:!0},minPrice:{type:Number,notify:!0,value:0},maxPrice:{type:Number,notify:!0,value:4},radius:{type:Number,notify:!0,value:1e4},googleLoaded:{type:Boolean,value:!1},openFilter:{type:Boolean,value:!1},lowPrice:{type:Number,value:1},highPrice:{type:Number,value:5}},listeners:{"searchForm.iron-form-submit":"_textSearch","backBtn.tap":"_goBack"},observers:["_routePageChanged(routeData.page)","_detectLocation(googleLoaded)","setMin(highPrice)","setMax(lowPrice)"],toggleOpen:function(e,t,o){this.openFilter=this.$.openFilter.checked},_routePageChanged:function(e){void 0===this.route&&(document.location="/#/home"),this.page=e||"home",Polymer.AppLayout.scroll({top:0,behavior:"silent"}),this.drawerOpened=!1},_toggleDrawer:function(){this.drawerOpened=!this.drawerOpened},_searchStyle:function(e){this.$.searchBar.classList.remove("column"),this.$.searchBar.classList.remove("row"),e?this.$.searchBar.classList.add("column"):this.$.searchBar.classList.add("row")},_goBack:function(){history.back()},_toSearch:function(){this.set("route.path","/search")},_toAdvSearch:function(){this.set("route.path","/advanced")},_detectLocation:function(e){if(1==e){var t=this;if(!(!1 in navigator)){var o={enableHighAccuracy:!0,maximumAge:5e3};navigator.geolocation.getCurrentPosition(function(e){var o=e.coords.latitude,i=e.coords.longitude;t.latitude=o,t.longitude=i,fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng="+o+","+i).then(function(e){e.json().then(function(e){e.status==google.maps.places.PlacesServiceStatus.OK?t.location=e.results[0].formatted_address:console.log("geolocation failed: ",e.status,e.error_message)})})},function(e){console.log("geolocation error: ",e)},o)}}},_getCoords:function(e,t){return this.set("queryParams.lat",e),this.set("queryParams.lng",t),new google.maps.LatLng(e,t)},setMax:function(e){this.highPrice<e&&(this.highPrice=e)},setMin:function(e){e<this.lowPrice&&(this.lowPrice=e)},_textSearch:function(){this.openNow=!1,this.minPrice=0,this.maxPrice=4,this.radius=1e4,this.set("route.path","/search")},_submitSearch:function(e){e&&(this.$.searchForm.submit(),this.submitSearch=!1)},_fetchImageUrl:function(e){return imageUrl=e.getUrl({maxWidth:1e3,maxHeight:500}),imageUrl},loadReviews:function(e){var t=this,o=e.place_id;localforage.getItem(o,function(o,i){var a=e.reviews;null==i?t.reviews=a:(null==a&&(a=[]),i.map(function(e){a.unshift(e)}),t.reviews=a)})},parseBusiness:function(e){var t=(new Date).getDay();t-=0==t?-6:1;var o="opening times not listed";"weekday_text"in e.opening_hours&&(o=e.opening_hours.weekday_text[t]);var i=e.formatted_address,a=e.photos||"https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",o=o,r=e.formatted_phone_number,s=e.place_id,n=e.price_level,c=e.rating,u=e.name,l=e.website,h="string"==typeof a?a:this._fetchImageUrl(a[0]);return this.loadReviews(e),{address:i,hours:o,image:h,phone:r,placeId:s,price:n,rating:c,title:u,website:l}},_showBusiness:function(e){var t=this,o=new google.maps.Map(this.$.map,{}),i={placeId:e.placeId||e.place_id},a=new google.maps.places.PlacesService(o);a.getDetails(i,function(e,o){o==google.maps.places.PlacesServiceStatus.OK&&(t.formattedBusiness=t.parseBusiness(e),t.routeData.page="business")})}});</script>
 
   <script type="text/javascript" src="../bower_components/localforage/dist/localforage.min.js"></script>
 
