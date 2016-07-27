@@ -103,7 +103,7 @@
     <section hidden$="[[loading]]">
       <h3 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h3>
       <div hidden$="[[emptyResults]]">
-        <template is="dom-repeat" items="[[searchResults]]" as="shop" >
+        <template is="dom-repeat" items="[[_displayedResults]]" as="shop" >
           <a class="shopCard" href="/#/business/{{shop.placeId}}">
             <paper-card on-tap="setBusiness">
               <div class="card-content">
@@ -162,6 +162,20 @@
          notify: true
        },
 
+       /**
+        * Results that fit the search filter criteria
+        */
+       _displayedResults: {
+         type: Array,
+         notify: true,
+         value: function() {
+           return [];
+         }
+       },
+
+       /**
+        * All of the results fetched from the Google Places API
+        */
        searchResults: {
          type: Array,
          notify: true,
@@ -201,12 +215,25 @@
        loading: {
          type: Boolean,
          value: false
+       },
+
+       openFilter: {
+         type: Boolean
+       },
+
+       minFilter: {
+         type: Number
+       },
+
+       maxFilter: {
+         type: Number
        }
 
      },
 
      observers: [
-       '_textSearch(active, queryParams.search, coords, minPrice, maxPrice, radius)'
+       '_textSearch(active, queryParams.search, coords, minPrice, maxPrice, radius)',
+       '_filterResults(searchResults, openFilter, minFilter, maxFilter)'
      ],
 
      setBusiness: function(e) {
@@ -216,6 +243,23 @@
      _fetchImageUrl: function(imageData) {
        imageUrl = imageData.getUrl({maxWidth: 1000, maxHeight: 500});
        return imageUrl;
+     },
+
+     _filterResults: function (results, openFilter, min, max) {
+       if (results === undefined || results.length == 0) return;
+
+       filtered = results.filter(function (shop) {
+         return (shop.openNow == openFilter &&
+                min <= shop.price && shop.price <= max);
+       });
+
+       if (filtered.length == 0) {
+         this.emptyResults = true;
+         this._displayedResults = filtered;
+       } else {
+         this.emptyResults = false;
+         this._displayedResults = filtered;
+       }
      },
 
      _textSearch: function(active, search, coords, minPrice, maxPrice, radius) {
@@ -266,6 +310,7 @@
 
        this.searchResults = res.map(function (shop) {
          var title = shop.name,
+             openNow = shop.opening_hours.open_now,
              price = shop.price_level,
              address = shop.formatted_address,
              rating = shop.rating,
@@ -276,6 +321,7 @@
 
          return {
            title: title,
+           openNow: openNow,
            price: price,
            address: address,
            rating: rating,
@@ -283,8 +329,7 @@
            placeId: placeId
          };
 
-       })
-
+       });
      }
 
    });

@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/google-apis/google-maps-api.html">
 <link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
@@ -16,7 +17,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="advanced-search.html">
 <link rel="import" href="business-listing.html">
 <link rel="import" href="home-page.html">
@@ -66,6 +67,11 @@
          display: none;
      }
 
+     :host(:not([page=search])) .filterControls {
+         display: none;
+     }
+
+
       app-header {
         background-color: var(--app-primary-color);
         color: black;
@@ -110,6 +116,22 @@
 
      app-drawer {
          z-index: 3;
+     }
+
+
+     paper-slider {
+         width: 30em;
+         margin-left: 10em;
+     }
+
+     label {
+         margin-left: 15em;
+     }
+
+     .flex {
+         display: flex;
+         justify-content: center;
+         align-items: center;
      }
 
      .row {
@@ -214,10 +236,36 @@
             <div suffix></div>
           </places-input>
         </valid-form>
-      </div>
-        <div class="advancedSearch">
-          <a href="#" on-tap="_toAdvSearch">advanced search</a>
+        <div  class="filterControls flex column">
+          <h4>Search Filters: </h4>
+          <div class="flex row">
+            <paper-toggle-button id="openFilter" on-tap="toggleOpen">Open Now</paper-toggle-button>
+            <div>
+              <label for="minPriceFilter">Minimum Price</label>
+              <paper-slider id="minPriceFilter"
+                            aria-label="Minimum Price"
+                            value="{{lowPrice}}"
+                            min="1"
+                            max="5"
+                            required
+                            editable></paper-slider>
+            </div>
+            <div>
+              <label for="maxPriceFilter">Maximum Price</label>
+              <paper-slider id="maxPriceFilter"
+                            aria-label="Maximum Price"
+                            value="{{highPrice}}"
+                            min="1"
+                            max="5"
+                            required
+                            editable></paper-slider>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="advancedSearch">
+        <a href="#" on-tap="_toAdvSearch">advanced search</a>
+      </div>
     </div>
 
     <!-- Drawer content for small screens -->
@@ -257,6 +305,9 @@
                       query-params="{{queryParams}}"
                       min-price="[[minPrice]]"
                       max-price="[[maxPrice]]"
+                      open-filter="[[openFilter]]"
+                      min-filter="[[lowPrice]]"
+                      max-filter="[[highPrice]]"
                       radius="[[radius]]"
                       business="{{business}}"></search-results>
       <business-listing name="business"
@@ -418,6 +469,21 @@
        googleLoaded: {
          type: Boolean,
          value: false
+       },
+
+       openFilter: {
+         type: Boolean,
+         value: false
+       },
+
+       lowPrice: {
+         type: Number,
+         value: 1
+       },
+
+       highPrice: {
+         type: Number,
+         value: 5
        }
 
      },
@@ -429,8 +495,15 @@
 
      observers: [
        '_routePageChanged(routeData.page)',
-       '_detectLocation(googleLoaded)'
+       '_detectLocation(googleLoaded)',
+       'setMin(highPrice)',
+       'setMax(lowPrice)'
      ],
+
+     // paper-toggle-button isn't binding with value :/
+     toggleOpen: function(e, d, m) {
+       this.openFilter = this.$.openFilter.checked;
+     },
 
      // mostly for styling the CSS back and menu buttons
      _routePageChanged: function(page) {
@@ -518,6 +591,16 @@
        this.set('queryParams.lat', lat);
        this.set('queryParams.lng', lng);
        return new google.maps.LatLng(lat, lng);
+     },
+
+     setMax: function(low) {
+       if (this.highPrice < low)
+         this.highPrice = low;
+     },
+
+     setMin: function(high) {
+       if (high < this.lowPrice)
+         this.lowPrice = high;
      },
 
      /**
