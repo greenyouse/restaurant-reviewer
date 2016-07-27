@@ -123,12 +123,12 @@
 
       <div hidden$="[[reviewSent]]">
         <p>Add your review: </p>
-        <star-picker id="reviewStars" rating="{{reviewRating}}"></star-picker>
+        <star-picker id="reviewStars" selected="[[toggleReview]]" rating="{{reviewRating}}"></star-picker>
       </div>
 
       <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
         <paper-input value="{{reviewName}}"
-                     placeholder="Your Name"
+                     label="Name"
                      required></paper-input>
         <br>
         <iron-autogrow-textarea value="{{reviewText}}"

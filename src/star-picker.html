@@ -1,7 +1,11 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="my-icons.html">
+
+<!--
+   -->
 
 <dom-module id="star-picker">
   <template>
@@ -11,21 +15,37 @@
          --iron-icon-height: 16px;
      }
 
-     iron-icon:hover {
-         cursor: pointer;
+     .set > iron-icon.full {
          color: #ffc107;
      }
 
-     iron-icon.full {
-         color: #ffc107
-     }
-
-     iron-icon.empty {
+     .set > iron-icon.empty {
          color: var(--paper-grey-500);
      }
+
+     .rating {
+         direction: rtl;
+         text-align: center;
+     }
+
+     .rating:not(.set) > iron-icon {
+         color: var(--paper-grey-500);
+     }
+
+     .rating > iron-icon:hover,
+     .rating > iron-icon:hover ~ iron-icon {
+         color: #ffc107 !important;;
+         cursor: pointer;
+     }
+
+     div:focus {
+         outline: 1px solid black;
+     }
+
     </style>
 
-    <div class="rating">
+    <iron-a11y-keys id="a11y" keys="right up left down esc" on-keys-pressed="handleKeys"></iron-a11y-keys>
+    <div tabindex="0" id="starContainer" class="rating" aria-valuemin="0" aria-valuemax$="{{stars}}" aria-valuenow$="{{rating}}">
       <template is="dom-repeat" items="[[_starColl]]" as="star">
         <iron-icon class$="[[star.class]]" icon="star" on-tap="_fillStar"></iron-icon>
       </template>
@@ -34,36 +54,41 @@
   </template>
 
   <script>
-    Polymer({
-      is: "star-picker",
+   Polymer({
+     is: "star-picker",
 
-      properties: {
-        /**
-         * The rating given
-         *
-         * @type {Number}
-         */
-        rating: {
-          type: Number,
-          notify: true
-        },
+     properties: {
+       /**
+        * The rating given
+        */
+       rating: {
+         type: Number,
+         notify: true
+       },
 
-        /**
-         * The number of stars to use for the rating
-         *
-         * @type {Number}
-         */
-        stars: {
-          type: Number,
-          value: 5
-        },
+       /**
+        * The number of stars to use for the rating
+        */
+       stars: {
+         type: Number,
+         value: 5
+       },
 
-        /**
-         * A private array holding the star objects. Varies the number of stars
-         * based on the stars property.
-         *
-         * @type {Array<Object>}
-         */
+       /**
+        * Whether a star rating has been selected yet. It will
+        * signal a change in CSS so that the star selection shows
+        * up.
+        */
+       selected: {
+         type: Boolean,
+         notify: true,
+         value: false
+       },
+
+       /**
+        * A private array holding the star objects. Varies the number of stars
+        * based on the stars property.
+        */
        _starColl: {
          type: Array,
          notify: true,
@@ -76,42 +101,97 @@
            return coll;
          }
        },
-      },
+     },
 
-      observers: [
-        'calculateStars(rating)'
-      ],
+     observers: [
+       'calculateStars(rating)',
+       'setSelection(selected)'
+     ],
 
-      _fillStar: function(e) {
-        this.rating = e.model.index + 1;
-      },
+     // once a click is done, switch the component style
+     setSelection: function (active) {
+       // don't run on startup
+       if (this.rating === undefined) return;
 
-      calculateStars: function(rating) {
-        var starColl = [];
+       ratingDiv = this.$.starContainer;
 
-        // calculate the number of each star type
-        var wholeStars = Math.floor(rating);
-        var emptyStars = 5 - (wholeStars);
+       console.log("active: ", active);
+       if (active) {
+         ratingDiv.classList.add("set");
+         console.log("OK", ratingDiv.classList);
+       } else {
+         ratingDiv.classList.remove("set");
+         console.log("Nope", ratingDiv.classList);
+       }
+     },
 
-        // build up the star collection using full and empty stars
-        for (var i = 0; i < wholeStars; i++) {
-          var star = {
-            class: "full",
-          };
-          starColl.push(star)
-        }
+     /**
+      * Sets the rating when a star is entered
+      *
+      * @param {Object} event
+      */
+     _fillStar: function(event) {
+       this.rating = 5 - event.model.index;
+     },
 
-        for (var i = 0; i < emptyStars; i++) {
-          var emptyStar = {
-            class: "empty"
-          }
-          starColl.push(emptyStar);
-        }
+     /**
+      * Builds the array of stars based on the rating
+      *
+      * @param {Number} rating
+      */
+     calculateStars: function(rating) {
+       var starColl = [];
 
-        this._starColl = starColl;
-      }
+       // calculate the number of each star type
+       var wholeStars = Math.floor(rating);
+       var emptyStars = 5 - (wholeStars);
 
-    });
+       // build up the star collection using full and empty stars
+       for (var i = 0; i < emptyStars; i++) {
+         var emptyStar = {
+           class: "empty"
+         }
+         starColl.push(emptyStar);
+       }
+
+       for (var i = 0; i < wholeStars; i++) {
+         var star = {
+           class: "full"
+         };
+         starColl.push(star)
+       }
+
+       this._starColl = starColl;
+     },
+
+     /**
+      * keyboard input for accessibility, influenced by:
+      * https://github.com/PolymerLabs/star-ratings/blob/master/star-ratings.html
+      *
+      * @param {Object} event
+      * @param {Object} detail
+      */
+     handleKeys: function(event, detail) {
+       var keyIdentifier = event.detail.key;
+
+       switch (keyIdentifier) {
+         case "esc":
+           this.$.starContainer.blur();
+           return;
+         case "right":
+         case "up":
+           if (this.rating < this.stars)
+             this.rating +=1
+           return;
+         case "left":
+         case "down":
+           if (this.rating > 1)
+             this.rating -= 1;
+           return;
+       }
+     }
+
+   });
   </script>
 
 </dom-module>
