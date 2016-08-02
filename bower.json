@@ -21,7 +21,7 @@
     "paper-input": "^1.1.11",
     "paper-toast": "^1.3.0",
     "gold-email-input": "^1.0.7",
-    "paper-card": "PolymerElements/paper-card#^1.1.1",
+    "paper-card": "PolymerElements/paper-card#^1.1.2",
     "iron-icons": "^1.1.3",
     "paper-button": "^1.0.12",
     "google-apis": "^1.1.5",
