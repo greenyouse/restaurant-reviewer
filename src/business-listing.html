@@ -145,7 +145,7 @@
       <br>
 
       <ul>
-        <template is="dom-repeat" items="[[reviews]]" as="review">
+        <template id="reviewsList" is="dom-repeat" items="[[reviews]]" as="review">
           <li class="review flex layout nowrap horizontal start start-justified">
             <div>
               <p class="smallText">[[review.date]]</p>
@@ -237,10 +237,14 @@
       _saveReview: function(newReview, business) {
         var placeId = business.placeId;
 
-        localforage.getItem(placeId).then(function (reviews) {
-          if (reviews == null) reviews = [];
+        // show the new review right away after submission
+        this.unshift('reviews', newReview);
+        this.$.reviewsList.render();
 
-          reviews.push(newReview);
+        localforage.getItem(placeId).then(function (reviews) {
+          if (reviews === null) reviews = [];
+
+          reviews.unshift(newReview);
 
           localforage.setItem(placeId, reviews);
         }).catch(function (err) {
