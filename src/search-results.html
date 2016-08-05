@@ -3,9 +3,15 @@
 <link rel="import" href="../bower_components/iron-location/iron-location.html">
 <link rel="import" href="../bower_components/iron-location/iron-query-params.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="dollar-rating.html">
+<link rel="import" href="price-filter.html">
 <link rel="import" href="star-rating.html">
 
 <dom-module id="search-results">
@@ -17,10 +23,30 @@
          --paper-card: {
              width: 100%;
          }
+
+         --price-root-style: {
+             @apply(--layout-horizontal);
+             @apply(--layout-center);
+             @apply(--layout-justified);
+         }
+
+         --price-slider-style: {
+             width: 30em;
+             margin-left: 10em;
+         }
+
+         --price-label-style: {
+             margin-left: 15em;
+         }
      }
 
      *[hidden] {
          display: none !important;
+     }
+
+     .filterControls {
+         background-color: var(--app-light-primary-color);
+         color: black;
      }
 
      #noResults {
@@ -49,7 +75,6 @@
      }
 
      .shopCard a {
-         color: black;
          text-decoration: none;
      }
 
@@ -59,10 +84,6 @@
 
      .shopCard:hover {
          cursor: pointer;
-     }
-
-     .card-detail {
-         color: var(--paper-grey-600);
      }
 
      .row {
@@ -90,6 +111,11 @@
          align-self: auto;
      }
 
+     section {
+         max-width: 960px;
+         margin: 0 auto;
+     }
+
      @media screen and (max-width: 767px) {
          .row {
              @apply(--layout-wrap);
@@ -97,8 +123,19 @@
      }
     </style>
 
-    <app-route route="{{route}}" query-params="{{queryParams}}">
-    </app-route>
+    <div class="filterControls layout vertical center">
+      <h4>Search Filters: </h4>
+      <div class="filters layout horizontal">
+        <paper-dropdown-menu id="openFilter" label="Open Now">
+          <paper-listbox class="dropdown-content" selected="{{openNow}}">
+            <paper-item>Any</paper-item>
+            <paper-item>Open</paper-item>
+            <paper-item>Closed</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <price-filter min="{{params.minPrice}}" max="{{params.maxPrice}}"></price-filter>
+      </div>
+    </div>
 
     <section hidden$="[[loading]]">
       <h3 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h3>
@@ -106,7 +143,7 @@
         <template is="dom-repeat" items="[[_displayedResults]]" as="shop" >
           <a class="shopCard" href="/#/business/{{shop.placeId}}">
             <paper-card on-tap="setBusiness">
-              <div class="card-content">
+              <div>
                 <div class="row">
                   <img class="storeImage" src="[[shop.image]]" alt="restaurant picture"></img>
                   <div>
@@ -136,25 +173,15 @@
    Polymer({
      is: 'search-results',
 
+     behaviors: [
+       Polymer.PriceFilterBehavior
+     ],
+
      properties: {
-       route: {
-         type: Object,
-         notify: true
-       },
-
-       data: {
-         type: Object
-       },
-
        active: {
          type: Boolean,
          notify: true,
          value: false
-       },
-
-       queryParams: {
-         type: Object,
-         notify: true
        },
 
        business: {
@@ -184,32 +211,9 @@
          }
        },
 
-       map: {
-         type: Object
-       },
-
-       coords: {},
-
        emptyResults: {
          type: Boolean,
-         notify: true,
          value: true
-       },
-
-       openNow: {
-         type: Boolean
-       },
-
-       maxPrice: {
-         type: Number
-       },
-
-       minPrice: {
-         type: Number
-       },
-
-       radius: {
-         type: Number
        },
 
        loading: {
@@ -217,23 +221,14 @@
          value: false
        },
 
-       openFilter: {
-         type: Boolean
-       },
-
-       minFilter: {
-         type: Number
-       },
-
-       maxFilter: {
-         type: Number
-       }
-
+       map: Object,
+       coords: Object,
+       params: Object
      },
 
      observers: [
-       '_textSearch(active, queryParams.search, coords, minPrice, maxPrice, radius)',
-       '_filterResults(searchResults, openFilter, minFilter, maxFilter)'
+       '_filterResults(searchResults, params.openNow, params.minPrice, params.maxPrice)',
+       '_textSearch(active, params.searchTerm, coords, params.minPrice, params.maxPrice, params.radius)'
      ],
 
      setBusiness: function(e) {
@@ -245,12 +240,25 @@
        return imageUrl;
      },
 
-     _filterResults: function (results, openFilter, min, max) {
+     _filterResults: function (results, openNow, min, max) {
        if (results === undefined || results.length == 0) return;
 
        filtered = results.filter(function (shop) {
-         return (shop.openNow == openFilter &&
-                min <= shop.price && shop.price <= max);
+
+         // fitler according to the openNow selection
+         switch (openNow) {
+           case 0:
+             return (min <= shop.price && shop.price <= max)
+               break;
+
+           case 1:
+             return (shop.openNow == false &&
+                     min <= shop.price && shop.price <= max);
+
+           case 2:
+             return (shop.openNow == true &&
+                     min <= shop.price && shop.price <= max)
+         }
        });
 
        if (filtered.length == 0) {
@@ -310,7 +318,7 @@
 
        this.searchResults = res.map(function (shop) {
          var title = shop.name,
-             openNow = shop.opening_hours.open_now,
+             openNow = shop.opening_hours? shop.opening_hours.open_now : null,
              price = shop.price_level,
              address = shop.formatted_address,
              rating = shop.rating,

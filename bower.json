@@ -31,7 +31,10 @@
     "iron-list": "^1.3.5",
     "paper-toggle-button": "^1.1.2",
     "paper-slider": "^1.0.11",
-    "paper-spinner": "^1.2.0"
+    "paper-spinner": "^1.2.0",
+    "paper-dropdown-menu": "^1.3.2",
+    "paper-item": "^1.2.1",
+    "paper-listbox": "^1.1.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

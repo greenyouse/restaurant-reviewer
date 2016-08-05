@@ -180,6 +180,10 @@
           }
         },
 
+        listingMap: {
+          type: Object
+        },
+
         reviewRating: {
           type: Number,
           notify: true,
@@ -228,6 +232,8 @@
         this.toggleReview = false;
         this.reviewText = "";
         this.reviewRating = 0;
+
+        this._showBusiness(business);
       },
 
       _showReview: function() {
@@ -274,6 +280,98 @@
         this._saveReview(review, this.business);
         this.toggleReview = false;
         this.reviewSent = true;
+      },
+
+      loadReviews: function(business) {
+        var _this2 = this;
+
+        // load the custom reviews for this business
+        var placeId = business.place_id;
+
+        localforage.getItem(placeId, function (err, cachedReviews) {
+          var reviews = business.reviews;
+
+          if (cachedReviews == null) {
+            _this2.reviews = reviews;
+          } else {
+
+            if (reviews == null) reviews = [];
+
+            cachedReviews.map(function (review) {
+              reviews.unshift(review);
+            });
+
+            _this2.reviews = reviews;
+          }
+        });
+      },
+
+      _fetchImageUrl: function(imageData) {
+        imageUrl = imageData.getUrl({maxWidth: 1000, maxHeight: 500});
+        return imageUrl;
+      },
+
+      parseBusiness: function(business) {
+        // find day of the week and use to get the current day's opening hours
+        // weeks start on monday so monday = 0 and sunday = 6.
+        // inspired by http://stackoverflow.com/questions/4156434/javascript-get-the-first-day-of-the-week-from-current-date
+        var day = new Date().getDay();
+        day = day - (day == 0 ? -6:1);
+
+        // check that weekday_text exists, otherwise use the default
+        var hours = "opening times not listed";
+        if ("weekday_text" in business.opening_hours)
+          hours = business.opening_hours.weekday_text[day];
+
+        var address = business.formatted_address,
+            imageData = business.photos || "https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",
+            hours = hours,
+            phone = business.formatted_phone_number,
+            placeId = business.place_id,
+            price = business.price_level,
+            rating = business.rating,
+            title = business.name,
+            website = business.website;
+
+        var imageUrl = typeof(imageData) == "string" ? imageData : this._fetchImageUrl(imageData[0]);
+
+        // separated because the review rendering must happen asynchronously
+        this.loadReviews(business);
+
+        return {
+          address: address,
+          hours: hours,
+          image: imageUrl,
+          phone: phone,
+          placeId: placeId,
+          price: price,
+          rating: rating,
+          title: title,
+          website: website
+        };
+      },
+
+      _showBusiness: function(business) {
+        var _this3 = this;
+
+        this.loading = true;
+
+        // center and zoom the business listing map
+        // TODO: fix map here and add marker
+        var map = new google.maps.Map(this.listingMap, {
+        });
+
+        var request = {
+          placeId: business.placeId || business.place_id
+        };
+
+        var places = new google.maps.places.PlacesService(map);
+        places.getDetails(request, function (place, status) {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+            // load the detailed business info for the listing page
+            _this3.business = _this3.parseBusiness(place);
+          }
+        });
       }
 
     });

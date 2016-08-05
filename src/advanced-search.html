@@ -3,9 +3,10 @@
 <link rel="import" href="../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="places-input.html">
+<link rel="import" href="price-filter.html">
+<link rel="import" href="radius-filter.html">
 <link rel="import" href="valid-form.html">
 
 
@@ -29,6 +30,13 @@
              flex-direction: column;
              width: 80%;
          }
+
+         --radius-slider-style,
+         --price-slider-style: {
+             margin-top: 0 !important;
+             width: 20em;
+             margin: 1em;
+         }
      }
 
      .card {
@@ -40,11 +48,7 @@
          width: 80%;
      }
 
-     paper-slider {
-         margin-top: 0 !important;
-     }
-
-     paper-input, places-input, paper-toggle-button, paper-slider {
+     paper-input, places-input, paper-toggle-button {
          width: 75%;
          margin: 1em;
      }
@@ -60,43 +64,32 @@
 
         <paper-input label="Business Name or Food Type"
                      ariaLabel="Business Name or Food Type"
-                     value="{{queryParams.search}}"
-                     required></paper-input>
+                     value="{{searchParams.searchTerm}}"
+                     required>
+        </paper-input>
 
         <places-input value="{{location}}"
                       lat="{{latitude}}"
                       lng="{{longitude}}"
                       label="Location"
-                      aria-label="Location"
-                      required></places-input>
+                      aria-label="your location"
+                      required>
+        </places-input>
 
-        <paper-toggle-button value="{{openNow}}">Open Now</paper-toggle-button>
+        <paper-dropdown-menu id="openFilter" label="Open Now">
+          <paper-listbox class="dropdown-content" selected="{{searchParams.openNow}}">
+            <paper-item>Any</paper-item>
+            <paper-item>Open</paper-item>
+            <paper-item>Closed</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
 
-        <label for="minPriceFilter">Minimum Price</label>
-        <paper-slider id="minPriceFilter"
-                      aria-label="Minimum Price"
-                      value="{{lowPrice}}"
-                      min="1"
-                      max="5"
-                      required
-                      editable></paper-slider>
+        <price-filter max="{{searchParams.maxPrice}}"
+                      min="{{searchParams.minPrice}}">
+        </price-filter>
 
-        <label for="maxPriceFilter">Maximum Price</label>
-        <paper-slider id="maxPriceFilter"
-                      aria-label="Maximum Price"
-                      value="{{highPrice}}"
-                      min="1"
-                      max="5"
-                      required
-                      editable></paper-slider>
+        <radius-filter value="{{searchParams.radius}}"></radius-filter>
 
-        <label for="radiusFilter">Search Radius (in kilometers)</label>
-        <paper-slider id="radiusFilter"
-                      aria-label="Search Radius (in kilometers)"
-                      value="{{kmRadius}}"
-                      min="1"
-                      max="10"
-                      editable></paper-slider>
       </valid-form>
     </paper-card>
   </template>
@@ -108,7 +101,7 @@
      is: 'advanced-search',
 
      behaviors: [
-       Polymer.IronValidatableBehavior
+       Polymer.IronValidatableBehavior,
      ],
 
      properties: {
@@ -122,10 +115,7 @@
          notify: true
        },
 
-       location: {
-         type: String,
-         notify: true
-       },
+       location: String,
 
        latitude: {
          type: Number,
@@ -137,75 +127,11 @@
          notify: true
        },
 
-       openNow: {
-         type: Boolean,
-         notify: true
-       },
-
-       /* The prices for google places are from 0 to 4 but visually,
-          the dollar signs are 1 to 5. Using low and highPrices for a
-          1 to 5 range.
-        */
-       lowPrice: {
-         type: Number,
-         value: 1
-       },
-
-       highPrice: {
-         type: Number,
-         value: 5
-       },
-
-       minPrice: {
-         type: Number,
-         notify: true
-       },
-
-       maxPrice: {
-         type: Number,
-         notify: true
-       },
-
-       kmRadius: {
-         type: Number,
-         value: 10
-       },
-
-       radius: {
-         type: Number,
-         notify: true
-       }
-
+       searchParams: Object
      },
 
      listeners: {
        'advSearchForm.iron-form-submit': '_textSearch'
-     },
-
-     observers: [
-       'setMin(highPrice)',
-       'setMax(lowPrice)',
-       'setRadius(kmRadius)'
-     ],
-
-     setMax: function(low) {
-       if (this.highPrice < low) {
-         this.highPrice = low;
-       };
-
-       this.maxPrice = this.highPrice - 1;
-     },
-
-     setMin: function(high) {
-       if (high < this.lowPrice) {
-         this.lowPrice = high;
-       };
-
-       this.minPrice = this.lowPrice - 1;
-     },
-
-     setRadius: function(kmRadius) {
-       this.radius = kmRadius * 1000;
      },
 
      // jump to the search-results page

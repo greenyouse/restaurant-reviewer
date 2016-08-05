@@ -1,0 +1,58 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="price-filter-behavior.html">
+
+<dom-module id="price-filter">
+  <style>
+   :host {
+       @apply(--price-root-style)
+   }
+
+   paper-slider {
+       @apply(--price-slider-style)
+   }
+
+   label {
+       @apply(--price-label-style)
+   }
+  </style>
+
+  <template>
+    <div>
+      <label>Minimum Price
+        <paper-slider aria-label="Minimum Price"
+                      value="{{min}}"
+                      min="1"
+                      max="5"
+                      required$="[[required]]"
+                      hidden$="[[hidden]]"
+                      editable>
+        </paper-slider>
+      </label>
+    </div>
+    <div>
+      <label>Maximum Price
+        <paper-slider id="maxPriceFilter"
+                      aria-label="Maximum Price"
+                      value="{{max}}"
+                      min="1"
+                      max="5"
+                      required$="[[required]]"
+                      hidden$="[[hidden]]"
+                      editable>
+        </paper-slider>
+      </label>
+    </div>
+  </template>
+
+  <script>
+   Polymer({
+     is: 'price-filter',
+
+     behaviors: [
+       Polymer.PriceFilterBehavior
+     ]
+   });
+  </script>
+
+</dom-module>

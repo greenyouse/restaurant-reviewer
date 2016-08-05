@@ -1,0 +1,45 @@
+<script>
+
+ /**
+  * This behavior controls how the min/max price filters work. The min and max
+  * ranges are automatically validated and corrected accordingly.
+  *
+  * This behvaior is used by `<price-filter>` to set the min and max prices
+  *
+  */
+ Polymer.PriceFilterBehavior = {
+   properties: {
+     min: {
+       type: Number,
+       notify: true
+     },
+
+     max: {
+       type: Number,
+       notify: true
+     }
+
+   },
+
+   observers: [
+     'setMin(max)',
+     'setMax(min)'
+   ],
+
+   setMax: function(min) {
+     if (this._highPrice < min) {
+       this._highPrice = min;
+       this.max = this._highPrice;
+     }
+   },
+
+   setMin: function(max) {
+     if (max < this._lowPrice) {
+       this._lowPrice = max;
+       this.min = this._lowPrice;
+     };
+   }
+
+ };
+
+</script>

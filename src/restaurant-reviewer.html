@@ -17,7 +17,6 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="advanced-search.html">
 <link rel="import" href="business-listing.html">
 <link rel="import" href="home-page.html">
@@ -59,18 +58,14 @@
          display: none;
      }
 
-     :host(:not([page=business])) .back-btn {
+     :host([page=search]) .back-btn,
+     :host([page=home]) .back-btn {
          display: none;
      }
 
      :host([page=advanced]) #searchBar {
          display: none;
      }
-
-     :host(:not([page=search])) .filterControls {
-         display: none;
-     }
-
 
       app-header {
         background-color: var(--app-primary-color);
@@ -118,30 +113,6 @@
          z-index: 3;
      }
 
-
-     paper-slider {
-         width: 30em;
-         margin-left: 10em;
-     }
-
-     label {
-         margin-left: 15em;
-     }
-
-     .flex {
-         display: flex;
-         justify-content: center;
-         align-items: center;
-     }
-
-     .row {
-         flex-direction: row;
-     }
-
-     .column {
-         flex-direction: column;
-     }
-
      .header__input--rounded {
          /* border-radius: 25%; */
          color: var(--app-secondary-color);
@@ -150,7 +121,7 @@
          padding-right: 10px;
      }
 
-     iron-pages {
+     :host(:not([page=search])) iron-pages {
          max-width: 960px;
          margin: 0 auto;
      }
@@ -184,7 +155,7 @@
 
     <google-maps-api version="3.exp" api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE" library-loaded="{{googleLoaded}}"></google-maps-api>
 
-    <app-location route="{{route}}" query-params="{{queryParams}}" use-hash-as-path></app-location>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
     <app-route route="{{route}}" pattern="/search" active="{{searchActive}}" tail="{{searchTail}}"></app-route>
     <app-route route="{{route}}" pattern="/business"></app-route>
@@ -218,7 +189,7 @@
                        id="searchLocation"
                        placeholder="Joe's diner, tacos, steakhouses"
                        class="header__input--rounded"
-                       value="{{queryParams.search}}"
+                       value="{{searchParams.searchTerm}}"
                        required>
             <iron-icon icon="search" prefix></iron-icon>
             <div suffix></div>
@@ -229,42 +200,16 @@
                         value="{{location}}"
                         lat="{{latitude}}"
                         lng="{{longitude}}"
-                        aria-label="location"
+                        aria-label="your location"
                         placeholder="address, neighborhood, city, state"
                         required>
             <iron-icon icon="communication:location-on" prefix></iron-icon>
             <div suffix></div>
           </places-input>
         </valid-form>
-        <div  class="filterControls flex column">
-          <h4>Search Filters: </h4>
-          <div class="flex row">
-            <paper-toggle-button id="openFilter" on-tap="toggleOpen">Open Now</paper-toggle-button>
-            <div>
-              <label for="minPriceFilter">Minimum Price</label>
-              <paper-slider id="minPriceFilter"
-                            aria-label="Minimum Price"
-                            value="{{lowPrice}}"
-                            min="1"
-                            max="5"
-                            required
-                            editable></paper-slider>
-            </div>
-            <div>
-              <label for="maxPriceFilter">Maximum Price</label>
-              <paper-slider id="maxPriceFilter"
-                            aria-label="Maximum Price"
-                            value="{{highPrice}}"
-                            min="1"
-                            max="5"
-                            required
-                            editable></paper-slider>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="advancedSearch">
-        <a href="#" on-tap="_toAdvSearch">advanced search</a>
+        <a href="/#/advanced">advanced search</a>
       </div>
     </div>
 
@@ -273,7 +218,7 @@
       <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
         <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="home" href="/#/home">Home</a>
-          <a name="search" href="#" on-tap="_toSearch">Search Results</a>
+          <a name="search" href="/#/search" Results</a>
         </iron-selector>
       </app-drawer>
     </template>
@@ -281,40 +226,31 @@
     <!-- page is used here instead of routeData.page for CSS styling -->
     <iron-pages role="main" selected="{{page}}" attr-for-selected="name">
       <home-page name="home"
-                 search-term="{{queryParams.search}}"
                  submit="{{submitSearch}}"
                  business="{{business}}"
-                 query-params="{{queryParams}}"
-                 coords="[[coords]]"></home-page>
+                 coords="[[coords]]">
+      </home-page>
       <advanced-search name="advanced"
                        route="{{route}}"
-                       query-params="{{queryParams}}"
+                       search-params="{{searchParams}}"
                        location="{{location}}"
                        latitude="{{latitude}}"
-                       longitude="{{longitude}}"
-                       open-now="{{openNow}}"
-                       min-price="{{minPrice}}"
-                       max-price="{{maxPrice}}"
-                       radius="{{radius}}"></advanced-search>
+                       longitude="{{longitude}}">
+      </advanced-search>
       <search-results name="search"
                       route="{{searchTail}}"
                       active="{{searchActive}}"
                       map="[[listingMap]]"
-                      search-results="[[searchResults]]"
                       coords="[[coords]]"
-                      query-params="{{queryParams}}"
-                      min-price="[[minPrice]]"
-                      max-price="[[maxPrice]]"
-                      open-filter="[[openFilter]]"
-                      min-filter="[[lowPrice]]"
-                      max-filter="[[highPrice]]"
-                      radius="[[radius]]"
-                      business="{{business}}"></search-results>
+                      open-now="{{searchParams.openNow}}"
+                      params="[[searchParams]]"
+                      business="{{business}}">
+      </search-results>
       <business-listing name="business"
                         listing-map="[[listingMap]]"
                         coords="[[coords]]"
-                        reviews="{{reviews}}"
-                        business="[[formattedBusiness]]"></business-listing>
+                        business="[[business]]">
+      </business-listing>
     </iron-pages>
 
     <!-- fake google map element for the Google Places library -->
@@ -358,11 +294,6 @@
          notify: true
        },
 
-       queryParams: {
-         type: Object,
-         notify: true
-       },
-
        smallScreen: {
          type: Boolean,
          observer: "_searchStyle"
@@ -382,13 +313,6 @@
          computed: '_getCoords(latitude, longitude)'
        },
 
-       searchResults: {
-         type: Array,
-         value: function() {
-           return [];
-         }
-       },
-
        submitSearch: {
          type: Boolean,
          value: false,
@@ -397,21 +321,7 @@
 
        business: {
          type: Object,
-         notify: true,
-         observer: "_showBusiness"
-       },
-
-       formattedBusiness: {
-         type: Object,
          notify: true
-       },
-
-       reviews: {
-         type: Array,
-         notify: true,
-         value: function() {
-           return [];
-         }
        },
 
        listingMap: {
@@ -443,49 +353,23 @@
          notify: true
        },
 
-       openNow: {
-         type: Boolean,
-         notify: true
-       },
-
-       minPrice: {
-         type: Number,
-         notify: true,
-         value: 0
-       },
-
-       maxPrice: {
-         type: Number,
-         notify: true,
-         value: 4
-       },
-
-       radius: {
-         type: Number,
-         notify: true,
-         value: 10000
-       },
-
        googleLoaded: {
          type: Boolean,
          value: false
-       },
+      },
 
-       openFilter: {
-         type: Boolean,
-         value: false
-       },
-
-       lowPrice: {
-         type: Number,
-         value: 1
-       },
-
-       highPrice: {
-         type: Number,
-         value: 5
+       searchParams: {
+         type: Object,
+         notify: true,
+         value: function() {
+           return {
+             openNow: 0,
+             minPrice: 1,
+             maxPrice: 5,
+             radius: 10000
+           }
+         }
        }
-
      },
 
      listeners: {
@@ -495,15 +379,8 @@
 
      observers: [
        '_routePageChanged(routeData.page)',
-       '_detectLocation(googleLoaded)',
-       'setMin(highPrice)',
-       'setMax(lowPrice)'
+       '_detectLocation(googleLoaded)'
      ],
-
-     // paper-toggle-button isn't binding with value :/
-     toggleOpen: function(e, d, m) {
-       this.openFilter = this.$.openFilter.checked;
-     },
 
      // mostly for styling the CSS back and menu buttons
      _routePageChanged: function(page) {
@@ -543,15 +420,6 @@
        history.back();
      },
 
-     // avoid removing the query params from the url
-     _toSearch: function() {
-       this.set('route.path', '/search');
-     },
-
-     _toAdvSearch: function() {
-       this.set('route.path', '/advanced');
-     },
-
      _detectLocation: function(loaded) {
        // wait for the library to load before doing geolocation
        if (loaded != true) return;
@@ -588,30 +456,16 @@
      },
 
      _getCoords: function(lat, lng) {
-       this.set('queryParams.lat', lat);
-       this.set('queryParams.lng', lng);
        return new google.maps.LatLng(lat, lng);
      },
 
-     setMax: function(low) {
-       if (this.highPrice < low)
-         this.highPrice = low;
-     },
-
-     setMin: function(high) {
-       if (high < this.lowPrice)
-         this.lowPrice = high;
-     },
-
      /**
-      * Resets advanced search params to their default values when the
-      * app-header search is used and jumps to the page of search results.
+      * Resets the search filters and jumps to the page of search results.
       */
      _textSearch: function() {
-       this.openNow = false,
-       this.minPrice = 0,
-       this.maxPrice = 4,
-       this.radius = 10000;
+       this.searchParams.openNow = 0;
+       this.searchParams.minPrice = 1;
+       this.searchParams.maxPrice = 5;
 
        this.set('route.path', '/search');
      },
@@ -621,99 +475,6 @@
          this.$.searchForm.submit();
          this.submitSearch = false;
        }
-     },
-
-     _fetchImageUrl: function(imageData) {
-       imageUrl = imageData.getUrl({maxWidth: 1000, maxHeight: 500});
-       return imageUrl;
-     },
-
-     loadReviews: function(business) {
-       var _this2 = this;
-
-       // load the custom reviews for this business
-       var placeId = business.place_id;
-
-       localforage.getItem(placeId, function (err, cachedReviews) {
-         var reviews = business.reviews;
-
-         if (cachedReviews == null) {
-           _this2.reviews = reviews;
-         } else {
-
-         if (reviews == null) reviews = [];
-
-           cachedReviews.map(function (review) {
-             reviews.unshift(review);
-           });
-
-           _this2.reviews = reviews;
-         }
-       });
-     },
-
-      parseBusiness: function(business) {
-        // find day of the week and use to get the current day's opening hours
-        // weeks start on monday so monday = 0 and sunday = 6.
-        // inspired by http://stackoverflow.com/questions/4156434/javascript-get-the-first-day-of-the-week-from-current-date
-        var day = new Date().getDay();
-        day = day - (day == 0 ? -6:1);
-
-        // check that weekday_text exists, otherwise use the default
-        var hours = "opening times not listed";
-        if ("weekday_text" in business.opening_hours)
-          hours = business.opening_hours.weekday_text[day];
-
-        var address = business.formatted_address,
-            imageData = business.photos || "https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",
-            hours = hours,
-            phone = business.formatted_phone_number,
-            placeId = business.place_id,
-            price = business.price_level,
-            rating = business.rating,
-            title = business.name,
-            website = business.website;
-
-        var imageUrl = typeof(imageData) == "string" ? imageData : this._fetchImageUrl(imageData[0]);
-
-        // separated because the review rendering must happen asynchronously
-        this.loadReviews(business);
-
-            return {
-              address: address,
-              hours: hours,
-              image: imageUrl,
-              phone: phone,
-              placeId: placeId,
-              price: price,
-              rating: rating,
-              title: title,
-              website: website
-            };
-      },
-
-     _showBusiness: function(business) {
-       var _this3 = this;
-
-       // center and zoom the business listing map
-       // TODO: fix map here and add marker
-       var map = new google.maps.Map(this.$.map, {
-       });
-
-       var request = {
-         placeId: business.placeId || business.place_id
-       };
-
-       var places = new google.maps.places.PlacesService(map);
-       places.getDetails(request, function (place, status) {
-         if (status == google.maps.places.PlacesServiceStatus.OK) {
-           // load the detailed business info for the listing page
-           _this3.formattedBusiness = _this3.parseBusiness(place);
-
-           // change to the business listing page when the selected business changes
-           _this3.routeData.page = 'business';
-         }
-       });
      }
 
    });
