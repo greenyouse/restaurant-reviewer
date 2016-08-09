@@ -1,6 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/google-apis/google-maps-api.html">
+<link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-behavior.html">
 
 <dom-module id="places-input">
   <template>
@@ -14,14 +16,20 @@
                  aria-label$="[[ariaLabel]]"
                  placeholder$="[[placeholder]]"
                  value="{{value}}"
-                 required\>"
+                 error-message$="[[errorMessage]]"
+                 required>
       <content></content>
     </paper-input>
+
   </template>
 
   <script>
    Polymer({
      is: 'places-input',
+
+     behaviors: [
+       Polymer.IronFormElementBehavior
+     ],
 
      properties: {
        value: {
@@ -67,7 +75,16 @@
 
        placeholder: {
          type: String
-       }
+       },
+
+       errorMessage: {
+         type: String,
+         value: "Enter a location"
+       },
+     },
+
+     validate: function() {
+       return (this.value && this.lat && this.lng) ? true : false;
      },
 
      loaded: function() {
