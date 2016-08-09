@@ -1,5 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -14,7 +16,7 @@
 
   <template>
 
-    <style>
+    <style include="iron-flex iron-flex-alignment">
      :host {
          --valid-form-button: {
              border-radius: 25%;
@@ -28,13 +30,11 @@
              background-color: white !important;
              flex-wrap: wrap;
              flex-direction: column;
-             width: 80%;
          }
 
          --radius-slider-style,
          --price-slider-style: {
-             margin-top: 0 !important;
-             width: 20em;
+             margin-top: 0;
              margin: 1em;
          }
      }
@@ -45,7 +45,6 @@
          margin: 24px;
          border-radius: 5px;
          background-color: #fff;
-         width: 80%;
      }
 
      paper-input, places-input, paper-toggle-button {
@@ -53,45 +52,54 @@
          margin: 1em;
      }
 
+     price-filter {
+         margin-top: 1em;
+     }
+
     </style>
 
     <app-route route="{{route}}" query-params="{{queryParams}}">
     </app-route>
 
-    <paper-card class="card">
-      <valid-form id="advSearchForm" button="Search">
-        <h3>Advanced Search</h3>
+    <main class="flex layout horizontal center center-justified">
+      <paper-card class="card">
+        <valid-form id="advSearchForm"
+                    class="flex layout nowrap vertical center center-justified"
+                    button="Search">
+          <h3>Advanced Search</h3>
 
-        <paper-input label="Business Name or Food Type"
-                     ariaLabel="Business Name or Food Type"
-                     value="{{searchParams.searchTerm}}"
-                     required>
-        </paper-input>
+          <paper-input label="Business Name or Food Type"
+                       ariaLabel="Business Name or Food Type"
+                       value="{{searchParams.searchTerm}}"
+                       required>
+          </paper-input>
 
-        <places-input value="{{location}}"
-                      lat="{{latitude}}"
-                      lng="{{longitude}}"
-                      label="Location"
-                      aria-label="your location"
-                      required>
-        </places-input>
+          <places-input value="{{location}}"
+                        lat="{{latitude}}"
+                        lng="{{longitude}}"
+                        label="Location"
+                        aria-label="your location"
+                        required>
+          </places-input>
 
-        <paper-dropdown-menu id="openFilter" label="Open Now">
-          <paper-listbox class="dropdown-content" selected="{{searchParams.openNow}}">
-            <paper-item>Any</paper-item>
-            <paper-item>Open</paper-item>
-            <paper-item>Closed</paper-item>
-          </paper-listbox>
-        </paper-dropdown-menu>
+          <paper-dropdown-menu id="openFilter" label="Open Now">
+            <paper-listbox class="dropdown-content" selected="{{searchParams.openNow}}">
+              <paper-item>Any</paper-item>
+              <paper-item>Open</paper-item>
+              <paper-item>Closed</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
 
-        <price-filter max="{{searchParams.maxPrice}}"
-                      min="{{searchParams.minPrice}}">
-        </price-filter>
+          <price-filter max="{{searchParams.maxPrice}}"
+                        min="{{searchParams.minPrice}}">
+          </price-filter>
 
-        <radius-filter value="{{searchParams.radius}}"></radius-filter>
+          <radius-filter value="{{searchParams.radius}}"></radius-filter>
 
-      </valid-form>
-    </paper-card>
+        </valid-form>
+      </paper-card>
+    </main>
+
   </template>
 
   <script>

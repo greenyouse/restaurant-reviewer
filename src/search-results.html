@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../bower_components/iron-location/iron-location.html">
 <link rel="import" href="../bower_components/iron-location/iron-query-params.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -25,18 +26,15 @@
          }
 
          --price-root-style: {
-             @apply(--layout-horizontal);
              @apply(--layout-center);
              @apply(--layout-justified);
          }
 
-         --price-slider-style: {
-             width: 30em;
-             margin-left: 10em;
-         }
+     }
 
-         --price-label-style: {
-             margin-left: 15em;
+     @media screen and (min-width: 769px) {
+         price-filter {
+             @apply(--layout-horizontal);
          }
      }
 
@@ -111,7 +109,7 @@
          align-self: auto;
      }
 
-     section {
+     main {
          max-width: 960px;
          margin: 0 auto;
      }
@@ -121,51 +119,72 @@
              @apply(--layout-wrap);
          }
      }
+
+     .control_small {
+         max-width: 15em;
+     }
+
+     .priceFilter {
+         @media screen and (max-width: 1439px) {
+             @apply(--layout-vertical);
+         }
+
+         @media screen and (max-width: 1440px) {
+             @apply(--layout-vertical);
+         }
+     }
     </style>
 
-    <div class="filterControls layout vertical center">
+    <section class="filterControls flex layout vertical center">
       <h4>Search Filters: </h4>
-      <div class="filters layout horizontal">
-        <paper-dropdown-menu id="openFilter" label="Open Now">
-          <paper-listbox class="dropdown-content" selected="{{openNow}}">
+      <div class="layout vertical" role="toolbar">
+        <paper-dropdown-menu class="control_small flex-auto self-center"
+                             id="openFilter"
+                             label="Open Now">
+          <paper-listbox class="dropdown-content" selected="{{params.openNow}}">
             <paper-item>Any</paper-item>
             <paper-item>Open</paper-item>
             <paper-item>Closed</paper-item>
           </paper-listbox>
         </paper-dropdown-menu>
-        <price-filter min="{{params.minPrice}}" max="{{params.maxPrice}}"></price-filter>
-      </div>
-    </div>
-
-    <section hidden$="[[loading]]">
-      <h3 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h3>
-      <div hidden$="[[emptyResults]]">
-        <template is="dom-repeat" items="[[_displayedResults]]" as="shop" >
-          <a class="shopCard" href="/#/business/{{shop.placeId}}">
-            <paper-card on-tap="setBusiness">
-              <div>
-                <div class="row">
-                  <img class="storeImage" src="[[shop.image]]" alt="restaurant picture"></img>
-                  <div>
-                    <h3>[[shop.title]]</h3>
-                    <star-rating rating="[[shop.rating]]"></star-rating>
-                  </div>
-                  <div>
-                    <p class="card-detail">[[shop.address]]</p>
-                    <dollar-rating rating="[[shop.price]]"></dollar-rating>
-                  </div>
-                </div>
-              </div>
-            </paper-card>
-          </a>
-          <br>
-        </template>
+        <price-filter class="priceFilter"
+                      min="{{params.minPrice}}" max="{{params.maxPrice}}"></price-filter>
       </div>
     </section>
 
-    <section class="loader" hidden$="[[!loading]]">
-      <paper-spinner active="[[!loading]]"></paper-spinner>
-    </section>
+    <main>
+      <section hidden$="[[loading]]">
+        <h2 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h2>
+        <div hidden$="[[emptyResults]]">
+          <template is="dom-repeat" items="[[_displayedResults]]" as="shop" >
+            <article>
+              <a class="shopCard" href="/#/business/{{shop.placeId}}">
+                <paper-card on-tap="setBusiness">
+                  <div>
+                    <div class="row">
+                      <img class="storeImage" src="[[shop.image]]" alt="restaurant picture"></img>
+                      <div>
+                        <h2>[[shop.title]]</h2>
+                        <star-rating rating="[[shop.rating]]"></star-rating>
+                      </div>
+                      <div>
+                        <p class="card-detail">[[shop.address]]</p>
+                        <dollar-rating rating="[[shop.price]]"></dollar-rating>
+                      </div>
+                    </div>
+                  </div>
+                </paper-card>
+              </a>
+            </article>
+            <br>
+          </template>
+        </div>
+      </section>
+
+      <section class="loader" hidden$="[[!loading]]">
+        <paper-spinner active="[[!loading]]"></paper-spinner>
+      </section>
+    </main>
 
   </template>
 
@@ -252,11 +271,12 @@
                break;
 
            case 1:
-             return (shop.openNow == false &&
+             return (shop.openNow == true &&
                      min <= shop.price && shop.price <= max);
+             break;
 
            case 2:
-             return (shop.openNow == true &&
+             return (shop.openNow == false &&
                      min <= shop.price && shop.price <= max)
          }
        });

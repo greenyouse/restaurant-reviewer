@@ -29,7 +29,7 @@
 
   <template>
 
-    <style>
+    <style is="app-shell" include="iron-flex iron-flex-alignment">
       :host {
         display: block;
           --app-primary-color: #5ca4ec;
@@ -54,7 +54,8 @@
           }
       }
 
-     :host([page=business]) .menu-btn {
+     :host([page=business]) .menu-btn,
+     :host([page=advanced]) .menu-btn {
          display: none;
      }
 
@@ -63,7 +64,8 @@
          display: none;
      }
 
-     :host([page=advanced]) #searchBar {
+     :host([page=advanced]) #searchBar,
+     :host([page=advanced]) .advancedSearch {
          display: none;
      }
 
@@ -128,8 +130,6 @@
 
      #tabContainer {
          background-color: var(--app-light-primary-color);
-         display: flex;
-         flex-direction: column;
      }
 
      .advancedSearch {
@@ -148,7 +148,7 @@
      }
 
      .logo a:focus {
-         outline: 1px solid black;
+         outline: 1px dotted black;
      }
 
     </style>
@@ -175,51 +175,55 @@
             <paper-icon-button icon="arrow-back" aria-label="Go back"></paper-icon-button>
           </a>
         </div>
-        <div class="logo" title><a href="/#/home" aria-label="Reviewer Home">Restaurant Reviewer</a></div>
+        <div class="logo" title><a href="/#/home" aria-label="Restaurant Reviewer Home">Restaurant Reviewer</a></div>
       </app-toolbar>
     </app-header>
 
     <!-- Restaurant Search Bar -->
     <div id="tabContainer">
-      <div id="searchBar" class="header__search">
-        <valid-form id="searchForm" button="Search">
-          <iron-a11y-keys id="a11y" target="[[termTarget]]" keys="enter"
-                          on-keys-pressed="_submitSearch"></iron-a11y-keys>
-          <paper-input aria-label="Business Name or Category"
-                       id="searchLocation"
-                       placeholder="Joe's diner, tacos, steakhouses"
-                       class="header__input--rounded"
-                       value="{{searchParams.searchTerm}}"
-                       required>
-            <iron-icon icon="search" prefix></iron-icon>
-            <div suffix></div>
-          </paper-input>
-          <iron-a11y-keys id="a11y" target="[[locationTarget]]" keys="enter"
-                          on-keys-pressed="_submitSearch"></iron-a11y-keys>
-          <places-input class="header__input--rounded"
-                        value="{{location}}"
-                        lat="{{latitude}}"
-                        lng="{{longitude}}"
-                        aria-label="your location"
-                        placeholder="address, neighborhood, city, state"
-                        required>
-            <iron-icon icon="communication:location-on" prefix></iron-icon>
-            <div suffix></div>
-          </places-input>
-        </valid-form>
-      </div>
-      <div class="advancedSearch">
-        <a href="/#/advanced">advanced search</a>
-      </div>
+      <section class="flex layout vertical">
+        <div id="searchBar" rold="toolbar">
+          <valid-form id="searchForm" button="Search">
+            <iron-a11y-keys id="a11y" target="[[termTarget]]" keys="enter"
+                            on-keys-pressed="_submitSearch"></iron-a11y-keys>
+            <paper-input aria-label="Business Name or Category"
+                         id="searchLocation"
+                         placeholder="Joe's diner, tacos, steakhouses"
+                         class="header__input--rounded"
+                         value="{{searchParams.searchTerm}}"
+                         required>
+              <iron-icon icon="search" prefix></iron-icon>
+              <div suffix></div>
+            </paper-input>
+            <iron-a11y-keys id="a11y" target="[[locationTarget]]" keys="enter"
+                            on-keys-pressed="_submitSearch"></iron-a11y-keys>
+            <places-input class="header__input--rounded"
+                          value="{{location}}"
+                          lat="{{latitude}}"
+                          lng="{{longitude}}"
+                          aria-label="your location"
+                          placeholder="address, neighborhood, city, state"
+                          required>
+              <iron-icon icon="communication:location-on" prefix></iron-icon>
+              <div suffix></div>
+            </places-input>
+          </valid-form>
+        </div>
+        <div class="advancedSearch" hidden$="[[smallScreen]]">
+          <a href="/#/advanced">advanced search</a>
+        </div>
+      </section>
     </div>
 
     <!-- Drawer content for small screens -->
     <template is="dom-if" if="[[smallScreen]]">
       <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
-        <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="home" href="/#/home">Home</a>
-          <a name="search" href="/#/search" Results</a>
-        </iron-selector>
+        <nav>
+          <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
+            <a name="home" href="/#/home">Home</a>
+            <a name="search" href="/#/advanced">Advanced Search</a>
+          </iron-selector>
+        </nav>
       </app-drawer>
     </template>
 
@@ -228,6 +232,7 @@
       <home-page name="home"
                  submit="{{submitSearch}}"
                  business="{{business}}"
+                 search-term="{{searchParams.searchTerm}}"
                  coords="[[coords]]">
       </home-page>
       <advanced-search name="advanced"
@@ -254,7 +259,7 @@
     </iron-pages>
 
     <!-- fake google map element for the Google Places library -->
-    <div id="map"></div>
+    <div id="map" hidden></div>
 
   </template>
 

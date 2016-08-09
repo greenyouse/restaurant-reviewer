@@ -15,33 +15,53 @@
    label {
        @apply(--price-label-style)
    }
+
+   /* Inlined to get around /deep/ combinator deprecation :( */
+     @media screen and (min-width: 416px) and (max-width: 829px) {
+         paper-slider {
+             width: 19em;
+         }
+
+         label {
+             width: 5em;
+         }
+     }
+
+   @media screen and (min-width: 830px) {
+       paper-slider {
+           width: 25em;
+       }
+
+       label {
+           width: 15em;
+       }
+   }
   </style>
 
   <template>
     <div>
-      <label>Minimum Price
-        <paper-slider aria-label="Minimum Price"
-                      value="{{min}}"
-                      min="1"
-                      max="5"
-                      required$="[[required]]"
-                      hidden$="[[hidden]]"
-                      editable>
-        </paper-slider>
-      </label>
+      <label for="minPriceFilter">Minimum Price</label>
+      <paper-slider id="minPriceFilter"
+                    aria-label="Minimum Price"
+                    value="{{min}}"
+                    min="1"
+                    max="5"
+                    required$="[[required]]"
+                    hidden$="[[hidden]]"
+                    editable>
+      </paper-slider>
     </div>
     <div>
-      <label>Maximum Price
-        <paper-slider id="maxPriceFilter"
-                      aria-label="Maximum Price"
-                      value="{{max}}"
-                      min="1"
-                      max="5"
-                      required$="[[required]]"
-                      hidden$="[[hidden]]"
-                      editable>
-        </paper-slider>
-      </label>
+      <label for="maxPriceFilter">Maximum Price</label>
+      <paper-slider id="maxPriceFilter"
+                    aria-label="Maximum Price"
+                    value="{{max}}"
+                    min="1"
+                    max="5"
+                    required$="[[required]]"
+                    hidden$="[[hidden]]"
+                    editable>
+      </paper-slider>
     </div>
   </template>
 

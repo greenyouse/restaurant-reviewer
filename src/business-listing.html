@@ -15,7 +15,7 @@
 <dom-module id="business-listing">
 
   <template>
-    <style include="iron-flex iron-flex-alignment">
+    <style include="iron-flex iron-flex-alignment iron-flex-factors">
      :host {
          --valid-form-button: {
              border-radius: 10%;
@@ -66,22 +66,52 @@
          list-style: none;
      }
 
-     li.review {
-         border-bottom: 1px solid black;
+     article.review {
          margin: 2em 0 2em;
      }
 
-     li.review > div:nth-child(1) {
+     article.review > div:nth-child(1) {
          margin-right: 2em;
      }
 
-     li.review:nth-child(1) {
+     article.review:nth-child(1) {
          border-top: 1px solid black;
          padding-top: 2em;
      }
 
-     .smallText {
+     .review__date {
          font-size: .8rem;
+     }
+
+     .review__text > p {
+         margin-left: auto;
+         margin-right: auto;
+     }
+
+     .review {
+         flex-direction: column;
+     }
+
+     @media screen and (min-width: 400px) {
+         .review__text > p {
+             width: 20em;
+         }
+     }
+
+     @media screen and (min-width: 700px) {
+         .review__text > p {
+             width: 25em;
+         }
+     }
+
+     @media screen and (min-width: 701px) {
+         .review {
+             @apply(--layout-horizontal);
+         }
+
+         .review__text > p {
+             width: 30em;
+         }
      }
 
      a, p {
@@ -91,75 +121,79 @@
      iron-autogrow-textarea {
          background-color: white;
      }
-
-     img {
-         max-width: 100% !important;
-         height:auto;
-         display: inline-block;
-     }
     </style>
 
-    <paper-card class="card flex layout nowrap vertical center center-justified">
-      <img src="[[business.image]]" alt="[[business.title]]" />
+    <main>
+      <paper-card class="card flex layout nowrap vertical center center-justified"
+                  image="[[business.image]]" alt="[[business.title]]">
 
-      <h3>[[business.title]]</h3>
-      <star-rating rating="[[business.rating]]"></star-rating>
+        <h3>[[business.title]]</h3>
+        <star-rating rating="[[business.rating]]"></star-rating>
 
-      <ul class="metadata">
-        <li>
-          <iron-icon icon="communication:location-on" prefix></iron-icon><p>[[business.address]]</p>
-        </li>
-        <li>
-          <iron-icon icon="maps:local-phone" prefix></iron-icon><p>[[business.phone]]</p>
-        </li>
-        <li>
-          <iron-icon icon="link" prefix></iron-icon><a href$="[[business.website]]" target="_blank">[[business.website]]</a>
-        </li>
-        <li>
-          <iron-icon icon="device:access-time" prefix></iron-icon><p>[[business.hours]]</p>
-        </li>
-        <li><dollar-rating rating="[[business.price]]"></dollar-rating></li>
-      </ul>
+        <section>
+          <ul class="metadata">
+            <li>
+              <iron-icon icon="communication:location-on" prefix></iron-icon><p>[[business.address]]</p>
+            </li>
+            <li>
+              <iron-icon icon="maps:local-phone" prefix></iron-icon><p>[[business.phone]]</p>
+            </li>
+            <li>
+              <iron-icon icon="link" prefix></iron-icon><a href$="[[business.website]]" target="_blank">[[business.website]]</a>
+            </li>
+            <li>
+              <iron-icon icon="device:access-time" prefix></iron-icon><p>[[business.hours]]</p>
+            </li>
+            <li><dollar-rating rating="[[business.price]]"></dollar-rating></li>
+          </ul>
+        </section>
 
-      <hr>
+        <hr>
 
-      <h3>Reviews</h3>
+        <h3>Reviews</h3>
 
-      <div hidden$="[[reviewSent]]">
-        <p>Add your review: </p>
-        <star-picker id="reviewStars" selected="[[toggleReview]]" rating="{{reviewRating}}"></star-picker>
-      </div>
+        <section>
+          <div hidden$="[[reviewSent]]">
+            <p>Add your review: </p>
+            <star-picker id="reviewStars" selected="[[toggleReview]]" rating="{{reviewRating}}"></star-picker>
+          </div>
 
-      <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
-        <paper-input value="{{reviewName}}"
-                     label="Name"
-                     required></paper-input>
+          <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
+            <paper-input value="{{reviewName}}"
+                         label="Name"
+                         required></paper-input>
+            <br>
+            <iron-autogrow-textarea value="{{reviewText}}"
+                                    hidden$="[[!toggleReview]]"
+                                    placeholder="Enter a review for this business"
+                                    required></iron-autogrow-textarea>
+          </valid-form>
+          <h3 hidden$="[[!reviewSent]]">Thanks for your review!</h3>
+        </section>
+
         <br>
-        <iron-autogrow-textarea value="{{reviewText}}"
-                                hidden$="[[!toggleReview]]"
-                                placeholder="Enter a review for this business"
-                                required></iron-autogrow-textarea>
-      </valid-form>
-      <h3 hidden$="[[!reviewSent]]">Thanks for your review!</h3>
 
-      <br>
+        <section>
+          <ul>
+            <template id="reviewsList" is="dom-repeat" items="[[reviews]]" as="review">
+              <li>
+                <article class="review flex layout nowrap start start-justified">
+                  <div>
+                    <star-rating rating="[[review.rating]]"></star-rating>
+                    <p>[[review.author_name]]</p>
+                    <p class="review__date">[[review.date]]</p>
+                  </div>
+                  <div class="review__text">
+                    <p>[[review.text]]</p>
+                  </div>
+                </article>
+              </li>
+            </template>
+          </ul>
+        </section>
 
-      <ul>
-        <template id="reviewsList" is="dom-repeat" items="[[reviews]]" as="review">
-          <li class="review flex layout nowrap horizontal start start-justified">
-            <div>
-              <p class="smallText">[[review.date]]</p>
-              <p>[[review.author_name]]</p>
-            </div>
-            <div>
-              <star-rating rating="[[review.rating]]"></star-rating>
-              <p>[[review.text]]</p>
-            </div>
-          </li>
-        </template>
-      </ul>
-
-    </paper-card>
+      </paper-card>
+    </main>
   </template>
 
   <script>

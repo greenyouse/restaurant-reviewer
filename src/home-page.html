@@ -43,61 +43,87 @@
      }
 
      a:focus {
-         outline: 1px solid black;
+         outline: 1px dotted black;
      }
 
+     @media screen and (max-width: 501px) {
+         .categories {
+             display: flex;
+             flex-wrap: wrap;
+         }
+
+         .category-1, .category-2 {
+             width: 50%;
+         }
+
+         .category-3,.category-4 {
+             order: 1;
+             width: 50%;
+         }
+     }
     </style>
 
-    <section>
-
-      <h3 class="center">Nearby Restaurants</h3>
-      <div class="nearbyTable">
-        <template is="dom-repeat" items="[[nearbyPlaces]]" as="shop">
-          <a href="/#/business/{{shop.place_id}}">
-            <restaurant-card title=[[shop.name]]
-                             image-data=[[shop.photos]]
-                             rating=[[shop.rating]]
-                             open-now=[[shop.opening_hours.open_now]]
-                             place-id="[[shop.place_id]]"
-                             address=[[shop.vicinity]]
-                             on-tap="setBusiness">
-            </restaurant-card>
-          </a>
-        </template>
-      </div>
-      <br>
-
-      <h3 class="center">Cuisine Types</h3>
-      <section class="categories">
-        <ul>
-          <li><a on-tap="setSearch" href="#">BBQ</a></li>
-          <li><a on-tap="setSearch" href="#">Ethnic</a></li>
-          <li><a on-tap="setSearch" href="#">Cafe</a></li>
-          <li><a on-tap="setSearch" href="#">Chinese</a></li>
-        </ul>
-        <ul>
-          <li><a on-tap="setSearch" href="#">Coffeehouse</a></li>
-          <li><a on-tap="setSearch" href="#">Family Style</a></li>
-          <li><a on-tap="setSearch" href="#">Fast Food</a></li>
-          <li><a on-tap="setSearch" href="#">French</a></li>
-        </ul>
-        <ul>
-          <li><a on-tap="setSearch" href="#">Fine Dining</a></li>
-          <li><a on-tap="setSearch" href="#">Japanese</a></li>
-          <li><a on-tap="setSearch" href="#">Latin American</a></li>
-          <li><a on-tap="setSearch" href="#">Middle Eastern</a></li>
-        </ul>
-        <ul>
-          <li><a on-tap="setSearch" href="#">Pizza</a></li>
-          <li><a on-tap="setSearch" href="#">Spanish</a></li>
-          <li><a on-tap="setSearch" href="#">Soul food</a></li>
-          <li><a on-tap="setSearch" href="#">Tex-Mex</a></li>
-        </ul>
+    <main>
+      <section>
+        <h2 class="center">Nearby Restaurants</h2>
+        <div class="nearbyTable">
+          <template is="dom-repeat" items="[[nearbyPlaces]]" as="shop">
+            <a href="/#/business/{{shop.place_id}}">
+              <restaurant-card title=[[shop.name]]
+                               image-data=[[shop.photos]]
+                               rating=[[shop.rating]]
+                               open-now=[[shop.opening_hours.open_now]]
+                               place-id="[[shop.place_id]]"
+                               address=[[shop.vicinity]]
+                               on-tap="setBusiness">
+              </restaurant-card>
+            </a>
+          </template>
+        </div>
+        <br>
       </section>
 
-      <!-- fake google map element for the Google Places library -->
-      <div id="map"></div>
-    </section>
+      <section>
+        <h2 class="center">Cuisine Types</h2>
+        <div class="categories">
+          <div class="category-1">
+            <ul>
+              <li><a on-tap="setSearch" href="#">BBQ</a></li>
+              <li><a on-tap="setSearch" href="#">Ethnic</a></li>
+              <li><a on-tap="setSearch" href="#">Cafe</a></li>
+              <li><a on-tap="setSearch" href="#">Chinese</a></li>
+            </ul>
+          </div>
+          <div class="category-2">
+            <ul>
+              <li><a on-tap="setSearch" href="#">Coffeehouse</a></li>
+              <li><a on-tap="setSearch" href="#">Family Style</a></li>
+              <li><a on-tap="setSearch" href="#">Fast Food</a></li>
+              <li><a on-tap="setSearch" href="#">French</a></li>
+            </ul>
+          </div>
+          <div class="category-3">
+            <ul>
+              <li><a on-tap="setSearch" href="#">Fine Dining</a></li>
+              <li><a on-tap="setSearch" href="#">Japanese</a></li>
+              <li><a on-tap="setSearch" href="#">Latin American</a></li>
+              <li><a on-tap="setSearch" href="#">Middle Eastern</a></li>
+            </ul>
+          </div>
+          <div class="category-4">
+            <ul>
+              <li><a on-tap="setSearch" href="#">Pizza</a></li>
+              <li><a on-tap="setSearch" href="#">Spanish</a></li>
+              <li><a on-tap="setSearch" href="#">Soul food</a></li>
+              <li><a on-tap="setSearch" href="#">Tex-Mex</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- fake google map element for the Google Places library -->
+    <div id="map" hidden></div>
 
   </template>
 
@@ -119,7 +145,7 @@
        },
 
        searchTerm: {
-         type: String,
+         type: Object,
          notify: true
        },
 
@@ -139,9 +165,9 @@
      },
 
      setSearch: function(e) {
-       var businessName = e.detail.sourceEvent.target.innerText;
+       var category = e.detail.sourceEvent.target.innerText;
 
-       this.searchTerm = businessName;
+       this.searchTerm = category;
        this.submit = true;
      },
 

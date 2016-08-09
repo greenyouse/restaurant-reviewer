@@ -44,18 +44,20 @@
 
     </style>
 
-    <paper-card image="[[imageUrl]]" alt="[[title]]">
-      <div class="card-content">
-        <p class="card-header"><b>[[title]]</b></p>
-        <div>
-          <star-rating rating="[[rating]]"></star-rating>
-          <template is="dom-if" if="[[openNow]]">
-            <p class="card-highlight">Open Now</p>
-          </template>
+    <article>
+      <paper-card image="[[imageUrl]]" alt="[[title]]">
+        <div class="card-content">
+          <p class="card-header"><b>[[title]]</b></p>
+          <div>
+            <star-rating rating="[[rating]]"></star-rating>
+            <template is="dom-if" if="[[openNow]]">
+              <p class="card-highlight">Open Now</p>
+            </template>
+          </div>
+          <p class="card-detail">[[address]]</p>
         </div>
-        <p class="card-detail">[[address]]</p>
-      </div>
-    </paper-card>
+      </paper-card>
+    </article>
 
   </template>
 
