@@ -1,11 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="my-icons.html">
 
-<!--
-   -->
 
 <dom-module id="star-picker">
   <template>
@@ -44,11 +42,17 @@
 
     </style>
 
-    <iron-a11y-keys id="a11y" keys="right up left down esc" on-keys-pressed="handleKeys"></iron-a11y-keys>
-    <div tabindex="0" id="starContainer" class="rating" aria-valuemin="0" aria-valuemax$="{{stars}}" aria-valuenow$="{{rating}}">
+    <div tabindex="0"
+         id="starContainer"
+         class="rating set"
+         aria-valuemin="0"
+         aria-valuemax$="{{stars}}"
+         aria-valuenow$="{{rating}}">
+
       <template is="dom-repeat" items="[[_starColl]]" as="star">
         <iron-icon class$="[[star.class]]" icon="star" on-tap="_fillStar"></iron-icon>
       </template>
+
     </div>
 
   </template>
@@ -56,6 +60,10 @@
   <script>
    Polymer({
      is: "star-picker",
+
+     behaviors: [
+       Polymer.IronA11yKeysBehavior
+     ],
 
      properties: {
        /**
@@ -72,17 +80,6 @@
        stars: {
          type: Number,
          value: 5
-       },
-
-       /**
-        * Whether a star rating has been selected yet. It will
-        * signal a change in CSS so that the star selection shows
-        * up.
-        */
-       selected: {
-         type: Boolean,
-         notify: true,
-         value: false
        },
 
        /**
@@ -104,23 +101,8 @@
      },
 
      observers: [
-       'calculateStars(rating)',
-       'setSelection(selected)'
+       'calculateStars(rating)'
      ],
-
-     // once a click is done, switch the component style
-     setSelection: function (active) {
-       // don't run on startup
-       if (this.rating === undefined) return;
-
-       ratingDiv = this.$.starContainer;
-
-       if (active) {
-         ratingDiv.classList.add("set");
-       } else {
-         ratingDiv.classList.remove("set");
-       }
-     },
 
      /**
       * Sets the rating when a star is entered
@@ -129,6 +111,11 @@
       */
      _fillStar: function(event) {
        this.rating = 5 - event.model.index;
+       this._selected();
+     },
+
+     _selected: function() {
+       this.fire('selected', {selected: true});
      },
 
      /**
@@ -161,31 +148,32 @@
        this._starColl = starColl;
      },
 
-     /**
-      * keyboard input for accessibility, influenced by:
-      * https://github.com/PolymerLabs/star-ratings/blob/master/star-ratings.html
-      *
-      * @param {Object} event
-      * @param {Object} detail
-      */
-     handleKeys: function(event, detail) {
-       var keyIdentifier = event.detail.key;
+     keyBindings: {
+       'esc': '_blur',
+       'up right': '_addStar',
+       'down left': '_removeStar'
+     },
 
-       switch (keyIdentifier) {
-         case "esc":
-           this.$.starContainer.blur();
-           return;
-         case "right":
-         case "up":
-           if (this.rating < this.stars)
-             this.rating +=1
-           return;
-         case "left":
-         case "down":
-           if (this.rating > 1)
-             this.rating -= 1;
-           return;
-       }
+     _blur: function() {
+       console.log('esc');
+       this.$.starContainer.blur();
+     },
+
+     _addStar: function() {
+       if (this.rating < this.stars)
+         this.rating += 1;
+
+       this._selected();
+     },
+
+     _removeStar: function() {
+       if (this.rating === 0)
+         this.rating = 2;
+
+       if (this.rating > 1)
+         this.rating -= 1;
+
+       this._selected();
      }
 
    });

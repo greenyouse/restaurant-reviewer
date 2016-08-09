@@ -22,10 +22,12 @@
              background-color:  #FFE05C;
              flex: 1 1 auto;
              padding-left: 10px;
+             max-width: 100%;
          }
 
          --valid-form-form: {
              flex-direction: column;
+             width: 50vw;
              padding: 2em;
          }
 
@@ -120,6 +122,7 @@
 
      iron-autogrow-textarea {
          background-color: white;
+         width: 50vw;
      }
     </style>
 
@@ -154,17 +157,20 @@
 
         <section>
           <div hidden$="[[reviewSent]]">
-            <p>Add your review: </p>
+            <p>Add your review:</p>
             <star-picker id="reviewStars" selected="[[toggleReview]]" rating="{{reviewRating}}"></star-picker>
           </div>
 
-          <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
+          <valid-form class="flex layout wrap vertical start center-justified"
+                      id="reviewForm"
+                      button="Send Review"
+                      hidden$="[[!toggleReview]]">
+
             <paper-input value="{{reviewName}}"
                          label="Name"
                          required></paper-input>
             <br>
             <iron-autogrow-textarea value="{{reviewText}}"
-                                    hidden$="[[!toggleReview]]"
                                     placeholder="Enter a review for this business"
                                     required></iron-autogrow-textarea>
           </valid-form>
@@ -248,7 +254,7 @@
       },
 
       listeners: {
-        'reviewStars.tap': '_showReview',
+        'reviewStars.selected': '_showReview',
         'reviewForm.iron-form-submit': '_submitReview'
       },
 
