@@ -45,8 +45,10 @@
     <div tabindex="0"
          id="starContainer"
          class="rating set"
+         aria-role="slider"
          aria-valuemin="0"
          aria-valuemax$="{{stars}}"
+         aria-valuetext$="{{rating}}"
          aria-valuenow$="{{rating}}">
 
       <template is="dom-repeat" items="[[_starColl]]" as="star">
