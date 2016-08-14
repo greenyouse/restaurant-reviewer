@@ -27,12 +27,13 @@
 
          --valid-form-form: {
              flex-direction: column;
-             width: 50vw;
+             max-width: 80%;
              padding: 2em;
          }
 
          --valid-form-elements: {
              margin: 2em;
+             max-width: 75%;
          }
      }
 
@@ -122,7 +123,11 @@
 
      iron-autogrow-textarea {
          background-color: white;
-         width: 50vw;
+         max-width: 75%;
+     }
+
+     section {
+         max-width: 100%;
      }
     </style>
 
@@ -392,6 +397,8 @@
       },
 
       _showBusiness: function(businessId) {
+        // avoid calling on startup
+        if (this.businessId === undefined) return;
         var _this3 = this;
 
         this.loading = true;
