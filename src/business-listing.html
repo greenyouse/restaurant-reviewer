@@ -259,7 +259,7 @@
       },
 
       observers: [
-        'resetBusiness(business)',
+        'resetBusiness(businessId)'
       ],
 
       ready: function() {
@@ -267,13 +267,13 @@
         this.toggleReview = false;
       },
 
-      resetBusiness: function(business){
+      resetBusiness: function(businessId){
         this.reviewSent = false;
         this.toggleReview = false;
         this.reviewText = "";
         this.reviewRating = 0;
 
-        this._showBusiness(business);
+        this._showBusiness(businessId);
       },
 
       _showReview: function() {
@@ -391,7 +391,7 @@
         };
       },
 
-      _showBusiness: function(business) {
+      _showBusiness: function(businessId) {
         var _this3 = this;
 
         this.loading = true;
@@ -402,7 +402,7 @@
         });
 
         var request = {
-          placeId: business.placeId || business.place_id
+          placeId: businessId
         };
 
         var places = new google.maps.places.PlacesService(map);

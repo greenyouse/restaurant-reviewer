@@ -157,8 +157,8 @@
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
-    <app-route route="{{route}}" pattern="/search" active="{{searchActive}}" tail="{{searchTail}}"></app-route>
-    <app-route route="{{route}}" pattern="/business"></app-route>
+    <app-route route="{{route}}" pattern="/search" active="{{searchActive}}"></app-route>
+    <app-route route="{{route}}" pattern="/business" tail="{{businessTail}}"></app-route>
 
     <iron-media-query query="max-width: 767px" query-matches="{{smallScreen}}"></iron-media-query>
 
@@ -244,7 +244,6 @@
                        longitude="{{longitude}}">
       </advanced-search>
       <search-results name="search"
-                      route="{{searchTail}}"
                       active="{{searchActive}}"
                       map="[[listingMap]]"
                       coords="[[coords]]"
@@ -255,6 +254,7 @@
       <business-listing name="business"
                         listing-map="[[listingMap]]"
                         coords="[[coords]]"
+                        business-id="[[businessId]]"
                         business="[[business]]">
       </business-listing>
     </iron-pages>
@@ -288,11 +288,6 @@
 
        route: {
          type: Object
-       },
-
-       searchTail: {
-         type: Object,
-         notify: true
        },
 
        searchActive: {
@@ -385,7 +380,8 @@
 
      observers: [
        '_routePageChanged(routeData.page)',
-       '_detectLocation(googleLoaded)'
+       '_detectLocation(googleLoaded)',
+       'getBusinessId(businessTail)'
      ],
 
      // mostly for styling the CSS back and menu buttons
@@ -481,6 +477,17 @@
          this.$.searchForm.submit();
          this.submitSearch = false;
        }
+     },
+
+     /**
+      * The business id is stored in the path of the business tail. This
+      * returns the id using that path.
+      *
+      * @param {Object} businessTail
+      */
+     getBusinessId: function(businessTail) {
+       if (businessTail.path)
+         this.businessId = businessTail.path.substr(1);
      }
 
    });
