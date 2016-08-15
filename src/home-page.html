@@ -1,11 +1,16 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="imrpot" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="restaurant-card.html">
 
 <dom-module id="home-page">
   <template>
 
     <style>
+     paper-button {
+         color: black;
+     }
+
      .nearbyTable {
          @apply(--layout-horizontal);
          @apply(--layout-center-justified);
@@ -88,34 +93,34 @@
         <div class="categories">
           <div class="category-1">
             <ul>
-              <li><a on-tap="setSearch" href="#">BBQ</a></li>
-              <li><a on-tap="setSearch" href="#">Ethnic</a></li>
-              <li><a on-tap="setSearch" href="#">Cafe</a></li>
-              <li><a on-tap="setSearch" href="#">Chinese</a></li>
+              <li><paper-button on-tap="setSearch" noink>BBQ</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Ethnic</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Cafe</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Chinese</paper-button></li>
             </ul>
           </div>
           <div class="category-2">
             <ul>
-              <li><a on-tap="setSearch" href="#">Coffeehouse</a></li>
-              <li><a on-tap="setSearch" href="#">Family Style</a></li>
-              <li><a on-tap="setSearch" href="#">Fast Food</a></li>
-              <li><a on-tap="setSearch" href="#">French</a></li>
+              <li><paper-button on-tap="setSearch" noink>Coffeehouse</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Family Style</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Fast Food</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>French</paper-button></li>
             </ul>
           </div>
           <div class="category-3">
             <ul>
-              <li><a on-tap="setSearch" href="#">Fine Dining</a></li>
-              <li><a on-tap="setSearch" href="#">Japanese</a></li>
-              <li><a on-tap="setSearch" href="#">Latin American</a></li>
-              <li><a on-tap="setSearch" href="#">Middle Eastern</a></li>
+              <li><paper-button on-tap="setSearch" noink>Fine Dining</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Japanese</paper-button><li>
+              <li><paper-button on-tap="setSearch" noink>Latin American</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Middle Eastern</paper-button></li>
             </ul>
           </div>
           <div class="category-4">
             <ul>
-              <li><a on-tap="setSearch" href="#">Pizza</a></li>
-              <li><a on-tap="setSearch" href="#">Spanish</a></li>
-              <li><a on-tap="setSearch" href="#">Soul food</a></li>
-              <li><a on-tap="setSearch" href="#">Tex-Mex</a></li>
+              <li><paper-button on-tap="setSearch" noink>Pizza</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Spanish</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Soul food</paper-button></li>
+              <li><paper-button on-tap="setSearch" noink>Tex-Mex</paper-button></li>
             </ul>
           </div>
         </div>
