@@ -2,12 +2,6 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="my-icons.html">
 
-<!-- TODO:
-   - add ripple effect
-   - have read-only property
-   - add tooltip messages
-   -->
-
 <dom-module id="star-rating">
   <template>
     <style>
@@ -27,7 +21,8 @@
 
     <div class="rating" aria-label$="Rating: [[rating]]">
       <template is="dom-repeat" items="[[_starsColl]]" as="star">
-        <iron-icon class$="[[star.class]]" src$="[[star.src]]" icon="[[star.icon]]"></iron-icon>
+        <!-- NOTE: alt text not working: https://github.com/PolymerElements/iron-icon/issues/8 -->
+        <iron-icon class$="[[star.class]]" role="presentation" src$="[[star.src]]" alt$="[[star.class]]" icon="[[star.icon]]"></iron-icon>
       </template>
     </div>
 
