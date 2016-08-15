@@ -1,81 +1,77 @@
-<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
-<link rel="import" href="../bower_components/iron-icons/device-icons.html">
-<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
-<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="dollar-rating.html">
-<link rel="import" href="star-picker.html">
-<link rel="import" href="star-rating.html">
-<link rel="import" href="valid-form.html">
-
-</head><body><dom-module id="business-listing">
+<html><head><meta charset="UTF-8"><link rel="import" href="restaurant-reviewer.html"></head><body><dom-module id="business-listing">
 
   <template>
-    <style include="iron-flex iron-flex-alignment">:host{--valid-form-button:{border-radius:10%;background-color:#FFE05C;flex:1 1 auto;padding-left:10px;};--valid-form-form:{flex-direction:column;padding:2em;};--valid-form-elements:{margin:2em;};}*[hidden]{display:none !important;}.card{box-shadow:0 2px 2px 0  rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);padding:16px;margin:24px;border-radius:5px;background-color:#fff;}.flex{-webkit-flex-basis:auto !important;flex-basis:auto !important;}ul.metadata > li{display:flex;justify-content:flex-start;align-items:center;}ul.metadata > li > *{align-self:auto;margin-right:1em;}li{list-style:none;}li.review{border-bottom:1px solid black;margin:2em 0 2em;}li.review > div:nth-child(1){margin-right:2em;}li.review:nth-child(1){border-top:1px solid black;padding-top:2em;}.smallText{font-size:.8rem;}a, p{overflow-wrap:break-word;}iron-autogrow-textarea{background-color:white;}img{max-width:100% !important;height:auto;display:inline-block;}</style>
+    <style include="iron-flex iron-flex-alignment iron-flex-factors">:host{--valid-form-button:{border-radius:10%;background-color:#FFE05C;flex:1 1 auto;padding-left:10px;max-width:100%;};--valid-form-form:{flex-direction:column;max-width:80%;padding:2em;};--valid-form-elements:{margin:2em;max-width:75%;};}*[hidden]{display:none !important;}.card{box-shadow:0 2px 2px 0  rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);padding:16px;margin:24px;border-radius:5px;background-color:#fff;}.flex{-webkit-flex-basis:auto !important;flex-basis:auto !important;}ul.metadata > li{display:flex;justify-content:flex-start;align-items:center;}ul.metadata > li > *{align-self:auto;margin-right:1em;}li{list-style:none;}article.review{margin:2em 0 2em;}article.review > div:nth-child(1){margin-right:2em;}article.review:nth-child(1){border-top:1px solid black;padding-top:2em;}.review__date{font-size:.8rem;}.review__text > p{margin-left:auto;margin-right:auto;}.review{flex-direction:column;}@media screen and (min-width: 400px){.review__text > p{width:20em;}}@media screen and (min-width: 700px){.review__text > p{width:25em;}}@media screen and (min-width: 701px){.review{@apply (--layout-horizontal);}.review__text > p{width:30em;}}a, p{overflow-wrap:break-word;}iron-autogrow-textarea{background-color:white;max-width:75%;}section{max-width:100%;}</style>
 
-    <paper-card class="card flex layout nowrap vertical center center-justified">
-      <img src="[[business.image]]" alt="Business Image">
+    <main>
+      <paper-card class="card flex layout nowrap vertical center center-justified" image="[[business.image]]" alt="[[business.title]]">
 
-      <h3>[[business.title]]</h3>
-      <star-rating rating="[[business.rating]]"></star-rating>
+        <h3>[[business.title]]</h3>
+        <star-rating rating="[[business.rating]]"></star-rating>
 
-      <ul class="metadata">
-        <li>
-          <iron-icon icon="communication:location-on" prefix=""></iron-icon><p>[[business.address]]</p>
-        </li>
-        <li>
-          <iron-icon icon="maps:local-phone" prefix=""></iron-icon><p>[[business.phone]]</p>
-        </li>
-        <li>
-          <iron-icon icon="link" prefix=""></iron-icon><a href$="[[business.website]]" target="_blank">[[business.website]]</a>
-        </li>
-        <li>
-          <iron-icon icon="device:access-time" prefix=""></iron-icon><p>[[business.hours]]</p>
-        </li>
-        <li><dollar-rating rating="[[business.price]]"></dollar-rating></li>
-      </ul>
+        <section>
+          <ul class="metadata">
+            <li>
+              <iron-icon icon="communication:location-on" prefix=""></iron-icon><p>[[business.address]]</p>
+            </li>
+            <li>
+              <iron-icon icon="maps:local-phone" prefix=""></iron-icon><p>[[business.phone]]</p>
+            </li>
+            <li>
+              <iron-icon icon="link" prefix=""></iron-icon><a href$="[[business.website]]" target="_blank">[[business.website]]</a>
+            </li>
+            <li>
+              <iron-icon icon="device:access-time" prefix=""></iron-icon><p>[[business.hours]]</p>
+            </li>
+            <li><dollar-rating rating="[[business.price]]"></dollar-rating></li>
+          </ul>
+        </section>
 
-      <hr>
+        <hr>
 
-      <h3>Reviews</h3>
+        <h3>Reviews</h3>
 
-      <div hidden$="[[reviewSent]]">
-        <p>Add your review: </p>
-        <star-picker id="reviewStars" selected="[[toggleReview]]" rating="{{reviewRating}}"></star-picker>
-      </div>
+        <section>
+          <div hidden$="[[reviewSent]]">
+            <p>Add your review:</p>
+            <star-picker id="reviewStars" selected="[[toggleReview]]" rating="{{reviewRating}}"></star-picker>
+          </div>
 
-      <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
-        <paper-input value="{{reviewName}}" label="Name" required=""></paper-input>
+          <valid-form class="flex layout wrap vertical start center-justified" id="reviewForm" button="Send Review" hidden$="[[!toggleReview]]">
+
+            <paper-input value="{{reviewName}}" label="Name" required=""></paper-input>
+            <br>
+            <iron-autogrow-textarea value="{{reviewText}}" placeholder="Enter a review for this business" required=""></iron-autogrow-textarea>
+          </valid-form>
+          <h3 hidden$="[[!reviewSent]]">Thanks for your review!</h3>
+        </section>
+
         <br>
-        <iron-autogrow-textarea value="{{reviewText}}" hidden$="[[!toggleReview]]" placeholder="Enter a review for this business" required=""></iron-autogrow-textarea>
-      </valid-form>
-      <h3 hidden$="[[!reviewSent]]">Thanks for your review!</h3>
 
-      <br>
+        <section>
+          <ul>
+            <template id="reviewsList" is="dom-repeat" items="[[reviews]]" as="review">
+              <li>
+                <article class="review flex layout nowrap start start-justified">
+                  <div>
+                    <star-rating rating="[[review.rating]]"></star-rating>
+                    <p>[[review.author_name]]</p>
+                    <p class="review__date">[[review.date]]</p>
+                  </div>
+                  <div class="review__text">
+                    <p>[[review.text]]</p>
+                  </div>
+                </article>
+              </li>
+            </template>
+          </ul>
+        </section>
 
-      <ul>
-        <template is="dom-repeat" items="[[reviews]]" as="review">
-          <li class="review flex layout nowrap horizontal start start-justified">
-            <div>
-              <p class="smallText">[[review.date]]</p>
-              <p>[[review.author_name]]</p>
-            </div>
-            <div>
-              <star-rating rating="[[review.rating]]"></star-rating>
-              <p>[[review.text]]</p>
-            </div>
-          </li>
-        </template>
-      </ul>
-
-    </paper-card>
+      </paper-card>
+    </main>
   </template>
 
-  <script>Polymer({is:"business-listing",properties:{business:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},reviewRating:{type:Number,notify:!0,value:0},toggleReview:{type:Boolean,notify:!0,value:!1},reviewName:{type:String,notify:!0},reviewText:{type:String,notify:!0},reviewSent:{type:Boolean,notify:!0,value:!1}},listeners:{"reviewStars.tap":"_showReview","reviewForm.iron-form-submit":"_submitReview"},observers:["resetBusiness(business)"],ready:function(){this.reviewSent=!1,this.toggleReview=!1},resetBusiness:function(e){this.reviewSent=!1,this.toggleReview=!1,this.reviewText="",this.reviewRating=0},_showReview:function(){this.toggleReview=!0},_saveReview:function(e,t){var i=t.placeId;localforage.getItem(i).then(function(t){null==t&&(t=[]),t.push(e),localforage.setItem(i,t)}).catch(function(e){console.log("Business db error: ",e)})},_getDate:function(){var e=new Date,t=e.getDate(),i=e.getMonth()+1,s=e.getFullYear();return t+"/"+i+"/"+s},_submitReview:function(){var e={text:this.reviewText,date:this._getDate(),author_name:this.reviewName,rating:this.reviewRating};this._saveReview(e,this.business),this.toggleReview=!1,this.reviewSent=!0}});</script>
+  <script>Polymer({is:"business-listing",properties:{business:{type:Object,notify:!0},reviews:{type:Array,notify:!0,value:function(){return[]}},listingMap:{type:Object},reviewRating:{type:Number,notify:!0,value:0},toggleReview:{type:Boolean,notify:!0,value:!1},reviewName:{type:String,notify:!0},reviewText:{type:String,notify:!0},reviewSent:{type:Boolean,notify:!0,value:!1},businessId:String},listeners:{"reviewStars.selected":"_showReview","reviewForm.iron-form-submit":"_submitReview"},observers:["resetBusiness(businessId)"],ready:function(){this.reviewSent=!1,this.toggleReview=!1},resetBusiness:function(e){this.reviewSent=!1,this.toggleReview=!1,this.reviewText="",this.reviewRating=0,this._showBusiness(e)},_showReview:function(){this.toggleReview=!0},_saveReview:function(e,t){var i=t.placeId;this.unshift("reviews",e),this.$.reviewsList.render(),localforage.getItem(i).then(function(t){null===t&&(t=[]),t.unshift(e),localforage.setItem(i,t)}).catch(function(e){console.log("Business db error: ",e)})},_getDate:function(){var e=new Date,t=e.getDate(),i=e.getMonth()+1,s=e.getFullYear();return t+"/"+i+"/"+s},_submitReview:function(){var e={text:this.reviewText,date:this._getDate(),author_name:this.reviewName,rating:this.reviewRating};this._saveReview(e,this.business),this.toggleReview=!1,this.reviewSent=!0},loadReviews:function(e){var t=this,i=e.place_id;localforage.getItem(i,function(i,s){var n=e.reviews;null==s?t.reviews=n:(null==n&&(n=[]),s.map(function(e){n.unshift(e)}),t.reviews=n)})},_fetchImageUrl:function(e){return imageUrl=e.getUrl({maxWidth:1e3,maxHeight:500}),imageUrl},parseBusiness:function(e){var t=(new Date).getDay();t-=0==t?-6:1;var i="opening times not listed";"weekday_text"in e.opening_hours&&(i=e.opening_hours.weekday_text[t]);var s=e.formatted_address,n=e.photos||"https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",i=i,r=e.formatted_phone_number,a=e.place_id,o=e.price_level,l=e.rating,u=e.name,g=e.website,v="string"==typeof n?n:this._fetchImageUrl(n[0]);return this.loadReviews(e),{address:s,hours:i,image:v,phone:r,placeId:a,price:o,rating:l,title:u,website:g}},_showBusiness:function(e){if(void 0!==this.coords){var t=this;this.loading=!0;var i=new google.maps.Map(this.listingMap,{}),s={placeId:e},n=new google.maps.places.PlacesService(i);n.getDetails(s,function(e,i){i==google.maps.places.PlacesServiceStatus.OK&&(t.business=t.parseBusiness(e))})}}});</script>
 
 </dom-module>
 </body></html>

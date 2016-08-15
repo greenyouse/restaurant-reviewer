@@ -1,0 +1,19 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+
+</head><body><dom-module is="radius-filter">
+  <style>paper-slider{@apply (--radius-slider-style);label{@apply (--radius-label-style);}}</style>
+
+  <template>
+
+    <label>Search Radius (in kilometers)
+      <paper-slider id="radiusFilter" aria-label="Search Radius (in kilometers)" value="{{kmRadius}}" min="1" max="10" required$="[[required]]" hidden$="[[hidden]]" editable="">
+
+      </paper-slider>
+    </label>
+
+  </template>
+  <script>Polymer({is:"radius-filter",properties:{kmRadius:{type:Number,value:10},value:{type:Number,notify:!0,radius:1e4}},observers:["setRadius(kmRadius)"],setRadius:function(e){this.value=1e3*e}});</script>
+
+</dom-module>
+</body></html>

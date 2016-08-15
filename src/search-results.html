@@ -1,55 +1,62 @@
-<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/iron-location/iron-location.html">
-<link rel="import" href="../bower_components/iron-location/iron-query-params.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
-<link rel="import" href="dollar-rating.html">
-<link rel="import" href="star-rating.html">
-
-</head><body><dom-module id="search-results">
+<html><head><meta charset="UTF-8"><link rel="import" href="restaurant-reviewer.html"></head><body><dom-module id="search-results">
 
   <template>
 
-    <style include="iron-flex iron-flex-alignment">:host{--paper-card:{width:100%;};}*[hidden]{display:none !important;}#noResults{text-align:center;}.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:2em;}.storeImage{width:15em;height:10em;}.card-header:{@apply (--paper-font-headline);};paper-card{border-bottom:1px solid var(--paper-grey-400);}.shopCard a{color:black;text-decoration:none;}.shopCard{color:black;}.shopCard:hover{cursor:pointer;}.card-detail{color:var(--paper-grey-600);}.row{@apply (--layout-horizontal);@apply (--layout-center);@apply (--layout-justified);}.row > *{padding:10px;}.row *:nth-child(1){flex:1 1 25%;align-self:auto;}.row *:nth-child(2){flex:4 1 50%;align-self:auto;}.row *:nth-child(3){flex:0 1 25%;align-self:auto;}@media screen and (max-width: 767px){.row{@apply (--layout-wrap);}}</style>
+    <style include="iron-flex iron-flex-alignment">:host{--paper-card:{width:100%;};--price-root-style:{@apply (--layout-center);@apply (--layout-justified);};}@media screen and (min-width: 769px){price-filter{@apply (--layout-horizontal);}}*[hidden]{display:none !important;}.filterControls{background-color:var(--app-light-primary-color);color:black;}#noResults{text-align:center;}.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:2em;}.store__image{width:15em;height:10em;}.card-header:{@apply (--paper-font-headline);};paper-card{border-bottom:1px solid var(--paper-grey-400);}.shopCard a{text-decoration:none;}.shopCard{color:black;}.shopCard:hover{cursor:pointer;}.row{@apply (--layout-horizontal);@apply (--layout-center);@apply (--layout-justified);}.row > *{padding:10px;}.row *:nth-child(1){flex:1 1 25%;align-self:auto;}.row *:nth-child(2){flex:4 1 50%;align-self:auto;}.row *:nth-child(3){flex:0 1 25%;align-self:auto;}main{max-width:960px;margin:0 auto;}@media screen and (max-width: 767px){.row{@apply (--layout-vertical);@apply (--layout-wrap);}}.control_small{max-width:15em;}</style>
 
-    <app-route route="{{route}}" query-params="{{queryParams}}">
-    </app-route>
-
-    <section hidden$="[[loading]]">
-      <h3 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h3>
-      <div hidden$="[[emptyResults]]">
-        <template is="dom-repeat" items="[[_displayedResults]]" as="shop">
-          <a class="shopCard" href="/#/business/{{shop.placeId}}">
-            <paper-card on-tap="setBusiness">
-              <div class="card-content">
-                <div class="row">
-                  <img class="storeImage" src="[[shop.image]]" alt="restaurant picture">
-                  <div>
-                    <h3>[[shop.title]]</h3>
-                    <star-rating rating="[[shop.rating]]"></star-rating>
-                  </div>
-                  <div>
-                    <p class="card-detail">[[shop.address]]</p>
-                    <dollar-rating rating="[[shop.price]]"></dollar-rating>
-                  </div>
-                </div>
-              </div>
-            </paper-card>
-          </a>
-          <br>
-        </template>
+    <section class="filterControls flex layout vertical center">
+      <h4>Search Filters: </h4>
+      <div class="layout vertical" role="toolbar">
+        <paper-dropdown-menu class="control_small flex-auto self-center" id="openFilter" label="Open Now">
+          <paper-listbox class="dropdown-content" selected="{{params.openNow}}">
+            <paper-item>Any</paper-item>
+            <paper-item>Open</paper-item>
+            <paper-item>Closed</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <price-filter min="{{params.minPrice}}" max="{{params.maxPrice}}"></price-filter>
       </div>
     </section>
 
-    <section class="loader" hidden$="[[!loading]]">
-      <paper-spinner active="[[!loading]]"></paper-spinner>
-    </section>
+    <main>
+      <section hidden$="[[loading]]">
+        <h2 id="noResults" hidden$="[[!emptyResults]]">No Results Found</h2>
+        <div hidden$="[[emptyResults]]">
+          <template is="dom-repeat" items="[[_displayedResults]]" as="shop">
+            <article>
+              <a class="shopCard" href="/#/business/{{shop.placeId}}">
+                <paper-card on-tap="setBusiness">
+                  <div>
+                    <div class="row">
+                      <div>
+                        <img class="store__image" src="[[shop.image]]" alt="restaurant picture">
+                      </div>
+                      <div class="store__title">
+                        <h2>[[shop.title]]</h2>
+                        <star-rating rating="[[shop.rating]]"></star-rating>
+                      </div>
+                      <div class="store__details">
+                        <dollar-rating rating="[[shop.price]]"></dollar-rating>
+                        <p>[[shop.address]]</p>
+                      </div>
+                    </div>
+                  </div>
+                </paper-card>
+              </a>
+            </article>
+            <br>
+          </template>
+        </div>
+      </section>
+
+      <section class="loader" hidden$="[[!loading]]">
+        <paper-spinner active="[[!loading]]"></paper-spinner>
+      </section>
+    </main>
 
   </template>
 
-  <script>Polymer({is:"search-results",properties:{route:{type:Object,notify:!0},data:{type:Object},active:{type:Boolean,notify:!0,value:!1},queryParams:{type:Object,notify:!0},business:{type:Object,notify:!0},_displayedResults:{type:Array,notify:!0,value:function(){return[]}},searchResults:{type:Array,notify:!0,value:function(){return[]}},map:{type:Object},coords:{},emptyResults:{type:Boolean,notify:!0,value:!0},openNow:{type:Boolean},maxPrice:{type:Number},minPrice:{type:Number},radius:{type:Number},loading:{type:Boolean,value:!1},openFilter:{type:Boolean},minFilter:{type:Number},maxFilter:{type:Number}},observers:["_textSearch(active, queryParams.search, coords, minPrice, maxPrice, radius)","_filterResults(searchResults, openFilter, minFilter, maxFilter)"],setBusiness:function(e){this.business=e.model.shop},_fetchImageUrl:function(e){return imageUrl=e.getUrl({maxWidth:1e3,maxHeight:500}),imageUrl},_filterResults:function(e,t,s,i){void 0!==e&&0!=e.length&&(filtered=e.filter(function(e){return e.openNow==t&&s<=e.price&&e.price<=i}),0==filtered.length?(this.emptyResults=!0,this._displayedResults=filtered):(this.emptyResults=!1,this._displayedResults=filtered))},_textSearch:function(e,t,s,i,r,a){var n=this;if(e&&t&&s){this.loading=!0;var l=new google.maps.Map(this.map,{center:s}),o={location:s,minPriceLevel:i,maxPriceLevel:r,query:t,radius:a,type:"restaurant"};void 0!==this.openNow&&(o.openNow=this.openNow);var p=new google.maps.places.PlacesService(l);p.textSearch(o,function(e,t){if(t==google.maps.places.PlacesServiceStatus.OK){n.emptyResults=!1;var s=e.splice(0,10);n.parseResults(s),n.loading=!1}else n.emptyResults=!0,n.loading=!1})}},parseResults:function(e){var t=this;this.searchResults=e.map(function(e){var s=e.name,i=e.opening_hours.open_now,r=e.price_level,a=e.formatted_address,n=e.rating,l=e.place_id,o=e.photos||"https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",p="string"==typeof o?o:t._fetchImageUrl(o[0]);return{title:s,openNow:i,price:r,address:a,rating:n,image:p,placeId:l}})}});</script>
+  <script>Polymer({is:"search-results",properties:{active:{type:Boolean,notify:!0,value:!1},business:{type:Object,notify:!0},_displayedResults:{type:Array,notify:!0,value:function(){return[]}},searchResults:{type:Array,notify:!0,value:function(){return[]}},emptyResults:{type:Boolean,value:!0},loading:{type:Boolean,value:!1},map:Object,coords:Object,params:Object},observers:["_filterResults(searchResults, params.openNow, params.minPrice, params.maxPrice)","_textSearch(active, params.searchTerm, coords, params.minPrice, params.maxPrice, params.radius)"],setBusiness:function(e){this.business=e.model.shop},_fetchImageUrl:function(e){return imageUrl=e.getUrl({maxWidth:1e3,maxHeight:500}),imageUrl},_filterResults:function(e,t,s,a){void 0!==e&&0!=e.length&&(filtered=e.filter(function(e){switch(t){case 0:return s<=e.price&&e.price<=a;case 1:return 1==e.openNow&&s<=e.price&&e.price<=a;case 2:return 0==e.openNow&&s<=e.price&&e.price<=a}}),0==filtered.length?(this.emptyResults=!0,this._displayedResults=filtered):(this.emptyResults=!1,this._displayedResults=filtered))},_textSearch:function(e,t,s,a,r,i){var n=this;if(e&&t&&s){this.loading=!0;var l=new google.maps.Map(this.map,{center:s}),o={location:s,minPriceLevel:a,maxPriceLevel:r,query:t,radius:i,type:"restaurant"};void 0!==this.openNow&&(o.openNow=this.openNow);var p=new google.maps.places.PlacesService(l);p.textSearch(o,function(e,t){if(t==google.maps.places.PlacesServiceStatus.OK){n.emptyResults=!1;var s=e.splice(0,10);n.parseResults(s),n.loading=!1}else n.emptyResults=!0,n.loading=!1})}},parseResults:function(e){var t=this;this.searchResults=e.map(function(e){var s=e.name,a=e.opening_hours?e.opening_hours.open_now:null,r=e.price_level,i=e.formatted_address,n=e.rating,l=e.place_id,o=e.photos||"https://maps.gstatic.com/tactile/pane/result-no-thumbnail-2x.png",p="string"==typeof o?o:t._fetchImageUrl(o[0]);return{title:s,openNow:a,price:r,address:i,rating:n,image:p,placeId:l}})}});</script>
 
 </dom-module>
 </body></html>

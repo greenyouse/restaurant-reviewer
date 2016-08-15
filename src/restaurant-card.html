@@ -10,18 +10,20 @@
   <template>
     <style>:host{--paper-card-header-image:{width:10em;height:5em;};--paper-card:{width:10em;height:20em;};}.card-header:{@apply (--paper-font-headline);};.card-content{@apply (--layout-vertical);@apply (--layout-start-justified);}.card-highlight{color:darkblue;}.card-detail{color:var(--paper-grey-900);}p{margin:0px;}</style>
 
-    <paper-card image="[[imageUrl]]" alt="store-image">
-      <div class="card-content">
-        <p class="card-header"><b>[[title]]</b></p>
-        <div>
-          <star-rating rating="[[rating]]"></star-rating>
-          <template is="dom-if" if="[[openNow]]">
-            <p class="card-highlight">Open Now</p>
-          </template>
+    <article>
+      <paper-card image="[[imageUrl]]" alt="[[title]]">
+        <div class="card-content">
+          <p class="card-header"><b>[[title]]</b></p>
+          <div>
+            <star-rating rating="[[rating]]"></star-rating>
+            <template is="dom-if" if="[[openNow]]">
+              <p class="card-highlight">Open Now</p>
+            </template>
+          </div>
+          <p class="card-detail">[[address]]</p>
         </div>
-        <p class="card-detail">[[address]]</p>
-      </div>
-    </paper-card>
+      </paper-card>
+    </article>
 
   </template>
 

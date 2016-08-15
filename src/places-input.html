@@ -1,16 +1,19 @@
 <html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/google-apis/google-maps-api.html">
+<link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-behavior.html">
 
 </head><body><dom-module id="places-input">
   <template>
     <google-maps-api libraries="places" api-key="AIzaSyBkHxZZzchmvczNvUWMznd0DicwOWZ9dSE" on-api-load="loaded"></google-maps-api>
 
-    <paper-input id="address" name$="[[name]]" label$="[[label]]" aria-label$="[[ariaLabel]]" placeholder$="[[placeholder]]" value="{{value}}" required\="">"
+    <paper-input id="address" name$="[[name]]" label$="[[label]]" aria-label$="[[ariaLabel]]" placeholder$="[[placeholder]]" value="{{value}}" error-message$="[[errorMessage]]" required="">
       <content></content>
     </paper-input>
+
   </template>
 
-  <script>Polymer({is:"places-input",properties:{value:{type:String,notify:!0},options:{type:Object,value:function(){return{types:["geocode"]}}},autocomplete:{type:Object,notify:!0},lat:{type:Number,notify:!0},lng:{type:Number,notify:!0},name:{type:String},label:{type:String},ariaLabel:{type:String},placeholder:{type:String}},loaded:function(){var e=this,t=this.$.address.inputElement;this.autocomplete=new google.maps.places.Autocomplete(t,this.options),google.maps.event.addListener(this.autocomplete,"place_changed",function(t){var o=e.autocomplete.getPlace();if(o.geometry){var n=o.geometry.location;e.lat=n.lat(),e.lng=n.lng()}})}});</script>
+  <script>Polymer({is:"places-input",behaviors:[Polymer.IronFormElementBehavior],properties:{value:{type:String,notify:!0},options:{type:Object,value:function(){return{types:["geocode"]}}},autocomplete:{type:Object,notify:!0},lat:{type:Number,notify:!0},lng:{type:Number,notify:!0},name:{type:String},label:{type:String},ariaLabel:{type:String},placeholder:{type:String},errorMessage:{type:String,value:"Enter a location"}},validate:function(){return!!(this.value&&this.lat&&this.lng)},loaded:function(){var e=this,t=this.$.address.inputElement;this.autocomplete=new google.maps.places.Autocomplete(t,this.options),google.maps.event.addListener(this.autocomplete,"place_changed",function(t){var o=e.autocomplete.getPlace();if(o.geometry){var a=o.geometry.location;e.lat=a.lat(),e.lng=a.lng()}})}});</script>
 </dom-module>
 </body></html>

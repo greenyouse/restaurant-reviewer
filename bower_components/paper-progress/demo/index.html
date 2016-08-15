@@ -28,11 +28,12 @@
       </template>
     </demo-snippet>
 
-    <h3>paper-progress can be indeterminate</h3>
+    <h3>paper-progress can be indeterminate with a custom duration</h3>
     <demo-snippet class="centered-demo">
       <template>
+        <style is="custom-style">paper-progress.slow{--paper-progress-indeterminate-cycle-duration:20s;}</style>
         <paper-progress indeterminate=""></paper-progress>
-        <paper-progress indeterminate="" value="800" min="100" max="1000"></paper-progress>
+        <paper-progress indeterminate="" class="slow"></paper-progress>
       </template>
     </demo-snippet>
 
@@ -47,7 +48,7 @@
     </demo-snippet>
   </div>
 
-  <script>function nextProgress(){if(animating=!0,progress.value<progress.max)progress.value+=progress.step||1;else{if(++repeat>=maxRepeat)return animating=!1,void(button.disabled=!1);progress.value=progress.min}requestAnimationFrame(nextProgress)}function startProgress(){repeat=0,progress.value=progress.min,button.disabled=!0,animating||nextProgress()}var progress,button,animationFrame,repeat,maxRepeat=5,animating=!1;window.addEventListener("WebComponentsReady",function(){progress=document.querySelector("paper-progress"),button=document.querySelector("paper-button")});</script>
+  <script>function nextProgress(){if(animating=!0,progress.value<progress.max)progress.value+=progress.step||1;else{if(++repeat>=maxRepeat)return animating=!1,void(button.disabled=!1);progress.value=progress.min}requestAnimationFrame(nextProgress)}function startProgress(){repeat=0,progress.value=progress.min,button.disabled=!0,animating||nextProgress()}var progress,button,repeat,maxRepeat=5,animating=!1;window.addEventListener("WebComponentsReady",function(){progress=document.querySelector("paper-progress"),button=document.querySelector("paper-button")});</script>
 
 
 
