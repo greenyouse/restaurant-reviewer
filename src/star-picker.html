@@ -42,9 +42,9 @@
 
     </style>
 
-    <div tabindex="0"
-         id="starContainer"
+    <div id="starContainer"
          class="rating set"
+         tabindex="0"
          aria-role="slider"
          aria-valuemin="0"
          aria-valuemax$="{{stars}}"
@@ -152,23 +152,24 @@
 
      keyBindings: {
        'esc': '_blur',
-       'up right': '_addStar',
-       'down left': '_removeStar'
+       'up right pageup end': '_addStar',
+       'down left pagedown home': '_removeStar'
      },
 
-     _blur: function() {
-       console.log('esc');
+     _blur: function(e) {
        this.$.starContainer.blur();
+       e.preventDefault();
      },
 
-     _addStar: function() {
+     _addStar: function(e) {
        if (this.rating < this.stars)
          this.rating += 1;
 
        this._selected();
+       e.preventDefault();
      },
 
-     _removeStar: function() {
+     _removeStar: function(e) {
        if (this.rating === 0)
          this.rating = 2;
 
@@ -176,6 +177,7 @@
          this.rating -= 1;
 
        this._selected();
+       e.preventDefault();
      }
 
    });
