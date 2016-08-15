@@ -13,26 +13,13 @@
          --iron-icon-height: 16px;
      }
 
-     .set > iron-icon.full {
-         color: #ffc107;
-     }
-
-     .set > iron-icon.empty {
-         color: var(--paper-grey-500);
-     }
-
      .rating {
          direction: rtl;
          text-align: center;
      }
 
-     .rating:not(.set) > iron-icon {
-         color: var(--paper-grey-500);
-     }
-
      .rating > iron-icon:hover,
      .rating > iron-icon:hover ~ iron-icon {
-         color: #ffc107 !important;;
          cursor: pointer;
      }
 
@@ -52,7 +39,7 @@
          aria-valuenow$="{{rating}}">
 
       <template is="dom-repeat" items="[[_starColl]]" as="star">
-        <iron-icon class$="[[star.class]]" icon="star" on-tap="_fillStar"></iron-icon>
+        <iron-icon icon="[[star.icon]]" on-mouseover="_fillStar" on-tap="_fillStar"></iron-icon>
       </template>
 
     </div>
@@ -94,7 +81,7 @@
          value: function() {
            var coll = [];
            for (var i; i < this.stars; i++) {
-             coll.push({class: "empty"});
+             coll.push({icon: "star-border"});
            }
 
            return coll;
@@ -135,14 +122,14 @@
        // build up the star collection using full and empty stars
        for (var i = 0; i < emptyStars; i++) {
          var emptyStar = {
-           class: "empty"
+           icon: "star-border"
          }
          starColl.push(emptyStar);
        }
 
        for (var i = 0; i < wholeStars; i++) {
          var star = {
-           class: "full"
+           icon: "star"
          };
          starColl.push(star)
        }
