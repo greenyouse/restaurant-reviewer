@@ -86,16 +86,16 @@
      ],
 
      setMax: function(min) {
-       if (this._highPrice < min) {
-         this._highPrice = min;
-         this.max = this._highPrice;
+       console.log(min, this.max);
+       if (this.max < min) {
+         this.max = min;
        }
      },
 
      setMin: function(max) {
-       if (max < this._lowPrice) {
-         this._lowPrice = max;
-         this.min = this._lowPrice;
+       console.log(this.min, max);
+       if (max < this.min) {
+         this.min = max;
        };
      }
 
