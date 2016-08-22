@@ -987,7 +987,7 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
     </div>
   </template>
 
-  <script>Polymer({is:"price-filter",properties:{min:{type:Number,notify:!0},max:{type:Number,notify:!0}},observers:["setMin(max)","setMax(min)"],setMax:function(i){this._highPrice<i&&(this._highPrice=i,this.max=this._highPrice)},setMin:function(i){i<this._lowPrice&&(this._lowPrice=i,this.min=this._lowPrice)}});</script>
+  <script>Polymer({is:"price-filter",properties:{min:{type:Number,notify:!0},max:{type:Number,notify:!0}},observers:["setMin(max)","setMax(min)"],setMax:function(i){this.max<i&&(this.max=i)},setMin:function(i){i<this.min&&(this.min=i)}});</script>
 
 </dom-module>
 <dom-module is="radius-filter">
@@ -1270,7 +1270,7 @@ this.currentTarget=t,this.defaultPrevented=!1,this.eventPhase=Event.AT_TARGET,th
     <div id="starContainer" class="rating set" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax$="{{stars}}" aria-valuetext$="{{rating}}" aria-valuenow$="{{rating}}">
 
       <template is="dom-repeat" items="[[_starColl]]" as="star">
-        <iron-icon icon="[[star.icon]]" on-mouseover="_fillStar" on-tap="_fillStar"></iron-icon>
+        <iron-icon icon="[[star.icon]]" on-tap="_fillStar"></iron-icon>
       </template>
 
     </div>

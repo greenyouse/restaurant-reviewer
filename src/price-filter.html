@@ -17,7 +17,7 @@
     </div>
   </template>
 
-  <script>Polymer({is:"price-filter",properties:{min:{type:Number,notify:!0},max:{type:Number,notify:!0}},observers:["setMin(max)","setMax(min)"],setMax:function(i){this._highPrice<i&&(this._highPrice=i,this.max=this._highPrice)},setMin:function(i){i<this._lowPrice&&(this._lowPrice=i,this.min=this._lowPrice)}});</script>
+  <script>Polymer({is:"price-filter",properties:{min:{type:Number,notify:!0},max:{type:Number,notify:!0}},observers:["setMin(max)","setMax(min)"],setMax:function(i){this.max<i&&(this.max=i)},setMin:function(i){i<this.min&&(this.min=i)}});</script>
 
 </dom-module>
 </body></html>
